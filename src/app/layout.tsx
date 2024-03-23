@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +18,197 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="flex w-full min-h-screen flex-col">
+          {/* Parte superior */}
+          <div className="flex w-full items-center h-14 px-4 border-b dark:border-gray-700">
+            <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
+              <ActivityIcon className="w-6 h-6" />
+              <span className="">Chash Flow</span>
+            </Link>
+            <div className="ml-auto flex items-center gap-4">
+              <Link className="flex items-center gap-2 text-sm font-medium" href="#">
+                <UserCircleIcon className="w-4 h-4 rounded-full" />
+                <span>brad</span>
+              </Link>
+              <Button size="sm" variant="outline" className="hover:bg-gray-100" >
+                Logout
+              </Button>
+            </div>
+          </div>
+          {/* Parte central */}
+          <div className="flex w-full bg-gray-200  overflow-hidden">
+            {/* Menu Lateral */}
+            <nav className="flex flex-col 
+              items-center w-20 h-full 
+              py-4 border-r bg-gray-200 dark:bg-gray-800
+              border-gray-200 dark:border-gray-800"
+            >
+              <Link className="flex flex-col items-center w-full px-3 py-2 text-center hover:bg-gray-100" href="#">
+                <HomeIcon className="w-6 h-6" />
+                <span className="text-xs leading-none">Home</span>
+              </Link>
+              <Link className="flex flex-col items-center w-full px-3 py-2 text-center hover:bg-gray-100" href="#">
+                <ActivityIcon className="w-6 h-6" />
+                <span className="text-xs leading-none">Activity</span>
+              </Link>
+              <Link className="flex flex-col items-center w-full px-3 py-2 text-center hover:bg-gray-100" href="#">
+                <CalendarIcon className="w-6 h-6" />
+                <span className="text-xs leading-none">Calendar</span>
+              </Link>
+              <Link className="flex flex-col items-center w-full px-3 py-2 text-center hover:bg-gray-100" href="#">
+                <FileIcon className="w-6 h-6" />
+                <span className="text-xs leading-none">Files</span>
+              </Link>
+              <Link className="flex flex-col items-center w-full px-3 py-2 text-center hover:bg-gray-100" href="#">
+                <MessageSquareIcon className="w-6 h-6" />
+                <span className="text-xs leading-none">Messages</span>
+              </Link>
+            </nav>
+            {/* Cotexto das Páginas */}
+            <div className="flex-1 flex flex-col w-full p-4 min-h-0 bg-white">       
+              {children}
+            </div>
+          </div>
+          {/* Parte inferior */}
+          <div className="flex w-full items-center h-14 px-4 border-t dark:border-gray-700">
+            <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
+              <ActivityIcon className="w-6 h-6" />
+              <span className="">Chash Flow</span>
+            </Link>
+            <div className="ml-auto flex items-center gap-4">
+              <Link className="flex items-center gap-2 text-sm font-medium" href="#">
+                <UserCircleIcon className="w-4 h-4 rounded-full" />
+                <span>brad</span>
+              </Link>
+              <Button size="sm" variant="outline">
+                Logout
+              </Button>
+            </div>
+          </div>
+        </div>
+      </body>
     </html>
   );
+}
+
+function ActivityIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+    </svg>
+  )
+}
+
+function CalendarIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+      <line x1="16" x2="16" y1="2" y2="6" />
+      <line x1="8" x2="8" y1="2" y2="6" />
+      <line x1="3" x2="21" y1="10" y2="10" />
+    </svg>
+  )
+}
+
+function FileIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+      <polyline points="14 2 14 8 20 8" />
+    </svg>
+  )
+}
+
+function HomeIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <polyline points="9 22 9 12 15 12 15 22" />
+    </svg>
+  )
+}
+
+function MessageSquareIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  )
+}
+
+function UserCircleIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <circle cx="12" cy="10" r="3" />
+      <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+    </svg>
+  )
 }
