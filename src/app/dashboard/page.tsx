@@ -10,7 +10,7 @@ export default async function Page(){
   }
   return(
     <div>
-      <h1>Página Home</h1>
+      <h1>Página Dashboard</h1>
       <h1>Bem vindo, {session?.user?.name}</h1>
       <LogoutButton text="Sair"/>
     </div>

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import {IconAgenda, IconCadastros, IconDashBoard, IconHome, IconLancamentos} from "./_components/iconsMenu";import LogoutButton from "./_components/logoutButton";
+IconDashBoard
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,38 +33,38 @@ export default function RootLayout({
                 <UserCircleIcon className="w-4 h-4 rounded-full" />
                 <span>brad</span>
               </Link>
-              <Button size="sm" variant="outline" className="hover:bg-gray-100" >
-                Logout
-              </Button>
+              <LogoutButton
+                size="sm" text="Texto" variant="outline" className="hover:bg-gray-100"
+              />
             </div>
           </div>
           {/* Parte central */}
           <div className="flex w-full bg-gray-200  overflow-hidden">
             {/* Menu Lateral */}
             <nav className="flex flex-col 
-              items-center w-20 h-full 
+              items-center w-24 h-full 
               py-4 border-r bg-gray-200 dark:bg-gray-800
               border-gray-200 dark:border-gray-800"
             >
-              <Link className="flex flex-col items-center w-full px-3 py-2 text-center hover:bg-gray-100" href="#">
-                <HomeIcon className="w-6 h-6" />
+              <Link className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100" href="/home">
+                <IconHome className="w-6 h-6"/>
                 <span className="text-xs leading-none">Home</span>
               </Link>
-              <Link className="flex flex-col items-center w-full px-3 py-2 text-center hover:bg-gray-100" href="#">
-                <ActivityIcon className="w-6 h-6" />
-                <span className="text-xs leading-none">Activity</span>
+              <Link className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100" href="/dashboard">
+                <IconDashBoard className="w-6 h-6" />
+                <span className="text-xs leading-none">Dashboard</span>
               </Link>
-              <Link className="flex flex-col items-center w-full px-3 py-2 text-center hover:bg-gray-100" href="#">
-                <CalendarIcon className="w-6 h-6" />
-                <span className="text-xs leading-none">Calendar</span>
+              <Link className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100" href="#">
+                <IconLancamentos className="w-6 h-6" />
+                <span className="text-xs leading-none">Lançamentos</span>
               </Link>
-              <Link className="flex flex-col items-center w-full px-3 py-2 text-center hover:bg-gray-100" href="#">
-                <FileIcon className="w-6 h-6" />
-                <span className="text-xs leading-none">Files</span>
+              <Link className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100" href="#">
+                <IconAgenda className="w-6 h-6" />
+                <span className="text-xs leading-none">Agendamento</span>
               </Link>
-              <Link className="flex flex-col items-center w-full px-3 py-2 text-center hover:bg-gray-100" href="#">
-                <MessageSquareIcon className="w-6 h-6" />
-                <span className="text-xs leading-none">Messages</span>
+              <Link className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100" href="#">
+                <IconCadastros className="w-6 h-6" />
+                <span className="text-xs leading-none">Cadastros</span>
               </Link>
             </nav>
             {/* Cotexto das Páginas */}
@@ -74,7 +76,7 @@ export default function RootLayout({
           <div className="flex w-full items-center h-14 px-4 border-t dark:border-gray-700">
             <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
               <ActivityIcon className="w-6 h-6" />
-              <span className="">Chash Flow</span>
+              <span className="">© 2023 JP System Ltda. All rights reserved.</span>
             </Link>
             <div className="ml-auto flex items-center gap-4">
               <Link className="flex items-center gap-2 text-sm font-medium" href="#">
