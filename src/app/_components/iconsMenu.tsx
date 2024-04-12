@@ -2,9 +2,15 @@
 
 import { LuHome, LuBarChartBig, LuFileEdit, LuCalendarCheck, LuDatabase } from "react-icons/lu";
 
+import { useSession } from "next-auth/react"
+
 export function IconHome(props: any ){
+  const { data: session } = useSession();
   return(
-    <LuHome {...props} />
+    <>
+      <LuHome {...props} />
+      {/* <span>{(session ? session.user.name : '')}</span> */}
+    </>
   )
 }
 

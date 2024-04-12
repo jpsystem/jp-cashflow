@@ -15,22 +15,25 @@ model User {
   email   String  @unique
   nome    String
   senha   String
-  apelido String
+  perfil  String  @default("default")
+  login   String  @unique
+  token   String?
+  dtToken DateTime?
   grupos  Grupo[]
 }
 
 model Grupo {
   id        Int     @id @default(autoincrement())
-  nome      String
+  nome      String  @unique
   descricao String?
-  tipo      String
-  user      User    @relation(fields: [userId], references: [id])
-  userId    Int
+  tipo      String  @default("D")
+  user      User?   @relation(fields: [userId], references: [id])
+  userId    Int?
   subGrupos SubGrupo[]
 }
 
 model SubGrupo {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   nome      String
   descricao String?
   grupo     Grupo    @relation(fields: [grupoId], references: [id])

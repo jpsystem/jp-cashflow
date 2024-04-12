@@ -1,0 +1,47 @@
+Anotações do sistema Cashflow
+Instalar as bibliotecas
+=======================
+react-table
+react-icons
+react-hook-form
+@hookform/resolvers
+zod
+next-auth
+prisma
+
+###Para saber se o usuario está autenticado
+###Se for serverComponente
+import { getServerSession } from "next-auth"
+import { auth as authOptions } from "@/lib/auth-config";
+
+export default async function Pagina() {
+  const session = await getServerSession(autoOptions)
+  ...
+}
+
+###Se for userComponent
+import {useSession } from "next-auth/react"
+
+export default async function Pagina() {
+  const { data: session } = useSession();
+  ...
+}
+
+Só que voce tem que está dentro de um provedor de seção
+dessa maneira:
+Dentro da pasta [components] crei o arquivo auth-provider.tsx
+Depois na pagina de layout.tsx principal
+        {/* ENCAPICULANDO TODAS AS PAGINAS FILHAS COM O 
+        AuthProvider para conseguir ler a seção no cliente */}
+##########################
+
+###Funções do Prisma#######
+Para Instalar
+  npm install prisma --save-dev
+
+Para migrar para o bonco ou seja criar as tabelas no BD a partir do modelo
+  npx prisma migrate dev --name init
+
+Para atualizar o BD com as alterações feitas no modelo
+  npx prisma migrate dev --name nome-da-alteração
+
