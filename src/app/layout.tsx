@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import {IconAgenda, IconCadastros, IconDashBoard, IconHome, IconLancamentos} from "./_components/iconsMenu";
 import LogoutButton from "./_components/logoutButton";
 import AuthProvider from "@/components/providers/auth-provider";
-import ModalProvider from "@/components/ui/jp/modal/modal-provider";
+// import ModalProvider from "@/components/ui/jp/modal/modal-provider";
 import Modal from "@/components/ui/jp/modal/modal";
 // IconDashBoard
 import { getServerSession} from "next-auth";
@@ -32,21 +32,21 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
         <AuthProvider>
           {/* ENCAPICULANDO TODAS AS PAGINAS PARA TER O MODAL 
           <Modal> DISPONIVEL EM TODA A APLICAÇÃO */}
-          <ModalProvider>
-            <div className="flex w-full min-h-screen flex-col">
+          {/* <ModalProvider> */}
+            <div className="flex w-full min-h-screen text-2xl flex-col">
               {/* Parte superior */}
-              <div className="flex w-full items-center h-14 px-4 border-b dark:border-gray-700">
-                <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
+              <div className="flex w-full items-center bg-gray-400 h-14 px-4 border-b dark:border-gray-700">
+                <Link className="flex items-center gap-2 text-2xl font-semibold" href="#">
                   <ActivityIcon className="w-6 h-6" />
                   <span className="">Chash Flow</span>
                 </Link>
                 <div className="ml-auto flex items-center gap-4">
-                  <Link className="flex items-center gap-2 text-sm font-medium" href="#">
+                  <Link className="flex items-center gap-2 text-2xl font-medium" href="#">
                     <UserCircleIcon className={`w-4 h-4 ${session ? (session?.user?.role !== "admin"? "text-blue-700":"text-green-700"): ""} rounded-full`} />
                     <span>{(session ? session.user.name : 'Cadastrar')}</span>
                   </Link>
                   <LogoutButton
-                    size="sm" text={(session ? "Logout" : 'Login')} variant="outline" className="hover:bg-gray-100"
+                    size="lg" text={(session ? "Logout" : 'Login')} variant="outline" className="hover:bg-gray-100"
                   />
                 </div>
               </div>
@@ -54,32 +54,32 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
               <div className="flex w-full bg-gray-200 min-h-[80vh]  overflow-hidden">
                 {/* Menu Lateral */}
                 <nav className="flex flex-col 
-                  items-center w-24 h-full 
+                  items-center w-44 h-full 
                   py-4 border-r bg-gray-200 dark:bg-gray-800
                   border-gray-200 dark:border-gray-800"
                 >
                   <Link className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100" href="/home">
                     <IconHome className="w-6 h-6"/>
-                    <span className="text-xs leading-none">Home</span>
+                    <span className="text-2xl leading-none">Home</span>
                   </Link>
                   <Link className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100" href="/dashboard">
                     <IconDashBoard className="w-6 h-6" />
-                    <span className="text-xs leading-none">Dashboard</span>
+                    <span className="text-2xl leading-none">Dashboard</span>
                   </Link>
                   <Link className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100" href="#">
                     <IconLancamentos className="w-6 h-6" />
-                    <span className="text-xs leading-none">Lançamentos</span>
+                    <span className="text-2xl leading-none">Lançamentos</span>
                   </Link>
                   <Link className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100" href="#">
                     <IconAgenda className="w-6 h-6" />
-                    <span className="text-xs leading-none">Agendamento</span>
+                    <span className="text-2xl leading-none">Agendamento</span>
                   </Link>
                   {/* Sub-Menu Cadastros */}
                   <Popover>
                     <PopoverTrigger asChild>
                   <Link className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100" href="#">
                     <IconCadastros className="w-6 h-6" />
-                    <span className="text-xs leading-none">Cadastros</span>
+                    <span className="text-2xl leading-none">Cadastros</span>
                   </Link>
 
                       {/* <Button className="w-full flex items-center gap-4 text-left">
@@ -117,7 +117,7 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
                 </div>
               </div>
               {/* Parte inferior */}
-              <div className="flex w-full items-center h-14 px-4 border-t dark:border-gray-700">
+              <div className="flex w-full items-center bg-gray-400 h-28 px-4 border-t dark:border-gray-700">
                 <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
                   <ActivityIcon className="w-6 h-6" />
                   <span className="">© 2023 JP System Ltda. All rights reserved.</span>
@@ -125,16 +125,16 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
                 <div className="ml-auto flex items-center gap-4">
                   <Link className="flex items-center gap-2 text-sm font-medium" href="#">
                     <UserCircleIcon className="w-4 h-4 rounded-full" />
-                    <span>brad</span>
+                    <span className="text-2xl">brad</span>
                   </Link>
-                  <Button size="sm" variant="outline">
+                  <Button size="lg" variant="outline">
                     Logout
                   </Button>
                 </div>
               </div>
             </div>
             <Modal />
-          </ModalProvider>
+          {/* </ModalProvider> */}
         </AuthProvider>
       </body>
     </html>

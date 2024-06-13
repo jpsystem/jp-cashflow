@@ -24,19 +24,20 @@ export default function LoginForm(){
   })
   return (
     <Card className="mx-auto max-w-md">
-      <CardHeader className="space-y-1 text-center">
-        <CardTitle className="text-3xl font-bold">Login</CardTitle>
-        <CardDescription>Entre com os dados para o login</CardDescription>
+      <CardHeader className="space-y-2 text-center">
+        <CardTitle className="text-4xl font-bold">Login</CardTitle>
+        <CardDescription className="text-2xl">Entre com os dados para o login</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="nickname">Login</Label>
+          <div className="space-y-2 text-2xl">
+            <Label htmlFor="nickname" className="text-2xl">Login</Label>
             <Input 
               id="nickname" 
               placeholder="jpsystem" 
               required 
               type="text"
+              className="text-2xl"
               {... form.register("nickname")} 
             />
           </div>
@@ -51,11 +52,12 @@ export default function LoginForm(){
             />
           </div> */}
           <div className="space-y-2">
-            <Label htmlFor="password">Senha</Label>
+            <Label htmlFor="password" className="text-2xl">Senha</Label>
             <Input 
               id="password"  
               required 
               type="password"
+              className="text-2xl"
               {... form.register("password")} 
             />
           </div>

@@ -12,17 +12,25 @@ export type tyUsuario = {
 };
 
 export type tyGrupo = {
-  key:       number,
-  id:        number,
+  key?:       number,
+  id?:        number,
   nome:      string,
   descricao: string,
   tipo:      string,
-  userID:    number,
+  userID?:    number,
 }
 
 export type tySubGrupo = {
-  key:       number,
-  id:        number,
+  key?:       number,
+  id?:        number,
   nome:      string,
   descricao: string,
+  grupoId: number,
+}
+
+export type tyGrupoLista = {
+  id?: number,
+  nome?: string,
+  descricao?: string,
+  qtdSubGrupos?: number,
 }
