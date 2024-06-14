@@ -31,7 +31,7 @@ export default function LoginForm(){
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2 text-2xl">
-            <Label htmlFor="nickname" className="text-2xl">Login</Label>
+            <Label htmlFor="nickname" className="text-2xl">Login TESTE</Label>
             <Input 
               id="nickname" 
               placeholder="jpsystem" 

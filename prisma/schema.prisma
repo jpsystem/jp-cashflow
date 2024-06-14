@@ -19,7 +19,7 @@ model User {
   login   String  @unique
   token   String?
   dtToken DateTime?
-  grupos  Grupo[]
+  //grupos  Grupo[]
 }
 
 model Grupo {
@@ -27,8 +27,8 @@ model Grupo {
   nome      String  @unique
   descricao String?
   tipo      String  @default("D")
-  user      User?   @relation(fields: [userId], references: [id])
-  userId    Int?
+  //user      User?   @relation(fields: [userId], references: [id])
+  //userId    Int?
   subGrupos SubGrupo[]
 }
 
