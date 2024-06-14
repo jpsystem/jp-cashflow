@@ -39,3 +39,12 @@ model SubGrupo {
   grupo     Grupo    @relation(fields: [grupoId], references: [id])
   grupoId   Int
 }
+
+model Fonte {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  descricao String?
+  tipo      String   @default("M")
+}
+
+
