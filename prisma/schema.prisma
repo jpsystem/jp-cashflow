@@ -19,7 +19,6 @@ model User {
   login   String  @unique
   token   String?
   dtToken DateTime?
-  //grupos  Grupo[]
 }
 
 model Grupo {
@@ -27,24 +26,47 @@ model Grupo {
   nome      String  @unique
   descricao String?
   tipo      String  @default("D")
-  //user      User?   @relation(fields: [userId], references: [id])
-  //userId    Int?
   subGrupos SubGrupo[]
 }
 
 model SubGrupo {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  descricao String?
-  grupo     Grupo    @relation(fields: [grupoId], references: [id])
-  grupoId   Int
+  id              Int      @id @default(autoincrement())
+  nome            String
+  descricao       String?
+  grupo           Grupo?   @relation(fields: [grupoId], references: [id])
+  grupoId         Int
+  SG_lancamentos  Lancamento[]
 }
 
 model Fonte {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  descricao String?
-  tipo      String   @default("M")
+  id                Int     @id @default(autoincrement())
+  nome              String
+  descricao         String?
+  tipo              String  @default("M")
+  fonte_lancamentos Lancamento[]
 }
 
+model Periodo {
+  id            Int       @id @default(autoincrement())
+  periodo       String
+  dtAtualizacao DateTime
+  status        String    @default("A") 
+}
 
+model Saldo {
+  id      Int      @id @default(autoincrement())
+  periodo String
+  valor   Decimal  @default(0.00)
+}
+
+model Lancamento {
+  id            Int      @id @default(autoincrement())
+  periodo       String
+  valor         Decimal  @default(0.00)
+  dtLancamento  DateTime?
+  operacao      String @default("D") 
+  subGrupo      SubGrupo?    @relation(fields: [subGrupoId], references: [id])
+  subGrupoId    Int
+  fonte         Fonte?    @relation(fields: [fonteId], references: [id])
+  fonteId       Int
+}
