@@ -40,7 +40,7 @@ export default async function GrupoDeContas() {
         <div className="flex flex-col w-full justify-center">
           <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center">Grupos de contas</h1>
           <p className="text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 text-center">
-            Gêrenciar o plano de contas para o controle financeiro
+            Gerenciar o plano de contas para o controle financeiro
           </p>
         </div>
         <div className="flex w-full justify-end">

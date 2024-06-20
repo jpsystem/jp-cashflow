@@ -1,4 +1,5 @@
 "use client"
+
 // COMPONENTE PAI
 
 import { Label } from "@/components/ui/label"
@@ -6,12 +7,10 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CreateGrupo } from "@/actions/grupoActions"
 import { z } from "zod"
 import LabelError from "@/components/ui/jp/labelError"
 import { useContext, useEffect, useState } from "react"
 //import { ModalContext } from "@/components/ui/jp/modal/modal-context"
-import NovoSubGrupo from "./novoSubGrupo"
 //COMPONENTE DIALOG
 import {
   Dialog,
@@ -55,91 +54,107 @@ import {
 } from "@/components/ui/table"
 import { TrashIcon } from "@/app/_components/iconsForm"
 import { sub } from "date-fns"
-import TabelaSubGrupos from "./tabelaSubGrupos"
 import { Textarea } from "@/components/ui/textarea"
 
-//Definição do objeto ZOD de validação
+// Definição do objeto ZOD de validação
 const schema = z.object({
   nome: z.string().min(2, "Campo obrigatorio!"),
   descricao: z.string().min(2, "Campo obrigatorio!"),
-  tipo: z.enum(["D", "C", "M"], {
+  tipo: z.enum(["M"], {
     errorMap: () => {
-      return {
-        message:
-          "Informe 'D' para débito, 'C' para crédito ou 'M' para conta de movimentação.",
-      }
+      return { message: "Sucesso ao criar uma nova Fonte." }
     },
   }),
 })
 
-//Definição do type SubGrupo
-type SubGrupo = {
-  id?: number
-  nome: string
-  descricao: string
-}
-
-//Definição do type Grupo
-type Grupo = {
+// Definição do type Fonte
+type Fontes = {
   id?: number
   nome: string
   descricao: string
   tipo?: string
-  subgrupos?: [
-    {
-      id?: number
-      nome: string
-      descricao: string
-    }
-  ]
 }
 
+// Definição das props para TabelaFontes
+type TabelaFontesProps = {
+  data: Fontes[]
+}
+
+// Definição do componente TabelaFontes
+const TabelaFontes: React.FC<TabelaFontesProps> = ({ data }) => {
+    function handleDelete(index: number): void {
+        throw new Error("Função não implementada.")
+    }
+
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Nome</TableHead>
+          <TableHead>Descrição</TableHead>
+          <TableHead>Tipo</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data.map((fonte, index) => (
+          <TableRow key={index}>
+            <TableCell>{fonte.nome}</TableCell>
+            <TableCell>{fonte.descricao}</TableCell>
+            <TableCell>{fonte.tipo}</TableCell>
+            <TableCell>
+              <Button variant="outline" onClick={() => handleDelete(index)}>
+                <TrashIcon />
+              </Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+
+// Componente principal
 type FormProps = z.infer<typeof schema>
 
 ////////////////////////////////////////////////////////////////
 
-export default function NovoGrupoForm() {
-  //Variavel de estado isOpen
+export default function NovoFontesForm() {
+  // Variavel de estado isOpen
   const [isOpen, setIsOpen] = useState(false)
 
-  //Função para fechar o DIALOG
+  // Função para fechar o DIALOG
   const handleClose = () => {
     setIsOpen(false)
   }
 
-  //Lista dos subGrupos
-  const [subGrupos, setSubGrupos] = useState<SubGrupo[]>([])
+  // Lista das Fontes
+  const [Fonte, setFonte] = useState<Fontes[]>([])
 
-  //Função para incluir um subGrupo na lista
-  const handleAddSubGrupo = (item: SubGrupo) => {
-    //Uma validação para ver se o Nome do subgrupo já existe
-    const index = subGrupos.findIndex((subGrupo) => subGrupo.nome === item.nome)
+  // Função para incluir uma fonte na lista
+  const handleAddFonte = (item: Fontes) => {
+    // Uma validação para ver se o Nome da Fonte já existe
+    const index = Fonte.findIndex((Fonte) => Fonte.nome === item.nome)
     if (index === -1) {
-      setSubGrupos([...subGrupos, item])
-      ordenarSubGrupos
+      setFonte([...Fonte, item])
+      ordenarFonte()
       return true
     }
     return false
-    //setSubGrupos([...subGrupos, item])
   }
 
-  //Função para excluir um subGrupo da lista
-  const handleDeleteSubGrupo = (index: number) => {
-    // Encontra o índice do objeto com o id fornecido
-    //const index = subGrupos.findIndex(item => item.id === id);
-    if (index > -1) {
-      const newArray = [
-        ...subGrupos.slice(0, index),
-        ...subGrupos.slice(index + 1),
-      ]
-      setSubGrupos(newArray)
-    }
-    ordenarSubGrupos
-  }
+  // // Função para excluir uma Fonte da lista
+  // const handleDeleteSubGrupo = (index: number) => {
+  //   // Encontra o índice do objeto com o id fornecido
+  //   if (index > -1) {
+  //     const newArray = [...Fonte.slice(0, index), ...Fonte.slice(index + 1)]
+  //     setFonte(newArray)
+  //   }
+  //   ordenarFonte()
+  // }
 
-  //Função para ordenar a lista
-  function ordenarSubGrupos() {
-    const listOrdenada = subGrupos.sort((a, b) => {
+  // Função para ordenar a lista
+  function ordenarFonte() {
+    const listOrdenada = Fonte.sort((a, b) => {
       if (a.nome < b.nome) {
         return -1
       }
@@ -148,36 +163,30 @@ export default function NovoGrupoForm() {
       }
       return 0
     })
-    setSubGrupos(listOrdenada)
+    setFonte(listOrdenada)
   }
 
-  //Definição do formulário
+  // Definição do formulário
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
       nome: "",
       descricao: "",
-      tipo: "D",
+      tipo: "M"
     },
   })
 
-  // const { register, handleSubmit, formState: {errors } } = useForm<FormProps>({
-  //   mode: 'all',
-  //   reValidateMode: "onChange",
-  //   resolver: zodResolver(schema)
-  // });
-
-  //Função para abrir a Sheet
+  // Função para abrir a Sheet
   const handleOpen = () => {
     form.resetField("nome")
     form.resetField("descricao")
     setIsOpen(true)
   }
 
-  //Função para executar no Submit
+  // Função para executar no Submit
   function onSubmit(values: FormProps) {
     console.log("VALORES", values)
-    console.log("SUBS", subGrupos)
+    console.log("SUBS", Fonte)
     setIsOpen(false)
   }
 
@@ -185,7 +194,7 @@ export default function NovoGrupoForm() {
     <Sheet open={isOpen}>
       {/* <DialogOverlay className="bg-black/10" /> */}
       <Button variant="outline" onClick={handleOpen}>
-        + Grupo
+        + Fonte
       </Button>
       <SheetTrigger className="rounded p-2 hover:bg-slate-200">
         {/* Add Conta */}
@@ -199,7 +208,7 @@ export default function NovoGrupoForm() {
                       rounded-2xl bg-white p-8  
                     text-gray-900 shadow"
       >
-        <DialogTitle>Novo grupo de contas</DialogTitle>
+        <DialogTitle>Nova Fonte</DialogTitle>
         {isOpen ? (
           <div className="mt-8">
             <Form {...form}>
@@ -207,7 +216,6 @@ export default function NovoGrupoForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-4"
               >
-                {/* Nome do grupo (nome) */}
                 <FormField
                   control={form.control}
                   name="nome"
@@ -215,9 +223,9 @@ export default function NovoGrupoForm() {
                     <FormItem>
                       <FormLabel>Nome</FormLabel>
                       <FormControl>
-                        <Input placeholder="Nome" {...field} />
+                        <Input placeholder="Nome..." {...field} />
                       </FormControl>
-                      <FormDescription>Nome do grupo.</FormDescription>
+                      <FormDescription>Nome da Fonte.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -229,10 +237,10 @@ export default function NovoGrupoForm() {
                     <FormItem>
                       <FormLabel>Descrição</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Descricao" {...field} />
+                        <Textarea placeholder="Descrição sobre a fonte..." {...field} />
                       </FormControl>
                       <FormDescription>
-                        Digite a descrição do subgrupo.
+                        Digite a descrição da Fonte.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -245,16 +253,16 @@ export default function NovoGrupoForm() {
                     <FormItem>
                       <FormLabel>Tipo</FormLabel>
                       <FormControl>
-                        <Input placeholder="Tipo" {...field} />
+                        <Input placeholder="Tipo..." {...field} />
                       </FormControl>
-                      <FormDescription>Tipo da conta.</FormDescription>
+                      <FormDescription>Tipo da Fonte.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <div className="flex-row">
                   <div>
-                    <TabelaSubGrupos data={subGrupos} />
+                    <TabelaFontes data={Fonte} />
                   </div>
                 </div>
                 {/* <Button className="w-full hover:bg-gray-100" variant={"outline"} type="submit">Incluir grupo</Button> */}

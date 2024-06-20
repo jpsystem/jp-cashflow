@@ -130,7 +130,7 @@ export default async function RootLayout({
                           href="/cadastros/fontes"
                         >
                           <IconCadastros className="mr-2 h-4 w-4" />
-                          Usuarios
+                          Fontes
                         </Link>
                       </PopoverClose>
                       <PopoverClose asChild>
