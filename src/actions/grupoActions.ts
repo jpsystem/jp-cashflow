@@ -14,7 +14,7 @@ export async function CreateGrupo(data: tyGrupo){
 
   let retorno = {
     status: 0,
-    menssage: "Vasio"
+    menssage: "Vazio"
   }
   try {
     const grupo = await prisma.grupo.create({
@@ -41,7 +41,7 @@ export async function CreateGrupo(data: tyGrupo){
 export async function ListaGrupos(){
   let retorno = {
     status: 0,
-    menssage: "Vasio",
+    menssage: "Vazio",
     grupos: [{}],
   }
   try {
@@ -93,7 +93,7 @@ export async function CreateSunGrupo(data: tySubGrupo){
 
   let retorno = {
     status: 0,
-    menssage: "Vasio"
+    menssage: "Vazio"
   }
   try {
     const subGrupo = await prisma.subGrupo.create({

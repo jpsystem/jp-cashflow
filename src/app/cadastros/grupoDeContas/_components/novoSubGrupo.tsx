@@ -164,13 +164,14 @@ export default function NovoSubGrupo({data, onAddItem}: Props) {
                     </FormItem>         
                   )}
                 />
-                <SheetFooter >
-                  <Button type="submit">Incluir</Button>
-                  <SheetClose onClick={handleClose}>
-                    {/* <button onClick={handleClose}>Cancel</button> */}
-                    CLOSE
-                  </SheetClose>
-                </SheetFooter>
+                 <div className="text-right mt-8 space-x-4">
+                  <SheetFooter>
+                    <Button variant="outline" type="submit">Incluir</Button>
+                    <SheetClose asChild>
+                      <Button variant="outline" onClick={handleClose}>Cancelar</Button>
+                    </SheetClose>
+                  </SheetFooter>
+                </div>
               </form>
             </Form>
           </div> 

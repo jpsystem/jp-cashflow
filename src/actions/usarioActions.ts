@@ -9,7 +9,7 @@ export async function CreateUsuario(data: tyUsuario){
 
   let retorno = {
     status: 0,
-    menssage: "Vasio"
+    menssage: "Vazio"
   }
   try {
     const {id} = await prisma.user.create({

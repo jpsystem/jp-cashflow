@@ -127,7 +127,7 @@ export default async function RootLayout({
                       <PopoverClose asChild>
                         <Link
                           className="flex items-center w-full px-3 py-4 text-center hover:bg-gray-100"
-                          href="/cadastros/fontes"
+                          href="/cadastros/fonte"
                         >
                           <IconCadastros className="mr-2 h-4 w-4" />
                           Fontes

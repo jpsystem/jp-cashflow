@@ -3,7 +3,7 @@ import prisma from '@/lib/db';
 
 export async function GET() {
   try {
-    const fontes: any[] = await prisma.$queryRaw`
+    const Fonte: any[] = await prisma.$queryRaw`
       SELECT 
         Fonte.id AS id,
         Fonte.nome AS nome,
@@ -17,8 +17,7 @@ export async function GET() {
         Fonte.descricao,
         Fonte.tipo
     `;
-
-    if (fontes.length === 0) {
+    if (Fonte.length === 0) {
       return NextResponse.json(
         { message: "Não encontrou nenhum dado" },
         { status: 200 }
@@ -26,7 +25,7 @@ export async function GET() {
     }
 
     return NextResponse.json(
-      { message: "OK", fontes },
+      { message: "OK", Fonte },
       { status: 200 }
     );
   } catch (error: any) {

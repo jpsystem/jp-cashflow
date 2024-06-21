@@ -20,6 +20,14 @@ export type tyGrupo = {
   userID?:    number,
 }
 
+export type tyFonte = {
+  id?:         number;
+  nome:        String;
+  descricao:   String;
+  tipo:        String;
+}
+
+
 export type tySubGrupo = {
   key?:       number,
   id?:        number,
