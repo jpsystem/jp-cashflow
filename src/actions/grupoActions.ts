@@ -1,42 +1,8 @@
 "use server";
 
-import { tySubGrupo, tyGrupo,  tyGrupoLista } from './../../types/types';
+import { tySubGrupo, tyGrupo,  tyGrupoLista } from '@/types/types';
 import prisma from '@/lib/db';
 
-// type GrupoLista = {
-//   id?: number;
-//   nome?: string;
-//   descricao?: string;
-//   qtdSubGrupos?: number;
-// }
-
-export async function CreateGrupo(data: tyGrupo){
-
-  let retorno = {
-    status: 0,
-    menssage: "Vazio"
-  }
-  try {
-    const grupo = await prisma.grupo.create({
-      data: {
-        nome: data.nome.toUpperCase(),
-        descricao: data.descricao,
-        tipo: data.tipo,
-      },
-    });
-    retorno.status = 1;
-    retorno.menssage = `Cadastro do grupo ${grupo.id}: ${grupo.nome} efetuado com sucesso`;
-  } catch (err: any) {
-    if(err.code === "P2002"){
-      retorno.status = 0;
-      retorno.menssage = "O nome desse grupo já está cadastrado para outro usuário!"
-    }else{
-      retorno.status = 0;
-      retorno.menssage = err.menssage;
-    }
-  }
-  return retorno;
-}
 
 export async function ListaGrupos(){
   let retorno = {
@@ -58,13 +24,14 @@ export async function ListaGrupos(){
       }
     })
     retorno.grupos = grupos;
-    console.log("RETORNO: ", retorno)
   } catch (err: any) {
     
   }
   return retorno
 }
 
+//Está função faz uma consulta no banco de dados
+//e retornar todos os grupos com a quantidade de subGrupos associado
 export async function retGrupos(){
   let grupos:tyGrupoLista[];
   try {
@@ -73,6 +40,7 @@ export async function retGrupos(){
         Grupo.id as id,
         Grupo.nome as nome,
         Grupo.descricao as descricao,
+        Grupo.ativo as ativo,
         Count(*) as qtdSubGrupos
       From 
         Grupo
@@ -81,7 +49,8 @@ export async function retGrupos(){
       Group By 
         Grupo.id,
         Grupo.nome, 
-        Grupo.descricao 
+        Grupo.descricao,
+        Grupo.ativo 
     `;
     return grupos
   } catch (err: any) {
@@ -89,7 +58,8 @@ export async function retGrupos(){
   }
 }
 
-export async function CreateSunGrupo(data: tySubGrupo){
+
+export async function CreateSubGrupo(data: tySubGrupo){
 
   let retorno = {
     status: 0,
@@ -115,4 +85,30 @@ export async function CreateSunGrupo(data: tySubGrupo){
     }
   }
   return retorno;
+}
+
+export async function novoGrupoComSubgrupos(dadosGrupo: tyGrupo, dadosSubGrupos: tySubGrupo[] ){
+  
+  const grupo = await prisma.grupo.create({
+    data: {
+      nome: dadosGrupo.nome.toUpperCase(),
+      descricao: dadosGrupo.descricao,
+      tipo: dadosGrupo.tipo,
+      subGrupos: {
+        create: dadosSubGrupos.map(
+          subGrupo => ({
+            nome: subGrupo.nome.toUpperCase(),
+            descricao: subGrupo.descricao,
+          })
+        )
+      }
+    },
+    include: {
+      subGrupos: true,
+    }
+  })
+
+  return grupo;
+
+
 }

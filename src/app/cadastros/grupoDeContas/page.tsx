@@ -1,32 +1,24 @@
-import { CreateSunGrupo, retGrupos } from "@/actions/grupoActions"
+import { novoGrupoComSubgrupos, retGrupos } from "@/actions/grupoActions"
 import NovoGrupoForm from "./_components/novoGrupoForm"
 import TabelaGrupos from "./_components/tabelaGrupos";
-import { tySubGrupo, tyGrupoLista } from "../../../../types/types";
-
-
-// type GrupoLista =
-//  {
-//   id?: number;
-//   nome?: string;
-//   descricao?: string;
-//   qtdSubGrupos?: number;
-// };
+import { tySubGrupo, tyGrupoLista } from "../../../types/types";
 
 async function incluiGrupo(){
   'use server'
   
   // console.log("INCLUI GRUPO")
 }
-async function incluiSubGrupo(){
-  'use server'
-  const dado = {
-    nome: "JPSystem",
-    descricao: "Entrada referente a JPSystem",
-    grupoId: 1,
-  }
-  const ret = await CreateSunGrupo(dado);
-  // console.log("INCLUI SUB GRUPO", ret)
-}
+
+// async function incluiSubGrupo(){
+//   'use server'
+//   const dado = {
+//     nome: "JPSystem",
+//     descricao: "Entrada referente a JPSystem",
+//     grupoId: 1,
+//   }
+//   const ret = await novoGrupoComSubgrupos(dado);
+//   // console.log("INCLUI SUB GRUPO", ret)
+// }
 
 
 export default async function GrupoDeContas() {
@@ -48,12 +40,12 @@ export default async function GrupoDeContas() {
         </div>
       </div>
       <TabelaGrupos/>
-      <form action={incluiGrupo}>
+      {/* <form action={incluiGrupo}>
         <button type='submit'>GRUPO</button>
       </form>
       <form action={incluiSubGrupo}>
         <button type='submit'>SUBGRUPO</button>
-      </form>
+      </form> */}
     </div>
   )
 }

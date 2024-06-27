@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table";
 import { CardContent, Card } from "@/components/ui/card";
 import { ChevronLeftIcon, FileEditIcon, MenuIcon, Package2Icon, TrashIcon } from "@/app/_components/iconsForm";
-import { tyGrupoLista } from "../../../../../types/types";
+import { tyGrupoLista } from "../../../../types/types";
 import { retGrupos } from "@/actions/grupoActions";
 
 export default async function TabelaFontes() {

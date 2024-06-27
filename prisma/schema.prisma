@@ -26,6 +26,7 @@ model Grupo {
   nome      String  @unique
   descricao String?
   tipo      String  @default("D")
+  ativo     Boolean @default(true)
   subGrupos SubGrupo[]
 }
 
@@ -33,6 +34,7 @@ model SubGrupo {
   id              Int      @id @default(autoincrement())
   nome            String
   descricao       String?
+  ativo           Boolean  @default(true)
   grupo           Grupo?   @relation(fields: [grupoId], references: [id])
   grupoId         Int
   SG_lancamentos  Lancamento[]
@@ -43,6 +45,7 @@ model Fonte {
   nome              String
   descricao         String?
   tipo              String  @default("M")
+  ativo             Boolean @default(true)
   fonte_lancamentos Lancamento[]
 }
 
@@ -60,12 +63,12 @@ model Saldo {
 }
 
 model Lancamento {
-  id            Int      @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   periodo       String
-  valor         Decimal  @default(0.00)
+  valor         Decimal   @default(0.00)
   dtLancamento  DateTime?
-  operacao      String @default("D") 
-  subGrupo      SubGrupo?    @relation(fields: [subGrupoId], references: [id])
+  operacao      String    @default("D") 
+  subGrupo      SubGrupo? @relation(fields: [subGrupoId], references: [id])
   subGrupoId    Int
   fonte         Fonte?    @relation(fields: [fonteId], references: [id])
   fonteId       Int

@@ -1,6 +1,6 @@
 "use server";
 
-import { tyUsuario } from "../../types/types";
+import { tyUsuario } from "@/types/types";
 import prisma from '@/lib/db';
 import { error } from 'console';
 

@@ -14,31 +14,39 @@ export type tyUsuario = {
 export type tyGrupo = {
   key?:       number,
   id?:        number,
-  nome:      string,
-  descricao: string,
-  tipo:      string,
+  nome:       string,
+  descricao:  string,
+  tipo:       string,
+  ativo?:     boolean,
   userID?:    number,
 }
 
 export type tyFonte = {
-  id?:         number;
-  nome:        String;
-  descricao:   String;
-  tipo:        String;
+  id?:        number;
+  nome:       String;
+  descricao:  String;
+  tipo:       String;
+  ativo?:     boolean;
 }
-
 
 export type tySubGrupo = {
   key?:       number,
   id?:        number,
-  nome:      string,
-  descricao: string,
-  grupoId: number,
+  nome:       string,
+  descricao:  string,
+  ativo?:     boolean,
+  grupoId?:   number,
 }
 
 export type tyGrupoLista = {
-  id?: number,
-  nome?: string,
-  descricao?: string,
-  qtdSubGrupos?: number,
+  id?:            number,
+  nome?:          string,
+  descricao?:     string,
+  ativo?:         boolean,
+  qtdSubGrupos?:  number,
+}
+
+export type tySelects = {
+  id?:            number,
+  nome?:          string,
 }

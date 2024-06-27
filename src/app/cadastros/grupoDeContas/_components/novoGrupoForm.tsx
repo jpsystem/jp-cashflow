@@ -1,27 +1,18 @@
 "use client"
 // COMPONENTE PAI
 
-import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CreateGrupo } from "@/actions/grupoActions"
+import { novoGrupoComSubgrupos } from "@/actions/grupoActions"
 import { z } from "zod"
-import LabelError from "@/components/ui/jp/labelError"
-import { useContext, useEffect, useState } from "react"
-//import { ModalContext } from "@/components/ui/jp/modal/modal-context"
-import NovoSubGrupo from "./novoSubGrupo"
-//COMPONENTE DIALOG
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { useState } from "react"
+import TabelaSubGrupos from "./tabelaSubGrupos"
+import { Textarea } from "@/components/ui/textarea"
+import { tyGrupo, tySubGrupo } from "../../../../types/types"
+
+
 //Componente SHEET shadcn/ui
 import {
   Sheet,
@@ -33,6 +24,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+
 //COMPONENTE FORM
 import {
   Form,
@@ -43,6 +35,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+
 //COMPONENTE TABLE
 import {
   Table,
@@ -53,11 +46,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { TrashIcon } from "@/app/_components/iconsForm"
-import { sub } from "date-fns"
-import TabelaSubGrupos from "./tabelaSubGrupos"
-import { Textarea } from "@/components/ui/textarea"
 
+//Configurando o zod para validação do formulário
 const schema = z.object({
   nome: z.string().min(2, "Campo obrigatório!"),
   descricao: z.string().min(2, "Campo obrigatório!"),
@@ -79,16 +69,18 @@ type FormProps = z.infer<typeof schema>;
 
 export default function NovoGrupoForm() {
   const [isOpen, setIsOpen] = useState(false);
-  const [subGrupos, setSubGrupos] = useState<SubGrupo[]>([]);
+  const [isSubimit, setIsSubmit] = useState(false);
+  const [subGruposP, setSubGruposP] = useState<SubGrupo[]>([]);
 
+  //Função a ser executada no evento 
+  //click do botão cancelar
   const handleClose = () => {
+    form.reset();
+    setSubGruposP([]);
     setIsOpen(false);
   };
 
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
-
+  //Inicialização do hook useForm
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -97,31 +89,51 @@ export default function NovoGrupoForm() {
       tipo: "D",
     },
   });
-
+  
+  //Função a ser executada no evento onSubmit
+  // do componente form
   function onSubmit(values: FormProps) {
-    console.log("VALORES", values);
-    console.log("SUBS", subGrupos);
-    setIsOpen(false);
+    const novoGrupo: tyGrupo = {
+      nome: values.nome,
+      descricao: values.descricao,
+      tipo: values.tipo
+    }
+    //Essa validação e para corrigir erro de submissão formulário antes de
+    //selecionar os subgrupos
+    if(isSubimit){
+      incluirGrupo(novoGrupo, subGruposP);
+      form.reset();
+      setIsOpen(false);
+    }
+
+  }
+
+  //Essa função executa uma funçao de backEnd para
+  //incluir o Grupo e seus respectivos subGrupos
+  async function incluirGrupo(dadosGrupo: tyGrupo, dadosSubGrupos: tySubGrupo[]){
+    novoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
+    .then(grupo => {
+      console.log("Grupo e SubGrupos criado: ", grupo);
+    })
+    .catch(error =>{
+      console.log("Erro ao criar Grupo e SubGrupos: ", error);
+    });
   }
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <Button variant="outline" onClick={handleOpen}>
-        + Grupo
-      </Button>
-      <SheetTrigger className="rounded p-2 hover:bg-slate-200">
-        {/* Add Conta */}
+
+      <SheetTrigger className="rounded border-solid border-black border-2 p-2 hover:bg-slate-200">
+        + GRUPO
       </SheetTrigger>
-      <SheetContent className="fixed border-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[600px] overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
-        <DialogTitle>
-          <button onClick={handleClose} className="absolute left-4 top-4">
-          </button>
-          Novo grupo de contas
-        </DialogTitle>
+      <SheetContent className="fixed border-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[800px] min-w-[800px] overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
+        <SheetHeader >
+          <SheetTitle className="text-2xl">Novo grupo de Contas</SheetTitle>
+        </SheetHeader>
         {isOpen && (
           <div className="mt-8">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={form.handleSubmit(onSubmit)}  className="space-y-4">
                 <FormField
                   control={form.control}
                   name="nome"
@@ -166,15 +178,15 @@ export default function NovoGrupoForm() {
                 />
                 <div className="flex-row">
                   <div>
-                    <TabelaSubGrupos data={subGrupos} />
+                    <TabelaSubGrupos data={subGruposP} setSubGruposP={setSubGruposP}/>
                   </div>
                 </div>
                 <div className="text-right mt-8 space-x-4">
                   <SheetFooter>
-                    <Button variant="outline" type="submit">Incluir</Button>
-                    <SheetClose asChild>
-                      <Button variant="outline" onClick={handleClose}>Cancelar</Button>
-                    </SheetClose>
+                    <Button variant="outline" type="submit" onClick={()=>setIsSubmit(true)}>Incluir</Button>
+                    <Button variant="outline" onClick={handleClose} >Cancelar</Button>
+                    {/* <SheetClose asChild>
+                    </SheetClose> */}
                   </SheetFooter>
                 </div>
               </form>

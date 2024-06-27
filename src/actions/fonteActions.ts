@@ -1,5 +1,5 @@
 // Importe os tipos necessários e o módulo do Prisma
-import { tyFonte } from '../../types/types';
+import { tyFonte } from '@/types/types';
 import prisma from '@/lib/db';
 
 // Função para criar uma fonte no banco de dados

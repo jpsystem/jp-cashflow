@@ -1,5 +1,4 @@
 'use client'
-
 // COMPONENTE FILHO
 
 import { Input } from "@/components/ui/input"
@@ -20,6 +19,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+
 //Componente FORM shadcn/ui
 import {
   Form,
@@ -39,7 +39,7 @@ type SubGrupo = {
 
 interface Props {
   data: SubGrupo[];
-  onAddItem: (item: SubGrupo) => boolean;
+  onAddItem: (item: SubGrupo) => Promise<boolean>;
 }
 
 const schema = z
@@ -79,14 +79,14 @@ export default function NovoSubGrupo({data, onAddItem}: Props) {
   }
 
   //Definição do submit handler.
-  function onSubmit(values: FormProps) {
-
+  async function onSubmit(values: FormProps) {
     const newItem: SubGrupo = { 
       //id: data.length + 1,
       nome: values.nome.toUpperCase(),
       descricao: values.descricao
     };
-    const retorno = onAddItem(newItem);
+    const retorno = await onAddItem(newItem);
+    console.log("AQUI: ",retorno);
     if(retorno){
       setIsOpen(false);
     }
@@ -94,7 +94,7 @@ export default function NovoSubGrupo({data, onAddItem}: Props) {
       alert("Esse subtipo ja existe!")
       setIsOpen(true);
     }
-    
+
   }
 
   return(
@@ -128,7 +128,7 @@ export default function NovoSubGrupo({data, onAddItem}: Props) {
         </SheetHeader>
 
         {/* //Inclusão do formulário */}
-        {isOpen ? (
+        {isOpen && (
           <div className="flex flex-col w-full items-end space-y-2">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -167,15 +167,13 @@ export default function NovoSubGrupo({data, onAddItem}: Props) {
                  <div className="text-right mt-8 space-x-4">
                   <SheetFooter>
                     <Button variant="outline" type="submit">Incluir</Button>
-                    <SheetClose asChild>
-                      <Button variant="outline" onClick={handleClose}>Cancelar</Button>
-                    </SheetClose>
+                    <Button variant="outline" onClick={handleClose}>Cancelar</Button>
                   </SheetFooter>
                 </div>
               </form>
             </Form>
           </div> 
-        ): (<></>)}
+        )}
       </SheetContent>
     </Sheet>
   )

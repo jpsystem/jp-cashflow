@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CreateUsuario } from "@/actions/usarioActions"
 import { useRouter } from "next/navigation";
-import { tyUsuario } from "../../../../../types/types"
+import { tyUsuario } from "../../../../types/types"
 import {z} from "zod"
 import LabelError from "@/components/ui/jp/labelError"
 import { useContext } from "react"

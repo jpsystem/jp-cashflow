@@ -1,4 +1,4 @@
-import { tyGrupoLista } from './../../../../types/types';
+import { tyGrupoLista } from '@/types/types';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 
