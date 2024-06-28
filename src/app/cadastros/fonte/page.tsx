@@ -4,7 +4,7 @@ import TabelaFonte from "./_components/tabelaFontes"
 async function incluiFonte() {
   "use server"
 }
-
+// sei la
 export default async function GrupoFontes() {
   return (
     <div className="flex flex-col min-h-[80vh] items-start gap-4 px-4 pb-4 md:justify-center md:px-6 md:gap-5">

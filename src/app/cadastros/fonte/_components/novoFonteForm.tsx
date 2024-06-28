@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CreateGrupo } from "@/actions/grupoActions"
 import { z } from "zod"
 import LabelError from "@/components/ui/jp/labelError"
 import { useContext, useEffect, useState } from "react"
@@ -33,6 +32,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 //COMPONENTE FORM
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
   FormControl,
@@ -61,6 +61,7 @@ import { Textarea } from "@/components/ui/textarea"
 const schema = z.object({
   nome: z.string().min(2, "Campo obrigatorio!"),
   descricao: z.string().min(2, "Campo obrigatorio!"),
+  ativo: z.boolean(),
   tipo: z.enum(["D", "C", "M"], {
     errorMap: () => {
       return {
@@ -73,10 +74,11 @@ const schema = z.object({
 
 // Definição do type fonte
 type tyFonte = {
-  id?: number;
-  nome: string;
-  descricao: string | null;
-  tipo: string;
+  id?: number
+  nome: string
+  descricao: string | null
+  tipo: string
+  ativo: boolean
 }
 
 type FormProps = z.infer<typeof schema>
@@ -102,6 +104,7 @@ export default function NovoFonteForm() {
       nome: "",
       descricao: "",
       tipo: "D",
+      ativo: true,
     },
   })
 
@@ -109,6 +112,8 @@ export default function NovoFonteForm() {
   const handleOpen = () => {
     form.resetField("nome")
     form.resetField("descricao")
+    form.resetField("tipo")
+    form.resetField("ativo")
     setIsOpen(true)
   }
 
@@ -124,7 +129,7 @@ export default function NovoFonteForm() {
       <Button variant="outline" onClick={handleOpen}>
         + Fonte
       </Button>
-      <SheetTrigger className="rounded p-2 hover:bg-slate-200">
+      <SheetTrigger className="rounded p-2 hover:bg-slate-200 ">
         {/* Add Conta */}
       </SheetTrigger>
       <SheetContent
@@ -133,12 +138,15 @@ export default function NovoFonteForm() {
                     -translate-x-1/2 -translate-y-1/2
                     max-h-[600px] overflow-auto
                     rounded-2xl bg-white p-8  
-                    text-gray-900 shadow max-w-md"
+                    text-gray-900 shadow max-w-md
+                    flex flex-col w-full items-center space-y-4"
       >
         <DialogTitle>Nova Fonte</DialogTitle>
         <SheetClose asChild>
-          <button onClick={handleClose} className="absolute right-4 top-4">
-          </button>
+          <button
+            onClick={handleClose}
+            className="absolute right-4 top-4"
+          ></button>
         </SheetClose>
         {isOpen && (
           <div className="mt-8">
@@ -187,11 +195,31 @@ export default function NovoFonteForm() {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="ativo"
+                  render={({ field }) => (
+                    <FormItem className="display:flex justify-content: flex-end">
+                      <FormLabel>Ativo</FormLabel>
+                      <div className="flex items-center space-x-2">
+                        <FormControl>
+                          <Checkbox />
+                        </FormControl>
+                        <div>salve</div>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <div className="text-right mt-8 space-x-4">
                   <SheetFooter>
-                    <Button variant="outline" type="submit">Incluir</Button>
+                    <Button variant="outline" type="submit">
+                      Incluir
+                    </Button>
                     <SheetClose asChild>
-                      <Button variant="outline" onClick={handleClose}>Cancelar</Button>
+                      <Button variant="outline" onClick={handleClose}>
+                        Cancelar
+                      </Button>
                     </SheetClose>
                   </SheetFooter>
                 </div>

@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { novoGrupoComSubgrupos } from "@/actions/grupoActions"
+import { Checkbox } from "@/components/ui/checkbox"
 import { z } from "zod"
 import { useState } from "react"
 import TabelaSubGrupos from "./tabelaSubGrupos"
 import { Textarea } from "@/components/ui/textarea"
 import { tyGrupo, tySubGrupo } from "../../../../types/types"
-
 
 //Componente SHEET shadcn/ui
 import {
@@ -57,28 +57,28 @@ const schema = z.object({
         "Informe 'D' para débito, 'C' para crédito ou 'M' para conta de movimentação.",
     }),
   }),
-});
+})
 
 type SubGrupo = {
-  id?: number;
-  nome: string;
-  descricao: string;
-};
+  id?: number
+  nome: string
+  descricao: string
+}
 
-type FormProps = z.infer<typeof schema>;
+type FormProps = z.infer<typeof schema>
 
 export default function NovoGrupoForm() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSubimit, setIsSubmit] = useState(false);
-  const [subGruposP, setSubGruposP] = useState<SubGrupo[]>([]);
+  const [isOpen, setIsOpen] = useState(false)
+  const [isSubimit, setIsSubmit] = useState(false)
+  const [subGruposP, setSubGruposP] = useState<SubGrupo[]>([])
 
-  //Função a ser executada no evento 
+  //Função a ser executada no evento
   //click do botão cancelar
   const handleClose = () => {
-    form.reset();
-    setSubGruposP([]);
-    setIsOpen(false);
-  };
+    form.reset()
+    setSubGruposP([])
+    setIsOpen(false)
+  }
 
   //Inicialização do hook useForm
   const form = useForm<FormProps>({
@@ -88,52 +88,56 @@ export default function NovoGrupoForm() {
       descricao: "",
       tipo: "D",
     },
-  });
-  
+  })
+
   //Função a ser executada no evento onSubmit
   // do componente form
   function onSubmit(values: FormProps) {
     const novoGrupo: tyGrupo = {
       nome: values.nome,
       descricao: values.descricao,
-      tipo: values.tipo
+      tipo: values.tipo,
     }
     //Essa validação e para corrigir erro de submissão formulário antes de
     //selecionar os subgrupos
-    if(isSubimit){
-      incluirGrupo(novoGrupo, subGruposP);
-      form.reset();
-      setIsOpen(false);
+    if (isSubimit) {
+      incluirGrupo(novoGrupo, subGruposP)
+      form.reset()
+      setIsOpen(false)
     }
-
   }
 
   //Essa função executa uma funçao de backEnd para
   //incluir o Grupo e seus respectivos subGrupos
-  async function incluirGrupo(dadosGrupo: tyGrupo, dadosSubGrupos: tySubGrupo[]){
+  async function incluirGrupo(
+    dadosGrupo: tyGrupo,
+    dadosSubGrupos: tySubGrupo[]
+  ) {
     novoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
-    .then(grupo => {
-      console.log("Grupo e SubGrupos criado: ", grupo);
-    })
-    .catch(error =>{
-      console.log("Erro ao criar Grupo e SubGrupos: ", error);
-    });
+      .then((grupo) => {
+        console.log("Grupo e SubGrupos criado: ", grupo)
+      })
+      .catch((error) => {
+        console.log("Erro ao criar Grupo e SubGrupos: ", error)
+      })
   }
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-
       <SheetTrigger className="rounded border-solid border-black border-2 p-2 hover:bg-slate-200">
         + GRUPO
       </SheetTrigger>
       <SheetContent className="fixed border-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[800px] min-w-[800px] overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
-        <SheetHeader >
+        <SheetHeader>
           <SheetTitle className="text-2xl">Novo grupo de Contas</SheetTitle>
         </SheetHeader>
         {isOpen && (
           <div className="mt-8">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}  className="space-y-4">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
                 <FormField
                   control={form.control}
                   name="nome"
@@ -178,13 +182,24 @@ export default function NovoGrupoForm() {
                 />
                 <div className="flex-row">
                   <div>
-                    <TabelaSubGrupos data={subGruposP} setSubGruposP={setSubGruposP}/>
+                    <TabelaSubGrupos
+                      data={subGruposP}
+                      setSubGruposP={setSubGruposP}
+                    />
                   </div>
                 </div>
                 <div className="text-right mt-8 space-x-4">
                   <SheetFooter>
-                    <Button variant="outline" type="submit" onClick={()=>setIsSubmit(true)}>Incluir</Button>
-                    <Button variant="outline" onClick={handleClose} >Cancelar</Button>
+                    <Button
+                      variant="outline"
+                      type="submit"
+                      onClick={() => setIsSubmit(true)}
+                    >
+                      Incluir
+                    </Button>
+                    <Button variant="outline" onClick={handleClose}>
+                      Cancelar
+                    </Button>
                     {/* <SheetClose asChild>
                     </SheetClose> */}
                   </SheetFooter>
@@ -195,5 +210,5 @@ export default function NovoGrupoForm() {
         )}
       </SheetContent>
     </Sheet>
-  );
+  )
 }

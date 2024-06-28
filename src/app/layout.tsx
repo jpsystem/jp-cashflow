@@ -12,7 +12,6 @@ import {
 } from "./_components/iconsMenu"
 import LogoutButton from "./_components/logoutButton"
 import AuthProvider from "@/components/providers/auth-provider"
-// import ModalProvider from "@/components/ui/jp/modal/modal-provider";
 import Modal from "@/components/ui/jp/modal/modal"
 import { getServerSession } from "next-auth"
 import { auth as authOptions } from "@/lib/auth-config"
@@ -38,49 +37,44 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <div className="flex w-full min-h-screen text-2xl flex-col">
+          <div className="flex flex-col min-h-screen text-2xl">
             {/* Parte superior */}
-            <div className="flex w-full items-center bg-gray-400 h-14 px-4 border-b dark:border-gray-700">
+            <div className="flex items-center w-full h-14 px-4 bg-gray-400 border-b dark:border-gray-700 border-y-5">
               <Link
                 className="flex items-center gap-2 text-2xl font-semibold"
                 href="#"
               >
-                <ActivityIcon className="w-6 h-6" />
-                <span>Cash Flow</span>
+                <ActivityIcon className="w-6 h-6 " />
+                <span className="py-4">JP Cash Flow</span>
               </Link>
-              <div className="ml-auto flex items-center gap-4">
-                <Link
-                  className="flex items-center gap-2 text-2xl font-medium"
-                  href="#"
-                >
-                  <UserCircleIcon
-                    className={`w-4 h-4 ${
-                      session
-                        ? session?.user?.role !== "admin"
+              <div className="flex items-center gap-4 ml-auto">
+                {session && (
+                  <Link
+                    className="flex items-center gap-2 text-2xl font-medium py-4"
+                    href="#"
+                  >
+                    <UserCircleIcon
+                      className={`w-4 h-4 ${
+                        session.user.role !== "admin"
                           ? "text-blue-700"
                           : "text-green-700"
-                        : ""
-                    } rounded-full`}
-                  />
-                  <span>{session ? session.user.name : "Cadastrar"}</span>
-                </Link>
-                <LogoutButton
+                      } rounded-full`}
+                    />
+                    <span>{session.user.name}</span>
+                  </Link>
+                )}
+                {/* <LogoutButton
                   size="lg"
                   text={session ? "Logout" : "Login"}
                   variant="outline"
                   className="hover:bg-gray-100"
-                />
+                /> */}
               </div>
             </div>
             {/* Parte central */}
-            <div className="flex w-full bg-gray-200 min-h-[80vh] overflow-hidden">
+            <div className="flex flex-1 w-full min-h-[80vh] bg-gray-200 overflow-hidden">
               {session && (
-                <nav
-                  className="flex flex-col 
-                    items-center w-44 h-full 
-                    py-4 border-r bg-gray-200 dark:bg-gray-800
-                    border-gray-200 dark:border-gray-800"
-                >
+                <nav className="flex flex-col items-center w-full sm:w-44 h-full py-4 border-r bg-gray-200 dark:bg-gray-800 border-gray-200 dark:border-gray-800">
                   <Link
                     className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100"
                     href="/home"
@@ -97,7 +91,7 @@ export default async function RootLayout({
                   </Link>
                   <Link
                     className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100"
-                    href="#"
+                    href="/lancamentos"
                   >
                     <IconLancamentos className="w-6 h-6" />
                     <span className="text-2xl leading-none">Lançamentos</span>
@@ -121,10 +115,10 @@ export default async function RootLayout({
                     </PopoverTrigger>
                     <PopoverContent
                       align="start"
-                      className="min-w-[200px] w-56 p-2 bg-slate-200"
+                      className="w-56 min-w-[200px] p-2 bg-slate-200"
                       side="right"
                     >
-                      <PopoverClose asChild>
+                      {/* <PopoverClose asChild>
                         <Link
                           className="flex items-center w-full px-3 py-4 text-center hover:bg-gray-100"
                           href="/cadastros/fonte"
@@ -132,7 +126,7 @@ export default async function RootLayout({
                           <IconCadastros className="mr-2 h-4 w-4" />
                           Fontes
                         </Link>
-                      </PopoverClose>
+                      </PopoverClose> */}
                       <PopoverClose asChild>
                         <Link
                           className="flex items-center w-full px-3 py-4 text-center hover:bg-gray-100"
@@ -145,7 +139,7 @@ export default async function RootLayout({
                       <PopoverClose asChild>
                         <Link
                           className="flex items-center w-full px-3 py-4 text-center hover:bg-gray-100"
-                          href="/cadastros/grupoDeContas"
+                          href="/cadastros/fonte"
                         >
                           <IconCadastros className="mr-2 h-4 w-4" />
                           Contas financeiras
@@ -160,7 +154,7 @@ export default async function RootLayout({
               </div>
             </div>
             {/* Parte inferior */}
-            <div className="flex w-full items-center bg-gray-400 h-28 px-4 border-t dark:border-gray-700">
+            <div className="flex items-center w-full h-14 px-4 bg-gray-400 border-b-5 dark:border-gray-700 ">
               <Link
                 className="flex items-center gap-2 text-lg font-semibold"
                 href="#"
@@ -168,17 +162,30 @@ export default async function RootLayout({
                 <ActivityIcon className="w-6 h-6" />
                 <span>© 2023 JP System Ltda. All rights reserved.</span>
               </Link>
-              <div className="ml-auto flex items-center gap-4">
-                <Link
-                  className="flex items-center gap-2 text-sm font-medium"
-                  href="#"
-                >
-                  <UserCircleIcon className="w-4 h-4 rounded-full" />
-                  <span className="text-2xl">brad</span>
-                </Link>
-                <Button size="lg" variant="outline">
-                  Logout
-                </Button>
+              <div className="flex items-center gap-4 ml-auto">
+                {session && (
+                  <>
+                    <Link
+                      className="flex items-center gap-2 text-sm font-medium"
+                      href="#"
+                    >
+                      <UserCircleIcon className="w-4 h-4 rounded-full" />
+                      <span className="text-2xl">{session.user.name}</span>
+                    </Link>
+                    <LogoutButton
+                      size="lg"
+                      text="Logout"
+                      variant="outline"
+                      className="hover:bg-gray-100"
+                    ></LogoutButton>
+                  </>
+                )}
+                {/* <LogoutButton
+                  size="lg"
+                  text="Logout"
+                  variant="outline"
+                  className="hover:bg-gray-100"
+                ></LogoutButton> */}
               </div>
             </div>
           </div>

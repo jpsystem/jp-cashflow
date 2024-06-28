@@ -1,4 +1,4 @@
-'use client'
+"use client"
 // COMPONENTE FILHO
 
 import { Input } from "@/components/ui/input"
@@ -7,7 +7,7 @@ import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {z} from "zod"
+import { z } from "zod"
 //Componente SHEET shadcn/ui
 import {
   Sheet,
@@ -32,81 +32,82 @@ import {
 } from "@/components/ui/form"
 
 type SubGrupo = {
-  id?: number,
-  nome: string,
-  descricao: string,
+  id?: number
+  nome: string
+  descricao: string
 }
 
 interface Props {
-  data: SubGrupo[];
-  onAddItem: (item: SubGrupo) => Promise<boolean>;
+  data: SubGrupo[]
+  onAddItem: (item: SubGrupo) => Promise<boolean>
 }
 
-const schema = z
-.object({
-  nome: z.string().min(3,"O nome da subconta deve ter pelo menos 3 caracteres."),
-  descricao: z.string().min(10,"A descrição deve ter pelo menos 10 caracteres."),
-});
+const schema = z.object({
+  nome: z
+    .string()
+    .min(3, "O nome da subconta deve ter pelo menos 3 caracteres."),
+  descricao: z
+    .string()
+    .min(10, "A descrição deve ter pelo menos 10 caracteres."),
+})
 
-type FormProps = z.infer<typeof schema>;
+type FormProps = z.infer<typeof schema>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export default function NovoSubGrupo({data, onAddItem}: Props) {
+export default function NovoSubGrupo({ data, onAddItem }: Props) {
   //Variavel de estado isOpen
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   //Função para fechar a SHEET
   const handleClose = () => {
-    setIsOpen(false);
+    setIsOpen(false)
   }
 
-
   //Definição do formulario
-  const form = useForm<FormProps>({  
+  const form = useForm<FormProps>({
     resolver: zodResolver(schema),
-    defaultValues:{
+    defaultValues: {
       nome: "",
       descricao: "",
-    }
-  });
+    },
+  })
 
   //Função para abrir a Sheet
   const handleOpen = () => {
-    form.resetField("nome"); 
-    form.resetField("descricao"); 
-    setIsOpen(true);
+    form.resetField("nome")
+    form.resetField("descricao")
+    setIsOpen(true)
   }
 
   //Definição do submit handler.
   async function onSubmit(values: FormProps) {
-    const newItem: SubGrupo = { 
+    const newItem: SubGrupo = {
       //id: data.length + 1,
       nome: values.nome.toUpperCase(),
-      descricao: values.descricao
-    };
-    const retorno = await onAddItem(newItem);
-    console.log("AQUI: ",retorno);
-    if(retorno){
-      setIsOpen(false);
+      descricao: values.descricao,
     }
-    else{
+    const retorno = await onAddItem(newItem)
+    console.log("AQUI: ", retorno)
+    if (retorno) {
+      setIsOpen(false)
+    } else {
       alert("Esse subtipo ja existe!")
-      setIsOpen(true);
+      setIsOpen(true)
     }
-
   }
 
-  return(
+  return (
     <Sheet open={isOpen}>
       {/* bg-black/80 */}
-        {/* <button onClick={handleOpen}>+ SubGrupo</button> */}
-        <Button variant="outline" onClick={handleOpen}>+ SubGrupo</Button>
-      <SheetTrigger>
-      </SheetTrigger>
-      <SheetContent 
-        side="top" 
-        className= {`
+      {/* <button onClick={handleOpen}>+ SubGrupo</button> */}
+      <Button variant="outline" onClick={handleOpen}>
+        + SubGrupo
+      </Button>
+      <SheetTrigger></SheetTrigger>
+      <SheetContent
+        side="top"
+        className={`
           bg-gray-100/90 
           left-1/2 top-1/2 
           -translate-x-1/2 
@@ -122,17 +123,18 @@ export default function NovoSubGrupo({data, onAddItem}: Props) {
       >
         <SheetHeader>
           <SheetTitle>Novo SubGrupo</SheetTitle>
-          <SheetDescription>
-            Inclui um novo subgrupo.
-          </SheetDescription>
+          <SheetDescription>Inclui um novo subgrupo.</SheetDescription>
         </SheetHeader>
 
         {/* //Inclusão do formulário */}
         {isOpen && (
           <div className="flex flex-col w-full items-end space-y-2">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField 
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8"
+              >
+                <FormField
                   control={form.control}
                   name="nome"
                   render={({ field }) => (
@@ -141,14 +143,12 @@ export default function NovoSubGrupo({data, onAddItem}: Props) {
                       <FormControl>
                         <Input placeholder="Nome" {...field} />
                       </FormControl>
-                      <FormDescription>
-                        Nome do subgrupo.
-                      </FormDescription>
+                      <FormDescription>Nome do subgrupo.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <FormField 
+                <FormField
                   control={form.control}
                   name="descricao"
                   render={({ field }) => (
@@ -161,21 +161,24 @@ export default function NovoSubGrupo({data, onAddItem}: Props) {
                         Digite a descrição do subgrupo.
                       </FormDescription>
                       <FormMessage />
-                    </FormItem>         
+                    </FormItem>
                   )}
                 />
-                 <div className="text-right mt-8 space-x-4">
+                <div className="text-right mt-8 space-x-4">
                   <SheetFooter>
-                    <Button variant="outline" type="submit">Incluir</Button>
-                    <Button variant="outline" onClick={handleClose}>Cancelar</Button>
+                    <Button variant="outline" type="submit">
+                      Incluir
+                    </Button>
+                    <Button variant="outline" onClick={handleClose}>
+                      Cancelar
+                    </Button>
                   </SheetFooter>
                 </div>
               </form>
             </Form>
-          </div> 
+          </div>
         )}
       </SheetContent>
     </Sheet>
   )
-
 }

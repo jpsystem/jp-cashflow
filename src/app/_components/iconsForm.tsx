@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 export function ChevronLeftIcon(props: any) {
   return (
@@ -18,7 +18,6 @@ export function ChevronLeftIcon(props: any) {
     </svg>
   )
 }
-
 
 export function FileEditIcon(props: any) {
   return (
@@ -41,7 +40,6 @@ export function FileEditIcon(props: any) {
   )
 }
 
-
 export function MenuIcon(props: any) {
   return (
     <svg
@@ -63,7 +61,6 @@ export function MenuIcon(props: any) {
   )
 }
 
-
 export function Package2Icon(props: any) {
   return (
     <svg
@@ -84,7 +81,6 @@ export function Package2Icon(props: any) {
     </svg>
   )
 }
-
 
 export function TrashIcon(props: any) {
   return (

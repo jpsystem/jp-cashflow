@@ -1,44 +1,44 @@
-"use server";
+"use server"
 
 //import { tySubGrupo, tyGrupo,  tyGrupoLista } from '@/types/types';
-import prisma from '@/lib/db';
+import prisma from "@/lib/db"
 
 //Função para retornar os dados do grupos para preencher
 //as caixa de seleção de grupos retornar apenas os ativos
-export async function getSelectGrupos(){
+export async function getSelectGrupos() {
   try {
     const activeGrupos = await prisma.grupo.findMany({
       where: { ativo: true },
-      select: { 
+      select: {
         id: true,
         nome: true,
-      }
-    });
-    return activeGrupos;
+      },
+    })
+    return activeGrupos
   } catch (error) {
-    console.error('Erro ao buscar grupos ativos:', error);
-    throw error;
+    console.error("Erro ao buscar grupos ativos:", error)
+    throw error
   }
 }
 
-//Função para retornar os dados do SubGrupos 
+//Função para retornar os dados do SubGrupos
 //associado a um determinado Grupo para preencher
 //as caixa de seleção de SubGrupos, retornar apenas os ativos
-export async function getSelectSubGrupos(grupoID: number){
+export async function getSelectSubGrupos(grupoID: number) {
   try {
     const activeSubGrupos = await prisma.subGrupo.findMany({
       where: {
-        grupoId: grupoID, 
-        ativo: true 
+        grupoId: grupoID,
+        ativo: true,
       },
-      select: { 
+      select: {
         id: true,
         nome: true,
-      }
-    });
-    return activeSubGrupos;
+      },
+    })
+    return activeSubGrupos
   } catch (error) {
-    console.error('Erro ao buscar subGrupos ativos:', error);
-    throw error;
+    console.error("Erro ao buscar subGrupos ativos:", error)
+    throw error
   }
 }

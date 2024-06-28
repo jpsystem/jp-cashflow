@@ -1,11 +1,11 @@
 import { novoGrupoComSubgrupos, retGrupos } from "@/actions/grupoActions"
 import NovoGrupoForm from "./_components/novoGrupoForm"
-import TabelaGrupos from "./_components/tabelaGrupos";
-import { tySubGrupo, tyGrupoLista } from "../../../types/types";
+import TabelaGrupos from "./_components/tabelaGrupos"
+import { tySubGrupo, tyGrupoLista } from "../../../types/types"
 
-async function incluiGrupo(){
-  'use server'
-  
+async function incluiGrupo() {
+  "use server"
+
   // console.log("INCLUI GRUPO")
 }
 
@@ -20,17 +20,16 @@ async function incluiGrupo(){
 //   // console.log("INCLUI SUB GRUPO", ret)
 // }
 
-
 export default async function GrupoDeContas() {
-
-
   //const grupos:tyGrupoLista[] = await retGrupos();
   // console.log("AQUI!:", (grupos[0].qtdSubGrupos))
   return (
     <div className="flex flex-col min-h-[80vh] items-start gap-4 px-4 pb-4 md:justify-center md:px-6 md:gap-5">
       <div className="flex flex-col w-full gap-4">
         <div className="flex flex-col w-full justify-center">
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center">Grupos de contas</h1>
+          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center">
+            Grupos de contas
+          </h1>
           <p className="text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 text-center">
             Gerenciar o plano de contas para o controle financeiro
           </p>
@@ -39,14 +38,7 @@ export default async function GrupoDeContas() {
           <NovoGrupoForm />
         </div>
       </div>
-      <TabelaGrupos/>
-      {/* <form action={incluiGrupo}>
-        <button type='submit'>GRUPO</button>
-      </form>
-      <form action={incluiSubGrupo}>
-        <button type='submit'>SUBGRUPO</button>
-      </form> */}
+      <TabelaGrupos />
     </div>
   )
 }
-

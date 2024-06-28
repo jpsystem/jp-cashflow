@@ -1,16 +1,29 @@
-import { Button } from "@/components/ui/button";
-import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table";
-import { CardContent, Card } from "@/components/ui/card";
-import { ChevronLeftIcon, FileEditIcon, MenuIcon, Package2Icon, TrashIcon } from "@/app/_components/iconsForm";
-import { tyGrupoLista } from "../../../../types/types";
-import { retGrupos } from "@/actions/grupoActions";
+import { Button } from "@/components/ui/button"
+import {
+  TableHead,
+  TableRow,
+  TableHeader,
+  TableCell,
+  TableBody,
+  Table,
+} from "@/components/ui/table"
+import { CardContent, Card } from "@/components/ui/card"
+import {
+  ChevronLeftIcon,
+  FileEditIcon,
+  MenuIcon,
+  Package2Icon,
+  TrashIcon,
+} from "@/app/_components/iconsForm"
+import { tyGrupoLista } from "../../../../types/types"
+import { retGrupos } from "@/actions/grupoActions"
 
 export default async function TabelaFontes() {
-  const response = await fetch('http://localhost:3000/api/fontes', {
+  const response = await fetch("http://localhost:3000/api/fontes", {
     next: {
-      tags: ['listaFontes']
-    }
-  });
+      tags: ["listaFontes"],
+    },
+  })
 
   if (!response.ok) {
     return (
@@ -21,10 +34,10 @@ export default async function TabelaFontes() {
           </CardContent>
         </Card>
       </div>
-    );
+    )
   }
 
-  const data = await response.json();
+  const data = await response.json()
 
   if (!data || !Array.isArray(data.fonte)) {
     return (
@@ -35,7 +48,7 @@ export default async function TabelaFontes() {
           </CardContent>
         </Card>
       </div>
-    );
+    )
   }
 
   return (
@@ -74,5 +87,5 @@ export default async function TabelaFontes() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
