@@ -37,8 +37,8 @@ import { Pen, Replace, Trash2 } from "lucide-react"
 const TabelaLancamentos = () => {
   return (
     <div className="p-4">
-      <div className="max-w-6xl mx-auto">
-        <Card className="mb-4 border p-4">
+      <div className="max-w-full mx-auto md:max-w-6xl">
+        <Card className="">
           <CardHeader>
             <CardTitle className="font-semibold mb-2">Filtros</CardTitle>
           </CardHeader>
@@ -74,10 +74,7 @@ const TabelaLancamentos = () => {
               </div>
               <div>
                 <Label className="block text-sm font-medium">Data</Label>
-                <Input
-                  type="date"
-                  className="mt-1 block w-full border-gray-500 rounded-md shadow-sm"
-                />
+                <Input type="date" />
               </div>
               <div>
                 <Label className="block text-sm font-medium">Fonte</Label>
@@ -96,30 +93,39 @@ const TabelaLancamentos = () => {
             </div>
           </CardContent>
         </Card>
+      </div>
+      <div>
         <h1 className="text-2xl font-bold mb-4">Lançamentos</h1>
-        <Table className="w-full">
+        <Table className="items-center content-center border-4 overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
           <TableCaption>
             Uma lista sobre seus lançamentos recentes.
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-left">Conta</TableHead>
-              <TableHead className="text-center">Sub-Conta</TableHead>
-              <TableHead className="text-center">Descrição</TableHead>
-              <TableHead className="text-center">Valor</TableHead>
-              <TableHead className="text-center">Fonte</TableHead>
-              <TableHead className="text-center">Data</TableHead>
-              <TableHead className="text-center">Ações</TableHead>
+              <TableHead className="text-left border-r w-[10%]">
+                Conta
+              </TableHead>
+              <TableHead className="text-center border-r w-[10%]">Sub-Conta</TableHead>
+              <TableHead className="text-center border-r w-[35%]">Descrição</TableHead>
+              <TableHead className="text-center border-r w-[10%]">Valor</TableHead>
+              <TableHead className="text-center border-r w-[10%]">Fonte</TableHead>
+              <TableHead className="text-center border-r w-[10%]">Data</TableHead>
+              <TableHead className="text-center w-[10%]">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell className="text-left">Conta1</TableCell>
-              <TableCell className="text-center">2</TableCell>
-              <TableCell className="text-center">Crédito</TableCell>
-              <TableCell className="text-center">R$250.00</TableCell>
-              <TableCell className="text-center">2</TableCell>
-              <TableCell className="text-center">24/5/2024</TableCell>
+              <TableCell className="text-left border-r">Conta1</TableCell>
+              <TableCell className="text-center border-r">2</TableCell>
+              <TableCell className="text-center border-r">
+                Crédito tipo mt texto aqui oq eu faço aaaa
+                aaaaaaaaaaaaaaaaaaaaaaaaaaa sjdasdjasdasdasjd
+                askjdlsadajksdasdkjladaskdlasdjaks asoçdkl asd kasod asidop
+                asidopa sdioasd ipa
+              </TableCell>
+              <TableCell className="text-center border-r">R$250.00</TableCell>
+              <TableCell className="text-center border-r">2</TableCell>
+              <TableCell className="text-center border-r">24/5/2024</TableCell>
               <TableCell className="text-center">
                 <Button variant="ghost">
                   <Pen className="mr-1 h-4 w-4 text-xs" />

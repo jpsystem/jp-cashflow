@@ -37,24 +37,24 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <div className="flex flex-col min-h-screen text-2xl">
+          <div className="flex flex-col min-h-screen text-lg sm:text-2xl">
             {/* Parte superior */}
             <div className="flex items-center w-full h-14 px-4 bg-gray-400 border-b dark:border-gray-700 border-y-5">
               <Link
-                className="flex items-center gap-2 text-2xl font-semibold"
+                className="flex items-center gap-2 text-xl sm:text-2xl font-semibold"
                 href="#"
               >
-                <ActivityIcon className="w-6 h-6 " />
+                <ActivityIcon className="w-6 h-6" />
                 <span className="py-4">JP Cash Flow</span>
               </Link>
               <div className="flex items-center gap-4 ml-auto">
                 {session && (
                   <Link
-                    className="flex items-center gap-2 text-2xl font-medium py-4"
+                    className="flex items-center gap-2 text-xl sm:text-2xl font-medium py-4"
                     href="#"
                   >
                     <UserCircleIcon
-                      className={`w-4 h-4 ${
+                      className={`w-6 h-6 ${
                         session.user.role !== "admin"
                           ? "text-blue-700"
                           : "text-green-700"
@@ -80,28 +80,36 @@ export default async function RootLayout({
                     href="/home"
                   >
                     <IconHome className="w-6 h-6" />
-                    <span className="text-2xl leading-none">Home</span>
+                    <span className="text-base sm:text-2xl leading-none">
+                      Home
+                    </span>
                   </Link>
                   <Link
                     className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100"
                     href="/dashboard"
                   >
                     <IconDashBoard className="w-6 h-6" />
-                    <span className="text-2xl leading-none">Dashboard</span>
+                    <span className="text-base sm:text-2xl leading-none">
+                      Dashboard
+                    </span>
                   </Link>
                   <Link
                     className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100"
                     href="/lancamentos"
                   >
                     <IconLancamentos className="w-6 h-6" />
-                    <span className="text-2xl leading-none">Lançamentos</span>
+                    <span className="text-base sm:text-2xl leading-none">
+                      Lançamentos
+                    </span>
                   </Link>
                   <Link
                     className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100"
                     href="#"
                   >
                     <IconAgenda className="w-6 h-6" />
-                    <span className="text-2xl leading-none">Agendamento</span>
+                    <span className="text-base sm:text-2xl leading-none">
+                      Agendamento
+                    </span>
                   </Link>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -110,7 +118,9 @@ export default async function RootLayout({
                         href="#"
                       >
                         <IconCadastros className="w-6 h-6" />
-                        <span className="text-2xl leading-none">Cadastros</span>
+                        <span className="text-base sm:text-2xl leading-none">
+                          Cadastros
+                        </span>
                       </Link>
                     </PopoverTrigger>
                     <PopoverContent
@@ -156,7 +166,7 @@ export default async function RootLayout({
             {/* Parte inferior */}
             <div className="flex items-center w-full h-14 px-4 bg-gray-400 border-b-5 dark:border-gray-700 ">
               <Link
-                className="flex items-center gap-2 text-lg font-semibold"
+                className="flex items-center gap-2 text-sm sm:text-lg font-semibold"
                 href="#"
               >
                 <ActivityIcon className="w-6 h-6" />
@@ -166,11 +176,13 @@ export default async function RootLayout({
                 {session && (
                   <>
                     <Link
-                      className="flex items-center gap-2 text-sm font-medium"
+                      className="flex items-center gap-2 text-xs sm:text-sm font-medium"
                       href="#"
                     >
                       <UserCircleIcon className="w-4 h-4 rounded-full" />
-                      <span className="text-2xl">{session.user.name}</span>
+                      <span className="text-base sm:text-2xl">
+                        {session.user.name}
+                      </span>
                     </Link>
                     <LogoutButton
                       size="lg"

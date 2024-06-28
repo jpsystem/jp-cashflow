@@ -74,10 +74,14 @@ export default function NovoLancamentosForm() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col">
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger onClick={handleOpen}>+ Lançamento</SheetTrigger>
-        <SheetContent className="fixed left-1/2 top-1/2 h-auto w-[90%] max-w-[870px] -translate-x-1/2 -translate-y-1/2 overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow sm:h-[760px] sm:w-[870px] border-4">
+        <SheetTrigger asChild className="container mx-auto max-sm:bg-red-100, max-md:px-2, max-[360px]:py-1, min-2xl:border sm:120px ">
+          <Button variant="outline" onClick={handleOpen}>
+            + Lançamentos
+          </Button>
+        </SheetTrigger>
+        <SheetContent className=" align-content-center align-items-center fixed border-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[800px] w-[90%] max-w-[800px] overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
           <DialogTitle>Novo Lançamento</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
