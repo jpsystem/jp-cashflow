@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from "@/components/ui/button"
 import {
   TableHead,
@@ -15,16 +17,25 @@ import {
   Package2Icon,
   TrashIcon,
 } from "@/app/_components/iconsForm"
-import { tyGrupoLista } from "../../../../types/types"
+import { tyGrupoLista } from "@/types/types"
+import { useEffect, useState } from "react"
+import { retGrupos } from "@/actions/grupoActions"
 
-export default async function TabelaGrupos() {
-  //const grupos:tyGrupoLista[] = await retGrupos();
-  const response = await fetch("http://localhost:3000/api/grupos", {
-    next: {
-      tags: ["listaGrupos"],
-    },
-  })
-  const data = await response.json()
+export default  function TabelaGrupos() {
+  const[dados, setDados]  = useState<tyGrupoLista[]>([]);
+
+  useEffect(() =>{
+    const fetchData = async () => {
+      try {
+        const result = await retGrupos();
+        setDados(result);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+    };
+    fetchData();
+  },[dados])
+
   return (
     <div className="flex flex-col w-full items-center">
       <Card className="w-full">
@@ -40,7 +51,7 @@ export default async function TabelaGrupos() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.grupos.map((item: any) => (
+              {dados.map((item: any) => (
                 <TableRow key={item.id}>
                   <TableCell>{item.id}</TableCell>
                   <TableCell>{item.nome}</TableCell>
