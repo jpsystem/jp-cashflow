@@ -36,7 +36,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={inter.className}>
         <AuthProvider>
@@ -77,7 +77,7 @@ export default async function RootLayout({
                     href="/home"
                   >
                     <IconHome className="w-6 h-6" />
-                    <span className="text-base sm:text-2xl 2xl:text-2xl leading-none md:flex">
+                    <span className="text-base sm:text-3xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
                       Home
                     </span>
                   </Link>
@@ -86,7 +86,7 @@ export default async function RootLayout({
                     href="/dashboard"
                   >
                     <IconDashBoard className="w-6 h-6" />
-                    <span className="text-base sm:text-2xl xl:text-3xl 2xl:text-4xl leading-none md:flex">
+                    <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
                       Dashboard
                     </span>
                   </Link>
@@ -95,7 +95,7 @@ export default async function RootLayout({
                     href="/lancamentos"
                   >
                     <IconLancamentos className="w-6 h-6" />
-                    <span className="text-base sm:text-2xl xl:text-3xl 2xl:text-4xl leading-none md:flex">
+                    <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
                       Lançamentos
                     </span>
                   </Link>
@@ -104,7 +104,7 @@ export default async function RootLayout({
                     href="#"
                   >
                     <IconAgenda className="w-6 h-6" />
-                    <span className="text-base sm:text-2xl xl:text-3xl 2xl:text-4xl leading-none md:flex">
+                    <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
                       Agendamento
                     </span>
                   </Link>
@@ -115,7 +115,7 @@ export default async function RootLayout({
                         href="#"
                       >
                         <IconCadastros className="w-6 h-6" />
-                        <span className="text-base sm:text-2xl xl:text-3xl 2xl:text-4xl leading-none md:flex">
+                        <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
                           Cadastros
                         </span>
                       </Link>
