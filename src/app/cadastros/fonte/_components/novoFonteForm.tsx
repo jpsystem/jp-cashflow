@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import LabelError from "@/components/ui/jp/labelError"
 import { useContext, useEffect, useState } from "react"
-//import { ModalContext } from "@/components/ui/jp/modal/modal-context"
 //COMPONENTE DIALOG
 import {
   Dialog,
@@ -132,16 +131,8 @@ export default function NovoFonteForm() {
       <SheetTrigger className="rounded p-2 hover:bg-slate-200 ">
         {/* Add Conta */}
       </SheetTrigger>
-      <SheetContent
-        className="fixed border-4
-                    left-1/2 top-1/2
-                    -translate-x-1/2 -translate-y-1/2
-                    max-h-[600px] overflow-auto
-                    rounded-2xl bg-white p-8  
-                    text-gray-900 shadow max-w-md
-                    flex flex-col w-full items-center space-y-4"
-      >
-        <DialogTitle>Nova Fonte</DialogTitle>
+      <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[600px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
+        <DialogTitle className="text-xl font-bold">Nova Fonte</DialogTitle>
         <SheetClose asChild>
           <button
             onClick={handleClose}
@@ -149,7 +140,7 @@ export default function NovoFonteForm() {
           ></button>
         </SheetClose>
         {isOpen && (
-          <div className="mt-8">
+          <div className="mt-4">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -169,6 +160,7 @@ export default function NovoFonteForm() {
                     </FormItem>
                   )}
                 />
+                {/* Descrição da fonte (descricao) */}
                 <FormField
                   control={form.control}
                   name="descricao"
@@ -182,6 +174,7 @@ export default function NovoFonteForm() {
                     </FormItem>
                   )}
                 />
+                {/* Tipo da fonte (tipo) */}
                 <FormField
                   control={form.control}
                   name="tipo"
@@ -195,23 +188,22 @@ export default function NovoFonteForm() {
                     </FormItem>
                   )}
                 />
+                {/* Checkbox Ativo */}
                 <FormField
                   control={form.control}
                   name="ativo"
                   render={({ field }) => (
-                    <FormItem className="display:flex justify-content: flex-end">
+                    <FormItem className="flex items-center space-x-2">
                       <FormLabel>Ativo</FormLabel>
-                      <div className="flex items-center space-x-2">
-                        <FormControl>
-                          <Checkbox />
-                        </FormControl>
-                        <div>salve</div>
-                      </div>
+                      <FormControl>
+                        <Checkbox />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <div className="text-right mt-8 space-x-4">
+                {/* Botões de ação */}
+                <div className="flex justify-end space-x-4 mt-4">
                   <SheetFooter>
                     <Button variant="outline" type="submit">
                       Incluir

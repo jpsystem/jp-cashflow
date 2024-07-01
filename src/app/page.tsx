@@ -1,5 +1,9 @@
 import LoginForm from "./_components/loginForm"
 
 export default function Page() {
-  return <LoginForm />
+  return (
+    <div>
+      <LoginForm />
+    </div>
+  )
 }
