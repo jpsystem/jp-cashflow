@@ -1,13 +1,8 @@
-import { novoGrupoComSubgrupos, retGrupos } from "@/actions/grupoActions"
+'use client'
+
 import NovoGrupoForm from "./_components/novoGrupoForm"
 import TabelaGrupos from "./_components/tabelaGrupos"
-import { tySubGrupo, tyGrupoLista } from "../../../types/types"
 
-async function incluiGrupo() {
-  "use server"
-
-  // console.log("INCLUI GRUPO")
-}
 
 // async function incluiSubGrupo(){
 //   'use server'
@@ -20,7 +15,7 @@ async function incluiGrupo() {
 //   // console.log("INCLUI SUB GRUPO", ret)
 // }
 
-export default async function GrupoDeContas() {
+export default function GrupoDeContas() {
   //const grupos:tyGrupoLista[] = await retGrupos();
   // console.log("AQUI!:", (grupos[0].qtdSubGrupos))
   return (
