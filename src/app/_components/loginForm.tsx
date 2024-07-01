@@ -45,7 +45,7 @@ export default function LoginForm() {
             </Label>
             <Input
               id="nickname"
-              placeholder="jpsystem"
+              placeholder="login"
               required
               type="text"
               className="text-2xl"

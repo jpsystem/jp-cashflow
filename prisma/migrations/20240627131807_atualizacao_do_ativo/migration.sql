@@ -7,7 +7,7 @@ CREATE TABLE "new_Fonte" (
     "tipo" TEXT NOT NULL DEFAULT 'M',
     "ativo" BOOLEAN NOT NULL DEFAULT true
 );
-INSERT INTO "new_Fonte" ("descricao", "id", "nome", "tipo") SELECT "descricao", "id", "nome", "tipo" FROM "Fonte";
+--INSERT INTO "new_Fonte" ("descricao", "id", "nome", "tipo") SELECT "descricao", "id", "nome", "tipo" FROM "Fonte";
 DROP TABLE "Fonte";
 ALTER TABLE "new_Fonte" RENAME TO "Fonte";
 CREATE TABLE "new_Grupo" (
@@ -17,7 +17,7 @@ CREATE TABLE "new_Grupo" (
     "tipo" TEXT NOT NULL DEFAULT 'D',
     "ativo" BOOLEAN NOT NULL DEFAULT true
 );
-INSERT INTO "new_Grupo" ("descricao", "id", "nome", "tipo") SELECT "descricao", "id", "nome", "tipo" FROM "Grupo";
+--INSERT INTO "new_Grupo" ("descricao", "id", "nome", "tipo") SELECT "descricao", "id", "nome", "tipo" FROM "Grupo";
 DROP TABLE "Grupo";
 ALTER TABLE "new_Grupo" RENAME TO "Grupo";
 CREATE UNIQUE INDEX "Grupo_nome_key" ON "Grupo"("nome");
@@ -29,7 +29,7 @@ CREATE TABLE "new_SubGrupo" (
     "grupoId" INTEGER NOT NULL,
     CONSTRAINT "SubGrupo_grupoId_fkey" FOREIGN KEY ("grupoId") REFERENCES "Grupo" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
-INSERT INTO "new_SubGrupo" ("descricao", "grupoId", "id", "nome") SELECT "descricao", "grupoId", "id", "nome" FROM "SubGrupo";
+--INSERT INTO "new_SubGrupo" ("descricao", "grupoId", "id", "nome") SELECT "descricao", "grupoId", "id", "nome" FROM "SubGrupo";
 DROP TABLE "SubGrupo";
 ALTER TABLE "new_SubGrupo" RENAME TO "SubGrupo";
 PRAGMA foreign_key_check;
