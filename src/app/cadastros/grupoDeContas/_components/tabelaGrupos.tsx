@@ -21,20 +21,25 @@ import { tyGrupoLista } from "@/types/types"
 import { useEffect, useState } from "react"
 import { retGrupos } from "@/actions/grupoActions"
 
-export default  function TabelaGrupos() {
-  const[dados, setDados]  = useState<tyGrupoLista[]>([]);
+interface Props {
+  dados: tyGrupoLista[]
+}
 
-  useEffect(() =>{
-    const fetchData = async () => {
-      try {
-        const result = await retGrupos();
-        setDados(result);
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-      }
-    };
-    fetchData();
-  },[dados])
+
+export default  function TabelaGrupos({dados}: Props) {
+  //const[dados, setDados]  = useState<tyGrupoLista[]>([]);
+
+  // useEffect(() =>{
+  //   const fetchData = async () => {
+  //     try {
+  //       const result = await retGrupos();
+  //       setDados(result);
+  //     } catch (error) {
+  //       console.error('Erro ao buscar dados:', error);
+  //     }
+  //   };
+  //   fetchData();
+  // },[])
 
   return (
     <div className="flex flex-col w-full items-center">

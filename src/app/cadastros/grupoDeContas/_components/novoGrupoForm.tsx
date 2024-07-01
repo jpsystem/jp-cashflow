@@ -8,10 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { novoGrupoComSubgrupos } from "@/actions/grupoActions"
 import { Checkbox } from "@/components/ui/checkbox"
 import { z } from "zod"
-import { useState } from "react"
+import React, { useState } from "react"
 import TabelaSubGrupos from "./tabelaSubGrupos"
 import { Textarea } from "@/components/ui/textarea"
-import { tyGrupo, tySubGrupo } from "../../../../types/types"
+import { tyGrupo, tySubGrupo, tyGrupoLista } from "@/types/types"
 
 //Componente SHEET shadcn/ui
 import {
@@ -67,7 +67,12 @@ type SubGrupo = {
 
 type FormProps = z.infer<typeof schema>
 
-export default function NovoGrupoForm() {
+
+interface Props {
+  setAtualizaGrupos: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function NovoGrupoForm({setAtualizaGrupos}: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const [isSubimit, setIsSubmit] = useState(false)
   const [subGruposP, setSubGruposP] = useState<SubGrupo[]>([])
@@ -115,7 +120,8 @@ export default function NovoGrupoForm() {
   ) {
     novoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
       .then((grupo) => {
-        console.log("Grupo e SubGrupos criado: ", grupo)
+        console.log("Grupo e SubGrupos criado: ", grupo);
+        setAtualizaGrupos(true);
       })
       .catch((error) => {
         console.log("Erro ao criar Grupo e SubGrupos: ", error)
