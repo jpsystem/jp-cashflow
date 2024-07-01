@@ -58,8 +58,8 @@ export const auth: NextAuthOptions = {
         let nickname: string;
 
         if(user){
-          nickname = user.nickname || "default";
-          if(nickname === "JP"){
+          nickname = user.nickname?.toLowerCase() || "default";
+          if(nickname === "jpsystem"){
             token.role = "admin";
             token.nickname = nickname;
           }else{
