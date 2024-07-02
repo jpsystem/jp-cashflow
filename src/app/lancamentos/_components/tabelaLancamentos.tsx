@@ -102,26 +102,37 @@ const TabelaLancamentos = () => {
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-left border-r w-[10%]">
+              <TableHead className="text-center border-r w-[7%]">
                 Conta
               </TableHead>
-              <TableHead className="text-center border-r w-[10%]">Sub-Conta</TableHead>
-              <TableHead className="text-center border-r w-[35%]">Descrição</TableHead>
-              <TableHead className="text-center border-r w-[10%]">Valor</TableHead>
-              <TableHead className="text-center border-r w-[10%]">Fonte</TableHead>
-              <TableHead className="text-center border-r w-[10%]">Data</TableHead>
-              <TableHead className="text-center w-[10%]">Ações</TableHead>
+              <TableHead className="text-center border-r w-[7%]">
+                Sub-Conta
+              </TableHead>
+              <TableHead className="text-center border-r w-[43%]">
+                Descrição
+              </TableHead>
+              <TableHead className="text-center border-r w-[8%]">
+                Valor
+              </TableHead>
+              <TableHead className="text-center border-r w-[7%]">
+                Fonte
+              </TableHead>
+              <TableHead className="text-center border-r w-[7%]">
+                Data
+              </TableHead>
+              <TableHead className="text-center w-[13%]">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell className="text-left border-r">Conta1</TableCell>
+              <TableCell className="text-center border-r">Conta1</TableCell>
               <TableCell className="text-center border-r">2</TableCell>
               <TableCell className="text-center border-r">
                 Crédito tipo mt texto aqui oq eu faço aaaa
                 aaaaaaaaaaaaaaaaaaaaaaaaaaa sjdasdjasdasdasjd
                 askjdlsadajksdasdkjladaskdlasdjaks asoçdkl asd kasod asidop
                 asidopa sdioasd ipa
+                sasasasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
               </TableCell>
               <TableCell className="text-center border-r">R$250.00</TableCell>
               <TableCell className="text-center border-r">2</TableCell>
