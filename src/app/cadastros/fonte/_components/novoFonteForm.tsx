@@ -4,7 +4,7 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import LabelError from "@/components/ui/jp/labelError"
@@ -41,20 +41,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-//COMPONENTE TABLE
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { TrashIcon } from "@/app/_components/iconsForm"
 import { sub } from "date-fns"
 import TabelaFonte from "./tabelaFontes"
 import { Textarea } from "@/components/ui/textarea"
+import * as React from "react"
+import { Dropdown, DropdownHeader } from "flowbite-react"
 
 // Definição do objeto ZOD de validação
 const schema = z.object({
@@ -128,10 +120,10 @@ export default function NovoFonteForm() {
       <Button variant="outline" onClick={handleOpen}>
         + Fonte
       </Button>
-      <SheetTrigger className="rounded p-2 hover:bg-slate-200 ">
+      <SheetTrigger className="rounded p-2 hover:bg-slate-200">
         {/* Add Conta */}
       </SheetTrigger>
-      <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[600px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
+      <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[510px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
         <DialogTitle className="text-xl font-bold">Nova Fonte</DialogTitle>
         <SheetClose asChild>
           <button
@@ -154,7 +146,11 @@ export default function NovoFonteForm() {
                     <FormItem>
                       <FormLabel>Nome</FormLabel>
                       <FormControl>
-                        <Input placeholder="Nome" {...field} />
+                        <Input
+                          className="placeholder:text-gray-400"
+                          placeholder="Nome"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -168,53 +164,89 @@ export default function NovoFonteForm() {
                     <FormItem>
                       <FormLabel>Descrição</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Descrição" {...field} />
+                        <Textarea
+                          className="placeholder:text-gray-400"
+                          placeholder="Descrição"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                {/* Tipo da fonte (tipo) */}
-                <FormField
-                  control={form.control}
-                  name="tipo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tipo</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Tipo" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* Checkbox Ativo */}
-                <FormField
-                  control={form.control}
-                  name="ativo"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center space-x-2">
-                      <FormLabel>Ativo</FormLabel>
-                      <FormControl>
-                        <Checkbox />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* Botões de ação */}
-                <div className="flex justify-end space-x-4 mt-4">
-                  <SheetFooter>
-                    <Button variant="outline" type="submit">
-                      Incluir
-                    </Button>
-                    <SheetClose asChild>
-                      <Button variant="outline" onClick={handleClose}>
-                        Cancelar
-                      </Button>
-                    </SheetClose>
-                  </SheetFooter>
+                <div className="flex justify-between items-center">
+                  <div className="flex-1 mr-4">
+                    <FormField
+                      control={form.control}
+                      name="tipo"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="flex flex-col space-y-2">
+                              <FormLabel className="">Tipo</FormLabel>
+                              <Button
+                                className="border border-input bg-background shadow-sm 
+                                           hover:bg-accent hover:text-accent-foreground
+                                           w-32 h-9"
+                              >
+                                <Dropdown label="Selecione">
+                                  <Dropdown.Item
+                                    className="text-sm"
+                                    onClick={() => field.onChange("D")}
+                                  >
+                                    Débito
+                                  </Dropdown.Item>
+                                  <Dropdown.Item
+                                    className="text-sm"
+                                    onClick={() => field.onChange("C")}
+                                  >
+                                    Crédito
+                                  </Dropdown.Item>
+                                  <Dropdown.Item
+                                    className="text-sm"
+                                    onClick={() => field.onChange("M")}
+                                  >
+                                    Movimentação
+                                  </Dropdown.Item>
+                                </Dropdown>
+                              </Button>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="flex items-center">
+                    <FormField
+                      control={form.control}
+                      name="ativo"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col items-center space-y-2">
+                          <FormLabel>Ativo</FormLabel>
+                          <FormControl>
+                            {/* {...field} checked={field.value}  */}
+                            <Checkbox />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
+                {/* Botões de ação */}
+                <div className="h-8"></div>
+                {/* Adiciona um espaçamento vertical de 8 unidades */}
+                <SheetFooter className="flex justify-end mt-4">
+                  <Button variant="outline" type="submit">
+                    Incluir
+                  </Button>
+                  <SheetClose asChild>
+                    <Button variant="outline" onClick={handleClose}>
+                      Cancelar
+                    </Button>
+                  </SheetClose>
+                </SheetFooter>
               </form>
             </Form>
           </div>

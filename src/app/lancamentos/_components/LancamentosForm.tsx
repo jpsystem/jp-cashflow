@@ -76,7 +76,10 @@ export default function NovoLancamentosForm() {
   return (
     <div className="flex flex-col">
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild className="container mx-auto max-sm:bg-red-100, max-md:px-2, max-[360px]:py-1, min-2xl:border sm:120px ">
+        <SheetTrigger
+          asChild
+          className="container mx-auto max-sm:bg-red-100, max-md:px-2, max-[360px]:py-1, min-2xl:border sm:120px "
+        >
           <Button variant="outline" onClick={handleOpen}>
             + Lançamentos
           </Button>
