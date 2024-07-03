@@ -50,8 +50,8 @@ import { Dropdown, DropdownHeader } from "flowbite-react"
 
 // Definição do objeto ZOD de validação
 const schema = z.object({
-  nome: z.string().min(2, "Campo obrigatorio!"),
-  descricao: z.string().min(2, "Campo obrigatorio!"),
+  nome: z.string().min(2, "Campo obrigatorio, Mínimo (2) caracteres"),
+  descricao: z.string().min(2, "Campo obrigatorio, Mínimo (2) caracteres"),
   ativo: z.boolean(),
   tipo: z.enum(["D", "C", "M"], {
     errorMap: () => {

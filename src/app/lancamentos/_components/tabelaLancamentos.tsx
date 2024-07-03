@@ -1,5 +1,6 @@
 "use client"
 
+import { format } from "date-fns"
 import {
   Sheet,
   SheetClose,
@@ -74,7 +75,10 @@ const TabelaLancamentos = () => {
               </div>
               <div>
                 <Label className="block text-sm font-medium">Data</Label>
-                <Input type="date" />
+                <Input
+                  type="date"
+                  defaultValue={format(new Date(), "yyyy-MM")}
+                />
               </div>
               <div>
                 <Label className="block text-sm font-medium">Fonte</Label>

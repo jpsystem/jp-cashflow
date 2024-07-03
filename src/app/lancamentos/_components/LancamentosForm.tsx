@@ -1,6 +1,7 @@
 "use client"
 
 // Imports
+import { format } from "date-fns"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
@@ -84,7 +85,11 @@ export default function NovoLancamentosForm() {
             + Lançamentos
           </Button>
         </SheetTrigger>
-        <SheetContent className=" align-content-center align-items-center fixed border-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[800px] w-[90%] max-w-[800px] overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
+        <SheetContent
+          className=" align-content-center align-items-center fixed border-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
+      max-h-[800px] w-[1500px] overflow-auto rounded-2xl}
+       bg-white p-8 text-gray-900 shadow"
+        >
           <DialogTitle>Novo Lançamento</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -95,7 +100,11 @@ export default function NovoLancamentosForm() {
                   <FormItem>
                     <FormLabel>Conta</FormLabel>
                     <FormControl>
-                      <Input placeholder="Conta" {...field} />
+                      <Input
+                        className="placeholder:text-gray-400"
+                        placeholder="Conta"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -108,7 +117,11 @@ export default function NovoLancamentosForm() {
                   <FormItem>
                     <FormLabel>Sub-Conta</FormLabel>
                     <FormControl>
-                      <Input placeholder="Sub-Conta" {...field} />
+                      <Input
+                        className="placeholder:text-gray-400"
+                        placeholder="Sub-Conta"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -121,7 +134,11 @@ export default function NovoLancamentosForm() {
                   <FormItem>
                     <FormLabel>Descrição</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Descrição" {...field} />
+                      <Textarea
+                        className="placeholder:text-gray-400"
+                        placeholder="Descrição"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -134,7 +151,11 @@ export default function NovoLancamentosForm() {
                   <FormItem>
                     <FormLabel>Valor</FormLabel>
                     <FormControl>
-                      <Input placeholder="Valor" {...field} />
+                      <Input
+                        className="placeholder:text-gray-400"
+                        placeholder="Valor"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -147,7 +168,12 @@ export default function NovoLancamentosForm() {
                   <FormItem>
                     <FormLabel>Data</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input
+                        type="date"
+                        defaultValue={format(new Date(), "yyyy-MM")}
+                        {...field}
+                      />
+                      {/* Utiliza format(new Date(), 'yyyy-MM') para definir o mês atual */}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -160,7 +186,11 @@ export default function NovoLancamentosForm() {
                   <FormItem>
                     <FormLabel>Fonte</FormLabel>
                     <FormControl>
-                      <Input placeholder="Fonte" {...field} />
+                      <Input
+                        className="placeholder:text-gray-400"
+                        placeholder="Fonte"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -173,7 +203,11 @@ export default function NovoLancamentosForm() {
                   <FormItem>
                     <FormLabel>Destino</FormLabel>
                     <FormControl>
-                      <Input placeholder="Destino" {...field} />
+                      <Input
+                        className="placeholder:text-gray-400"
+                        placeholder="Destino"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
