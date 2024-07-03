@@ -94,6 +94,7 @@ export default async function RootLayout({
                     className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-gray-100"
                     href="/lancamentos"
                   >
+                  <h1>oi</h1>
                     <IconLancamentos className="w-6 h-6" />
                     <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
                       Lançamentos
