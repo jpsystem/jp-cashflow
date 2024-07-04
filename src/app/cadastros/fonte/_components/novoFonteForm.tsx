@@ -1,162 +1,140 @@
 "use client"
-// COMPONENTE PAI
 
-import { Label } from "@/components/ui/label"
+// Imports
 import { Input } from "@/components/ui/input"
+import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
-import { useForm, Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import LabelError from "@/components/ui/jp/labelError"
-import { useContext, useEffect, useState } from "react"
-//COMPONENTE DIALOG
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-//Componente SHEET shadcn/ui
+import { useState } from "react"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-//COMPONENTE FORM
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { TrashIcon } from "@/app/_components/iconsForm"
-import { sub } from "date-fns"
-import TabelaFonte from "./tabelaFontes"
-import { Textarea } from "@/components/ui/textarea"
-import * as React from "react"
-import { Dropdown, DropdownHeader } from "flowbite-react"
+import { DialogTitle } from "@/components/ui/dialog"
+import { Dropdown, DropdownItem } from "flowbite-react"
 
-// Definição do objeto ZOD de validação
+// Schema de validação com zod
 const schema = z.object({
-  nome: z.string().min(2, "Campo obrigatorio, Mínimo (2) caracteres"),
-  descricao: z.string().min(2, "Campo obrigatorio, Mínimo (2) caracteres"),
-  ativo: z.boolean(),
-  tipo: z.enum(["D", "C", "M"], {
-    errorMap: () => {
-      return {
-        message:
-          "Informe 'D' para débito, 'C' para crédito ou 'M' para conta de movimentação.",
-      }
-    },
+  valor: z.string().min(1, "Campo obrigatório!"),
+  periodo: z.string().min(1, "Campo obrigatório!"),
+  descricao: z.string().min(1, "Campo obrigatório!"),
+  dtLancamento: z.date(),
+  fonte: z.string().min(1, "Campo obrigatório!"),
+  destino: z.string().min(1, "Campo obrigatório!"),
+  conta: z.string().min(1, "Campo obrigatório!"),
+  subConta: z.string().min(1, "Campo obrigatório!"),
+  operacao: z.enum(["D", "C", "M"], {
+    errorMap: () => ({
+      message:
+        "Informe 'D' para débito, 'C' para crédito ou 'M' para conta de movimentação.",
+    }),
   }),
 })
 
-// Definição do type fonte
-type tyFonte = {
-  id?: number
-  nome: string
-  descricao: string | null
-  tipo: string
-  ativo: boolean
-}
-
 type FormProps = z.infer<typeof schema>
 
-////////////////////////////////////////////////////////////////
-
-export default function NovoFonteForm() {
-  // Variavel de estado isOpen
+export default function NovoLancamentosForm() {
   const [isOpen, setIsOpen] = useState(false)
-
-  // Função para fechar o DIALOG
-  const handleClose = () => {
-    setIsOpen(false)
-  }
-
-  // Lista das fontes
-  const [Fonte] = useState<tyFonte[]>([])
-
-  // Definição do formulário
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
-      nome: "",
+      valor: "",
+      periodo: "",
       descricao: "",
-      tipo: "D",
-      ativo: true,
+      dtLancamento: new Date(),
+      fonte: "",
+      destino: "",
+      conta: "",
+      subConta: "",
+      operacao: "D",
     },
   })
 
-  // Função para abrir a Sheet
-  const handleOpen = () => {
-    form.resetField("nome")
-    form.resetField("descricao")
-    form.resetField("tipo")
-    form.resetField("ativo")
-    setIsOpen(true)
-  }
+  const handleOpen = () => setIsOpen(true)
+  const handleClose = () => setIsOpen(false)
 
-  // Função para executar no Submit
-  function onSubmit(values: FormProps) {
+  const onSubmit = (values: FormProps) => {
     console.log("VALORES", values)
-    console.log("SUBS", Fonte)
     setIsOpen(false)
   }
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <Button variant="outline" onClick={handleOpen}>
-        + Fonte
-      </Button>
-      <SheetTrigger className="rounded p-2 hover:bg-slate-200">
-        {/* Add Conta */}
-      </SheetTrigger>
-      <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[510px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
-        <DialogTitle className="text-xl font-bold">Nova Fonte</DialogTitle>
-        <SheetClose asChild>
-          <button
-            onClick={handleClose}
-            className="absolute right-4 top-4"
-          ></button>
-        </SheetClose>
-        {isOpen && (
-          <div className="mt-4">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
-              >
-                {/* Nome da fonte (nome) */}
+    <div className="flex flex-col">
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger asChild>
+          <Button variant="outline" onClick={handleOpen}>
+            + Lançamentos
+          </Button>
+        </SheetTrigger>
+        <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[500px] max-h-[500px] min-w-[800px] max-w-[800px] overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
+          <DialogTitle>Novo Lançamento</DialogTitle>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="flex gap-2">
                 <FormField
                   control={form.control}
-                  name="nome"
+                  name="conta"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nome</FormLabel>
+                    <FormItem className="flex-1">
+                      <FormLabel>Conta</FormLabel>
                       <FormControl>
-                        <Input
-                          className="placeholder:text-gray-400"
-                          placeholder="Nome"
-                          {...field}
-                        />
+                        <Dropdown label="Selecione Conta">
+                          <DropdownItem onClick={() => field.onChange("Conta1")}>
+                            Conta 1
+                          </DropdownItem>
+                          <DropdownItem onClick={() => field.onChange("Conta2")}>
+                            Conta 2
+                          </DropdownItem>
+                          <DropdownItem onClick={() => field.onChange("Conta3")}>
+                            Conta 3
+                          </DropdownItem>
+                        </Dropdown>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                {/* Descrição da fonte (descricao) */}
+                <FormField
+                  control={form.control}
+                  name="subConta"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Sub-Conta</FormLabel>
+                      <FormControl>
+                        <Dropdown label="Selecione Sub-Conta">
+                          <DropdownItem onClick={() => field.onChange("SubConta1")}>
+                            Sub-Conta 1
+                          </DropdownItem>
+                          <DropdownItem onClick={() => field.onChange("SubConta2")}>
+                            Sub-Conta 2
+                          </DropdownItem>
+                          <DropdownItem onClick={() => field.onChange("SubConta3")}>
+                            Sub-Conta 3
+                          </DropdownItem>
+                        </Dropdown>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div>
                 <FormField
                   control={form.control}
                   name="descricao"
@@ -165,7 +143,7 @@ export default function NovoFonteForm() {
                       <FormLabel>Descrição</FormLabel>
                       <FormControl>
                         <Textarea
-                          className="placeholder:text-gray-400"
+                          className="placeholder:text-gray-400 w-full"
                           placeholder="Descrição"
                           {...field}
                         />
@@ -174,84 +152,114 @@ export default function NovoFonteForm() {
                     </FormItem>
                   )}
                 />
-                <div className="flex justify-between items-center">
-                  <div className="flex-1 mr-4">
-                    <FormField
-                      control={form.control}
-                      name="tipo"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <div className="flex flex-col space-y-2">
-                              <FormLabel className="">Tipo</FormLabel>
-                              <Button
-                                className="border border-input bg-background shadow-sm 
-                                           hover:bg-accent hover:text-accent-foreground
-                                           w-32 h-9"
-                              >
-                                <Dropdown label="Selecione">
-                                  <Dropdown.Item
-                                    className="text-sm"
-                                    onClick={() => field.onChange("D")}
-                                  >
-                                    Débito
-                                  </Dropdown.Item>
-                                  <Dropdown.Item
-                                    className="text-sm"
-                                    onClick={() => field.onChange("C")}
-                                  >
-                                    Crédito
-                                  </Dropdown.Item>
-                                  <Dropdown.Item
-                                    className="text-sm"
-                                    onClick={() => field.onChange("M")}
-                                  >
-                                    Movimentação
-                                  </Dropdown.Item>
-                                </Dropdown>
-                              </Button>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="flex items-center">
-                    <FormField
-                      control={form.control}
-                      name="ativo"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col items-center space-y-2">
-                          <FormLabel>Ativo</FormLabel>
-                          <FormControl>
-                            {/* {...field} checked={field.value}  */}
-                            <Checkbox />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-                {/* Botões de ação */}
-                <div className="h-8"></div>
-                {/* Adiciona um espaçamento vertical de 8 unidades */}
-                <SheetFooter className="flex justify-end mt-4">
-                  <Button variant="outline" type="submit">
-                    Incluir
+              </div>
+              <div className="flex gap-2">
+                <FormField
+                  control={form.control}
+                  name="valor"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Valor</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="placeholder:text-gray-400 w-full"
+                          placeholder="Valor"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="dtLancamento"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Data</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="placeholder:text-gray-400 text-center w-full"
+                          type="date"
+                          defaultValue={format(new Date(), "yyyy-MM")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex gap-2">
+                <FormField
+                  control={form.control}
+                  name="fonte"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Fonte</FormLabel>
+                      <FormControl>
+                        <Dropdown label="Selecione Fonte">
+                          <DropdownItem onClick={() => field.onChange("Fonte1")}>
+                            Fonte 1
+                          </DropdownItem>
+                          <DropdownItem onClick={() => field.onChange("Fonte2")}>
+                            Fonte 2
+                          </DropdownItem>
+                          <DropdownItem onClick={() => field.onChange("Fonte3")}>
+                            Fonte 3
+                          </DropdownItem>
+                        </Dropdown>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="destino"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Destino</FormLabel>
+                      <FormControl>
+                        <Dropdown label="Selecione Destino">
+                          <DropdownItem onClick={() => field.onChange("Destino1")}>
+                            Destino 1
+                          </DropdownItem>
+                          <DropdownItem onClick={() => field.onChange("Destino2")}>
+                            Destino 2
+                          </DropdownItem>
+                          <DropdownItem onClick={() => field.onChange("Destino3")}>
+                            Destino 3
+                          </DropdownItem>
+                        </Dropdown>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <SheetFooter className="text-sm font-semibold flex justify-end mt-7">
+                <Button
+                  variant="outline"
+                  type="submit"
+                  className="text-lg px-2 py-1"
+                >
+                  Incluir
+                </Button>
+                <SheetClose asChild>
+                  <Button
+                    variant="outline"
+                    onClick={handleClose}
+                    className="text-lg px-2 py-1"
+                  >
+                    Cancelar
                   </Button>
-                  <SheetClose asChild>
-                    <Button variant="outline" onClick={handleClose}>
-                      Cancelar
-                    </Button>
-                  </SheetClose>
-                </SheetFooter>
-              </form>
-            </Form>
-          </div>
-        )}
-      </SheetContent>
-    </Sheet>
+                </SheetClose>
+              </SheetFooter>
+            </form>
+          </Form>
+        </SheetContent>
+      </Sheet>
+    </div>
   )
 }

@@ -79,152 +79,165 @@ export default function NovoLancamentosForm() {
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger
           asChild
-          className="container mx-auto max-sm:bg-red-100, max-md:px-2, max-[360px]:py-1, min-2xl:border sm:120px "
+          className="container mx-auto max-sm:bg-red-100, max-md:px-2, max-[360px]:py-1, min-2xl:border sm:120px"
         >
           <Button variant="outline" onClick={handleOpen}>
             + Lançamentos
           </Button>
         </SheetTrigger>
         <SheetContent
-          className=" align-content-center align-items-center fixed border-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
-      max-h-[800px] w-[1500px] overflow-auto rounded-2xl}
-       bg-white p-8 text-gray-900 shadow"
+          className="text-6xl fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
+           min-h-[480px] max-h-[480px] min-w-[600px] max-w-[600px] overflow-auto 
+           rounded-2xl bg-white p-8 text-gray-900 shadow"
         >
           <DialogTitle>Novo Lançamento</DialogTitle>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="conta"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Conta</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="placeholder:text-gray-400"
-                        placeholder="Conta"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="subConta"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Sub-Conta</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="placeholder:text-gray-400"
-                        placeholder="Sub-Conta"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="descricao"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Descrição</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="placeholder:text-gray-400"
-                        placeholder="Descrição"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="valor"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Valor</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="placeholder:text-gray-400"
-                        placeholder="Valor"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="dtLancamento"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Data</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="date"
-                        defaultValue={format(new Date(), "yyyy-MM")}
-                        {...field}
-                      />
-                      {/* Utiliza format(new Date(), 'yyyy-MM') para definir o mês atual */}
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="fonte"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fonte</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="placeholder:text-gray-400"
-                        placeholder="Fonte"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="destino"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Destino</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="placeholder:text-gray-400"
-                        placeholder="Destino"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="text-right mt-8 space-x-4">
-                <SheetFooter>
-                  <Button variant="outline" type="submit">
-                    Incluir
-                  </Button>
-                  <SheetClose asChild>
-                    <Button variant="outline" onClick={handleClose}>
-                      Cancelar
-                    </Button>
-                  </SheetClose>
-                </SheetFooter>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="flex flex-col-2 gap-2 items-center leading-3 mx-auto">
+                <FormField
+                  control={form.control}
+                  name="conta"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Conta</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="placeholder:text-gray-400 w-full"
+                          placeholder="Conta"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="subConta"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Sub-Conta</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="placeholder:text-gray-400 w-full"
+                          placeholder="Sub-Conta"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
+              <div className="items-center leading-3 mx-auto">
+                <FormField
+                  control={form.control}
+                  name="descricao"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Descrição</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          className="placeholder:text-gray-400 w-full"
+                          placeholder="Descrição"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col-2 gap-2 items-center leading-3 mx-auto">
+                <FormField
+                  control={form.control}
+                  name="valor"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Valor</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="placeholder:text-gray-400 w-full"
+                          placeholder="Valor"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="dtLancamento"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Data</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="placeholder:text-gray-400 text-center w-full"
+                          type="date"
+                          defaultValue={format(new Date(), "yyyy-MM")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col-2 gap-2 items-center leading-3 mx-auto">
+                <FormField
+                  control={form.control}
+                  name="fonte"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Fonte</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="placeholder:text-gray-400 w-full"
+                          placeholder="Fonte"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="destino"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Destino</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="placeholder:text-gray-400 w-full"
+                          placeholder="Destino"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <SheetFooter className="text-sm font-semibold flex justify-end mt-7">
+                <Button
+                  variant="outline"
+                  type="submit"
+                  className="text-lg px-2 py-1"
+                >
+                  Incluir
+                </Button>
+                <SheetClose asChild>
+                  <Button
+                    variant="outline"
+                    onClick={handleClose}
+                    className="text-lg px-2 py-1"
+                  >
+                    Cancelar
+                  </Button>
+                </SheetClose>
+              </SheetFooter>
             </form>
           </Form>
         </SheetContent>
