@@ -2,11 +2,11 @@
 
 // Imports
 import { Input } from "@/components/ui/input"
-import { format } from "date-fns"
+import { format, startOfMonth, endOfMonth } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
+import { z, ZodType } from "zod"
 import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import {
@@ -29,12 +29,22 @@ import {
 import { DialogTitle } from "@/components/ui/dialog"
 import { Dropdown, DropdownItem } from "flowbite-react"
 
+type FormData = {
+  startDate: Date
+  endDate: Date
+}
+
+const myDateSchema = z.date({
+  required_error: "Por favor selecione uma data",
+  invalid_type_error: "Não é uma data válida",
+})
+
 // Schema de validação com zod
 const schema = z.object({
   valor: z.string().min(1, "Campo obrigatório!"),
   periodo: z.string().min(1, "Campo obrigatório!"),
   descricao: z.string().min(1, "Campo obrigatório!"),
-  dtLancamento: z.date(),
+  dtLancamento: z.coerce.date(),
   fonte: z.string().min(1, "Campo obrigatório!"),
   destino: z.string().min(1, "Campo obrigatório!"),
   conta: z.string().min(1, "Campo obrigatório!"),
@@ -47,6 +57,7 @@ const schema = z.object({
   }),
 })
 
+type DateProps = z.infer<typeof myDateSchema>
 type FormProps = z.infer<typeof schema>
 
 export default function NovoLancamentosForm() {
@@ -73,6 +84,11 @@ export default function NovoLancamentosForm() {
     console.log("VALORES", values)
     setIsOpen(false)
   }
+
+  // Calcula o primeiro e o último dia do mês atual
+  const currentDate = new Date()
+  const firstDayOfMonth = startOfMonth(currentDate)
+  const lastDayOfMonth = endOfMonth(currentDate)
 
   return (
     <div className="flex flex-col">
@@ -201,7 +217,9 @@ export default function NovoLancamentosForm() {
                         <Input
                           className="placeholder:text-gray-400 text-center w-full"
                           type="date"
-                          defaultValue={format(new Date(), "yyyy-MM")}
+                          min={format(firstDayOfMonth, "yyyy-MM-dd")}
+                          max={format(lastDayOfMonth, "yyyy-MM-dd")}
+                          defaultValue={format(currentDate, "yyyy-MM-dd")}
                           {...field}
                         />
                       </FormControl>

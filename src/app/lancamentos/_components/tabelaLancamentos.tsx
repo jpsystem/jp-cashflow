@@ -48,11 +48,11 @@ const TabelaLancamentos = () => {
               <div>
                 <Label className="block text-sm font-medium">Conta</Label>
                 <Select>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full ">
                     <SelectValue placeholder="Selecione a conta" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
+                    <SelectGroup className="bg-white">
                       <SelectItem value="Conta 1">Conta 1</SelectItem>
                       <SelectItem value="Conta 2">Conta 2</SelectItem>
                     </SelectGroup>
@@ -66,7 +66,7 @@ const TabelaLancamentos = () => {
                     <SelectValue placeholder="Selecione a Sub-Conta" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
+                    <SelectGroup className="bg-white">
                       <SelectItem value="Sub-Conta 1">Sub-Conta 1</SelectItem>
                       <SelectItem value="Sub-Conta 2">Sub-Conta 2</SelectItem>
                     </SelectGroup>
@@ -87,7 +87,7 @@ const TabelaLancamentos = () => {
                     <SelectValue placeholder="Selecione a Fonte" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
+                    <SelectGroup className="bg-white w-full">
                       <SelectItem value="Fonte 1">Fonte 1</SelectItem>
                       <SelectItem value="Fonte 2">Fonte 2</SelectItem>
                     </SelectGroup>
