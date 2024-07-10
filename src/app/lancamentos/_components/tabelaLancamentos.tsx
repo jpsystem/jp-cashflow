@@ -1,5 +1,6 @@
 "use client"
 
+import { format } from "date-fns"
 import {
   Sheet,
   SheetClose,
@@ -47,11 +48,11 @@ const TabelaLancamentos = () => {
               <div>
                 <Label className="block text-sm font-medium">Conta</Label>
                 <Select>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full ">
                     <SelectValue placeholder="Selecione a conta" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
+                    <SelectGroup className="bg-white">
                       <SelectItem value="Conta 1">Conta 1</SelectItem>
                       <SelectItem value="Conta 2">Conta 2</SelectItem>
                     </SelectGroup>
@@ -65,7 +66,7 @@ const TabelaLancamentos = () => {
                     <SelectValue placeholder="Selecione a Sub-Conta" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
+                    <SelectGroup className="bg-white">
                       <SelectItem value="Sub-Conta 1">Sub-Conta 1</SelectItem>
                       <SelectItem value="Sub-Conta 2">Sub-Conta 2</SelectItem>
                     </SelectGroup>
@@ -74,7 +75,10 @@ const TabelaLancamentos = () => {
               </div>
               <div>
                 <Label className="block text-sm font-medium">Data</Label>
-                <Input type="date" />
+                <Input
+                  type="date"
+                  defaultValue={format(new Date(), "yyyy-MM")}
+                />
               </div>
               <div>
                 <Label className="block text-sm font-medium">Fonte</Label>
@@ -83,7 +87,7 @@ const TabelaLancamentos = () => {
                     <SelectValue placeholder="Selecione a Fonte" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
+                    <SelectGroup className="bg-white w-full">
                       <SelectItem value="Fonte 1">Fonte 1</SelectItem>
                       <SelectItem value="Fonte 2">Fonte 2</SelectItem>
                     </SelectGroup>
@@ -102,26 +106,37 @@ const TabelaLancamentos = () => {
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-left border-r w-[10%]">
+              <TableHead className="text-center border-r w-[7%]">
                 Conta
               </TableHead>
-              <TableHead className="text-center border-r w-[10%]">Sub-Conta</TableHead>
-              <TableHead className="text-center border-r w-[35%]">Descrição</TableHead>
-              <TableHead className="text-center border-r w-[10%]">Valor</TableHead>
-              <TableHead className="text-center border-r w-[10%]">Fonte</TableHead>
-              <TableHead className="text-center border-r w-[10%]">Data</TableHead>
-              <TableHead className="text-center w-[10%]">Ações</TableHead>
+              <TableHead className="text-center border-r w-[7%]">
+                Sub-Conta
+              </TableHead>
+              <TableHead className="text-center border-r w-[43%]">
+                Descrição
+              </TableHead>
+              <TableHead className="text-center border-r w-[8%]">
+                Valor
+              </TableHead>
+              <TableHead className="text-center border-r w-[7%]">
+                Fonte
+              </TableHead>
+              <TableHead className="text-center border-r w-[7%]">
+                Data
+              </TableHead>
+              <TableHead className="text-center w-[13%]">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell className="text-left border-r">Conta1</TableCell>
+              <TableCell className="text-center border-r">Conta1</TableCell>
               <TableCell className="text-center border-r">2</TableCell>
               <TableCell className="text-center border-r">
                 Crédito tipo mt texto aqui oq eu faço aaaa
                 aaaaaaaaaaaaaaaaaaaaaaaaaaa sjdasdjasdasdasjd
                 askjdlsadajksdasdkjladaskdlasdjaks asoçdkl asd kasod asidop
                 asidopa sdioasd ipa
+                sasasasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
               </TableCell>
               <TableCell className="text-center border-r">R$250.00</TableCell>
               <TableCell className="text-center border-r">2</TableCell>
