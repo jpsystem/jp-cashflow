@@ -1,15 +1,21 @@
 "use client"
 // COMPONENTE FILHO
 
+//Passo 1 - receber como parametro o subGrupo atual
+//Passo 2 - Exibir formulário para edição dos dados, todos os campos podem ser editados
+//Passo 3 - feita alteração nos campos salvar os dados na tabela de subgrpos
+//Passo 4 -  retorna para tabela e atualiza os dados da lista de subgrupos.
+
+
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { tySubGrupo } from "@/types/types"
+import { useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
+import { tySubGrupo } from "@/types/types"
 
 //Componente SHEET shadcn/ui
 import {
@@ -30,8 +36,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+
 interface Props {
-  onAddItem: (item: tySubGrupo) => Promise<boolean>
+  data: tySubGrupo
+  isEdita: boolean
+  setIsEdita: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const schema = z.object({
@@ -41,61 +50,53 @@ const schema = z.object({
   descricao: z
     .string()
     .min(10, "A descrição deve ter pelo menos 10 caracteres."),
-  ativo: z.boolean(), 
+  ativo: z.boolean()
 })
 
 type FormProps = z.infer<typeof schema>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export default function NovoSubGrupo({ onAddItem }: Props) {
+export default function EditaSubGrupo({ data, isEdita, setIsEdita}: Props) {
   //Variavel de estado isOpen
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(isEdita)
 
   //Função para fechar a SHEET
   const handleClose = () => {
-    setIsOpen(false)
+    setIsEdita(false)
   }
 
   //Definição do formulario
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
-      nome: "",
-      descricao: "",
-      ativo: true,
+      nome: data?.nome,
+      descricao: data?.descricao,
+      ativo: data?.ativo,
     },
   })
 
-  //Função para abrir a Sheet
-  const handleOpen = () => {
-    form.resetField("nome")
-    form.resetField("descricao")
-    form.resetField("ativo")
-    setIsOpen(true)
-  }
-
   //Definição do submit handler.
   async function onSubmit(values: FormProps) {
+    console.log("Alterados: ",values)
     const newItem: tySubGrupo = {
+      //id: data.length + 1,
       nome: values.nome.toUpperCase(),
       descricao: values.descricao,
-      ativo: values.ativo,
+      ativo: values.ativo
     }
-    const retorno = await onAddItem(newItem)
+    //const retorno = await onAddItem(newItem)
+    const retorno = false;
     if (retorno) {
       setIsOpen(false)
     } else {
-      alert("Esse subtipo ja existe!")
+      alert("Não foi possivel atualizar!")
       setIsOpen(true)
     }
   }
 
   return (
     <Sheet open={isOpen}>
-      <Button variant="outline" onClick={handleOpen}>
-        + SubGrupo
-      </Button>
       <SheetContent
         side="top"
         className={`
@@ -113,7 +114,7 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
           justify-self-center`}
       >
         <SheetHeader>
-          <SheetTitle>Novo SubGrupo</SheetTitle>
+          <SheetTitle>Editar SubGrupo</SheetTitle>
         </SheetHeader>
         {/* //Inclusão do formulário */}
         {isOpen && (
@@ -157,7 +158,8 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
                   control={form.control}
                   name="ativo"
                   render={({ field }) => (
-                    <FormItem 
+                    <FormItem
+                      //onChange={handleChange} 
                       className="flex items-center space-x-2"
                     >
                       <FormLabel className={"mr-2"}>Ativo</FormLabel>
@@ -165,8 +167,9 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
                         <Checkbox 
                           className={"align-top"} 
                           checked={field.value}
-                          //defaultChecked
-                          onCheckedChange={field.onChange} />
+                          onCheckedChange={field.onChange}
+                          //defaultChecked 
+                        />
                       </FormControl>
                       <FormDescription>
                         Defina se o subgrupo está ativo.
@@ -178,7 +181,7 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
                 <div className="text-right mt-8 space-x-4">
                   <SheetFooter>
                     <Button variant="outline" type="submit">
-                      Incluir
+                      Salvar
                     </Button>
                     <Button variant="outline" onClick={handleClose}>
                       Cancelar

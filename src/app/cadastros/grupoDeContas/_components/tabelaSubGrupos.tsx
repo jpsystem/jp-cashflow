@@ -2,6 +2,13 @@
 // COMPONENTE PAI
 import { Button } from "@/components/ui/button"
 import { CardContent, Card } from "@/components/ui/card"
+import { useEffect, useState } from "react"
+import { FileEditIcon, TrashIcon } from "@/app/_components/iconsForm"
+import NovoSubGrupo from "./novoSubGrupo"
+import EditaSubGrupo from "./editaSubGrupo"
+import { tySubGrupo } from "@/types/types"
+
+//Componente TABLE shadcn/ui
 import {
   Table,
   TableCaption,
@@ -11,35 +18,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useEffect, useState } from "react"
-import { TrashIcon } from "@/app/_components/iconsForm"
-import NovoSubGrupo from "./novoSubGrupo"
-import { flushAllTraces } from "next/dist/trace"
-import { ListaFontes } from "@/actions/fonteActions"
-
-type SubGrupo = {
-  id?: number
-  nome: string
-  descricao: string
-}
 
 interface Props {
-  data: SubGrupo[]
-  setSubGruposP: React.Dispatch<React.SetStateAction<SubGrupo[]>>
+  data: tySubGrupo[]
+  setSubGruposP: React.Dispatch<React.SetStateAction<tySubGrupo[]>>
 }
 
 export default function TabelaSubGrupos({ data, setSubGruposP }: Props) {
   //Lista dos subGrupos
-  const [subGrupos, setSubGrupos] = useState<SubGrupo[]>(data)
+  const [subGrupos, setSubGrupos] = useState<tySubGrupo[]>(data)
   const [alterou, setAlterou] = useState(false)
+  const [isEdita, setIsEdita] = useState(false)
+  const [indexSG, setIndexSG] = useState(0)
   //const subGrupos = data;
 
   //Função para incluir um subGrupo na lista
-  const handleAddSubGrupo = async (item: SubGrupo) => {
+  const handleAddSubGrupo = async (item: tySubGrupo) => {
     //Uma validação para ver se o Nome do subgrupo já existe
     const index = subGrupos.findIndex((subGrupo) => subGrupo.nome === item.nome)
     if (index === -1) {
-      const lista: SubGrupo[] = [...subGrupos, item]
+      const lista: tySubGrupo[] = [...subGrupos, item]
       setSubGrupos(lista)
       ordenarSubGrupos(lista)
       return true
@@ -60,9 +58,18 @@ export default function TabelaSubGrupos({ data, setSubGruposP }: Props) {
       setSubGruposP(newArray)
     }
   }
+  // Função para editar um item da lista
+  const handleEditSubGrupo = async (index: number) => {
+    // Encontra o índice do objeto com o id fornecido
+    //const index = subGrupos.findIndex(item => item.id === id);
+    setIndexSG(index)
+    setIsEdita(true)
+    console.log("Index-G: ", index)
+  }
+
 
   //Função para ordenar a lista
-  async function ordenarSubGrupos(itens: SubGrupo[]) {
+  async function ordenarSubGrupos(itens: tySubGrupo[]) {
     console.log("Ordenou")
     const listOrdenada = itens.sort((a, b) => {
       if (a.nome < b.nome) {
@@ -89,27 +96,49 @@ export default function TabelaSubGrupos({ data, setSubGruposP }: Props) {
                 </div>
                 <div className="flex justify-end">
                   <NovoSubGrupo
-                    data={subGrupos}
+                    //data={subGrupos}
                     onAddItem={handleAddSubGrupo}
                   />
                 </div>
+                {/* ================================ */}
+                {
+                  isEdita && (
+                    <EditaSubGrupo 
+                      data={subGrupos[indexSG]}
+                      isEdita={isEdita}
+                      setIsEdita={setIsEdita}
+                    />
+                  )
+                }
+                {/* ================================ */}
               </div>
             </TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Indice</TableHead>
+                {/* <TableHead className="w-[100px]">Indice</TableHead> */}
                 <TableHead>Nome</TableHead>
                 <TableHead>Descrição</TableHead>
+                <TableHead>Ativo</TableHead>
                 <TableHead>Excluir</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {subGrupos.map((grupo, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">{index}</TableCell>
+                <TableRow key={index} className={grupo.ativo ? 'text-black' : 'text-red-500'} >
+                  {/* <TableCell className="font-medium">{index}</TableCell> */}
                   <TableCell>{grupo.nome}</TableCell>
                   <TableCell>{grupo.descricao}</TableCell>
+                  <TableCell>{grupo.ativo ? 'True' : 'False'}</TableCell>
                   <TableCell>
+                    <Button
+                      onClick={() => handleEditSubGrupo(index)} 
+                      className="h-8 w-8" 
+                      size="icon" 
+                      variant="ghost"
+                    >
+                      <FileEditIcon className="h-4 w-4" />
+                      <span className="sr-only">Edit</span>
+                    </Button>
                     <Button
                       onClick={() => handleDeleteSubGrupo(index)}
                       className="h-8 w-8"

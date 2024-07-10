@@ -32,34 +32,41 @@ model Grupo {
 
 model SubGrupo {
   id              Int      @id @default(autoincrement())
-  nome            String
+  nome            String   
   descricao       String?
   ativo           Boolean  @default(true)
   grupo           Grupo?   @relation(fields: [grupoId], references: [id])
-  grupoId         Int
+  grupoId         Int //Chave estrangeira para tabela Grupo
   SG_lancamentos  Lancamento[]
+  @@unique([nome, grupoId]) //Só aceita um nome de subgrupo unico para o mesmo grupo
 }
 
 model Fonte {
   id                Int     @id @default(autoincrement())
-  nome              String
+  nome              String  @unique
   descricao         String?
   tipo              String  @default("M")
   ativo             Boolean @default(true)
   fonte_lancamentos Lancamento[]
+  fonte_saldos      Saldo[]
 }
 
 model Periodo {
   id            Int       @id @default(autoincrement())
-  periodo       String
+  periodo       String    @unique
   dtAtualizacao DateTime
   status        String    @default("A") 
+  periodo_saldos Saldo[]
 }
 
 model Saldo {
-  id      Int      @id @default(autoincrement())
-  periodo String
-  valor   Decimal  @default(0.00)
+  id        Int      @id @default(autoincrement())
+  valor     Decimal  @default(0.00)
+  fonte     Fonte?   @relation(fields: [fonteId], references: [id])
+  fonteId   Int //Chave estrangeira para tabela Fonte
+  periodo   Periodo?   @relation(fields: [periodoId], references: [id])
+  periodoId Int //Chave estrangeira para tabela Periodo
+  @@unique([periodoId, fonteId]) //Só acaita um Saldo de uma fonte por periodo
 }
 
 model Lancamento {
@@ -69,7 +76,7 @@ model Lancamento {
   dtLancamento  DateTime?
   operacao      String    @default("D") 
   subGrupo      SubGrupo? @relation(fields: [subGrupoId], references: [id])
-  subGrupoId    Int
+  subGrupoId    Int //Chave estrangeira para tabela SubGrupo
   fonte         Fonte?    @relation(fields: [fonteId], references: [id])
-  fonteId       Int
+  fonteId       Int //Chave estrangeira para tabela Fonte
 }

@@ -15,10 +15,10 @@ export type tyGrupo = {
   key?:       number,
   id?:        number,
   nome:       string,
-  descricao:  string,
-  tipo:       string,
+  descricao?:  string,
+  tipo?:       string,
   ativo?:     boolean,
-  userID?:    number,
+  //userID?:    number,
 }
 
 export type tyFonte = {
@@ -33,7 +33,7 @@ export type tySubGrupo = {
   key?:       number,
   id?:        number,
   nome:       string,
-  descricao:  string,
+  descricao?:  string,
   ativo?:     boolean,
   grupoId?:   number,
 }

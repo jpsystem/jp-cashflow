@@ -2,6 +2,7 @@
 
 import { tySubGrupo, tyGrupo, tyGrupoLista } from "@/types/types"
 import prisma from "@/lib/db"
+import {Grupo, SubGrupo } from "@prisma/client"
 
 export async function ListaGrupos() {
   let retorno = {
@@ -54,6 +55,22 @@ export async function retGrupos() {
     return (grupos = [{}])
   }
 }
+//Essa função retorna os dados do Grupo para Edição
+export async function retGrupo(grupoId: number): Promise<{ grupo?: Grupo | null; 
+                                subGrupos: SubGrupo[] }> {
+  try {
+    const grupo = await prisma.grupo.findUnique({ 
+      where: { id: grupoId },
+      include:{subGrupos: true},
+    });
+    return { grupo , subGrupos: grupo?.subGrupos || [] };
+  } catch (error){
+    console.error('Error fetching grupo:', error)
+    // return { grupo: undefined, subGrupos: [] };
+    throw error;
+  }
+  
+}
 
 export async function CreateSubGrupo(data: tySubGrupo) {
   let retorno = {
@@ -104,4 +121,47 @@ export async function novoGrupoComSubgrupos(
   })
 
   return grupo
+}
+
+export async function alteraSubGrupo(data: tySubGrupo) {
+  let retorno = {
+    status: true,
+    menssage: "Alteração efetuada",
+  }
+  try {
+    const subGrupo = await prisma.subGrupo.update({
+      where: {id: data.id},
+      data: {
+        nome: data.nome,
+        descricao: data.descricao,
+        ativo: data.ativo,
+      },
+    })
+  } catch (err) {
+    retorno.status = false;
+    retorno.menssage = "O correu um error! ";
+  }
+  return retorno;
+}
+
+export async function alteraGrupo(data: tyGrupo){
+  let retorno = {
+    status: true,
+    menssage: "Alteração efetuada",
+  }
+  try {
+    const grupo = await prisma.grupo.update({
+      where: {id: data.id},
+      data: {
+        nome: data.nome,
+        descricao: data.descricao,
+        tipo: data.tipo,
+        ativo: data.ativo,
+      },
+    })
+  } catch (err) {
+    retorno.status = false;
+    retorno.menssage = "O correu um error! ";
+  }
+  return retorno;
 }
