@@ -2,11 +2,11 @@
 
 // Imports
 import { Input } from "@/components/ui/input"
-import { format, startOfMonth, endOfMonth } from "date-fns"
+import { format, startOfMonth, endOfMonth, parseISO, addHours } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z, ZodType } from "zod"
+import { z } from "zod"
 import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import {
@@ -29,22 +29,25 @@ import {
 import { DialogTitle } from "@/components/ui/dialog"
 import { Dropdown, DropdownItem } from "flowbite-react"
 
-type FormData = {
-  startDate: Date
-  endDate: Date
+// Definição dos tipos de dados do formulário
+type FormProps = {
+  valor: string
+  periodo: string
+  descricao: string
+  dtLancamento: string
+  fonte: string
+  destino: string
+  conta: string
+  subConta: string
+  operacao: "D" | "C" | "M"
 }
-
-const myDateSchema = z.date({
-  required_error: "Por favor selecione uma data",
-  invalid_type_error: "Não é uma data válida",
-})
 
 // Schema de validação com zod
 const schema = z.object({
   valor: z.string().min(1, "Campo obrigatório!"),
   periodo: z.string().min(1, "Campo obrigatório!"),
   descricao: z.string().min(1, "Campo obrigatório!"),
-  dtLancamento: z.coerce.date(),
+  dtLancamento: z.string(),
   fonte: z.string().min(1, "Campo obrigatório!"),
   destino: z.string().min(1, "Campo obrigatório!"),
   conta: z.string().min(1, "Campo obrigatório!"),
@@ -57,9 +60,6 @@ const schema = z.object({
   }),
 })
 
-type DateProps = z.infer<typeof myDateSchema>
-type FormProps = z.infer<typeof schema>
-
 export default function NovoLancamentosForm() {
   const [isOpen, setIsOpen] = useState(false)
   const form = useForm<FormProps>({
@@ -68,7 +68,7 @@ export default function NovoLancamentosForm() {
       valor: "",
       periodo: "",
       descricao: "",
-      dtLancamento: new Date(),
+      dtLancamento: format(new Date(), "yyyy-MM-dd"),
       fonte: "",
       destino: "",
       conta: "",
@@ -98,7 +98,7 @@ export default function NovoLancamentosForm() {
             + Lançamentos
           </Button>
         </SheetTrigger>
-        <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[500px] max-h-[500px] min-w-[800px] max-w-[800px] overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
+        <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[500px] max-h-[500px] min-w-[800px] max-w-[800px] overflow-x-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
           <DialogTitle>Novo Lançamento</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -219,8 +219,12 @@ export default function NovoLancamentosForm() {
                           type="date"
                           min={format(firstDayOfMonth, "yyyy-MM-dd")}
                           max={format(lastDayOfMonth, "yyyy-MM-dd")}
-                          defaultValue={format(currentDate, "yyyy-MM-dd")}
                           {...field}
+                          value={format(parseISO(field.value), "yyyy-MM-dd")}
+                          onChange={(e) => {
+                            const newDate = parseISO(e.target.value)
+                            field.onChange(format(addHours(newDate, 12), "yyyy-MM-dd"))
+                          }}
                         />
                       </FormControl>
                       <FormMessage />

@@ -1,6 +1,6 @@
 "use client"
 
-import { format } from "date-fns"
+import { format } from "date-fns";
 import {
   Sheet,
   SheetClose,
@@ -10,10 +10,10 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/sheet";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -22,7 +22,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -31,14 +31,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Pen, Replace, Trash2 } from "lucide-react"
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Pen, Replace, Trash2 } from "lucide-react";
 
 const TabelaLancamentos = () => {
   return (
     <div className="p-4">
-      <div className="max-w-full mx-auto md:max-w-6xl">
+      <div className="max-w-full mx-auto md:max-w-6xl overflow-x-auto min-w-screen">
         <Card className="">
           <CardHeader>
             <CardTitle className="font-semibold mb-2">Filtros</CardTitle>
@@ -98,33 +98,33 @@ const TabelaLancamentos = () => {
           </CardContent>
         </Card>
       </div>
-      <div>
+      <div className="overflow-x-auto mt-4">
         <h1 className="text-2xl font-bold mb-4">Lançamentos</h1>
-        <Table className="items-center content-center border-4 overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
+        <Table className="min-w-full border-4 overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
           <TableCaption>
             Uma lista sobre seus lançamentos recentes.
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center border-r w-[7%]">
+              <TableHead className="text-center border-r w-[2%]">
                 Conta
               </TableHead>
-              <TableHead className="text-center border-r w-[7%]">
+              <TableHead className="text-center border-r w-[2%]">
                 Sub-Conta
               </TableHead>
               <TableHead className="text-center border-r w-[43%]">
                 Descrição
               </TableHead>
-              <TableHead className="text-center border-r w-[8%]">
+              <TableHead className="text-center border-r w-[6%]">
                 Valor
               </TableHead>
-              <TableHead className="text-center border-r w-[7%]">
+              <TableHead className="text-center border-r w-[2%]">
                 Fonte
               </TableHead>
               <TableHead className="text-center border-r w-[7%]">
                 Data
               </TableHead>
-              <TableHead className="text-center w-[13%]">Ações</TableHead>
+              <TableHead className="text-center w-[12%]">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -157,7 +157,7 @@ const TabelaLancamentos = () => {
         </Table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TabelaLancamentos
+export default TabelaLancamentos;
