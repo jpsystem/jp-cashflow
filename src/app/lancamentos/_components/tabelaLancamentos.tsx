@@ -110,7 +110,7 @@ const TabelaLancamentos = () => {
                 Conta
               </TableHead>
               <TableHead className="text-center border-r w-[2%]">
-                Sub-Conta
+                Sub Conta
               </TableHead>
               <TableHead className="text-center border-r w-[43%]">
                 Descrição
@@ -124,7 +124,7 @@ const TabelaLancamentos = () => {
               <TableHead className="text-center border-r w-[7%]">
                 Data
               </TableHead>
-              <TableHead className="text-center w-[12%]">Ações</TableHead>
+              <TableHead className="text-center w-[10%]">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

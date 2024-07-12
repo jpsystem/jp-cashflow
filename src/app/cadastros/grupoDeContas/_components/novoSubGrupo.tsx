@@ -1,37 +1,38 @@
-"use client"
+"use client";
+
 // COMPONENTE FILHO
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { tySubGrupo } from "@/types/types";
+import { Checkbox } from "@/components/ui/checkbox";
 
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
-import { Textarea } from "@/components/ui/textarea"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { tySubGrupo } from "@/types/types"
-import { Checkbox } from "@/components/ui/checkbox"
-
-//Componente SHEET shadcn/ui
+// Componente SHEET shadcn/ui
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet"
+} from "@/components/ui/sheet";
 
-//Componente FORM shadcn/ui
+// Componente FORM shadcn/ui
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
+
 interface Props {
-  onAddItem: (item: tySubGrupo) => Promise<boolean>
+  onAddItem: (item: tySubGrupo) => Promise<boolean>;
 }
 
 const schema = z.object({
@@ -41,23 +42,23 @@ const schema = z.object({
   descricao: z
     .string()
     .min(10, "A descrição deve ter pelo menos 10 caracteres."),
-  ativo: z.boolean(), 
-})
+  ativo: z.boolean(),
+});
 
-type FormProps = z.infer<typeof schema>
+type FormProps = z.infer<typeof schema>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export default function NovoSubGrupo({ onAddItem }: Props) {
-  //Variavel de estado isOpen
-  const [isOpen, setIsOpen] = useState(false)
+  // Variável de estado isOpen
+  const [isOpen, setIsOpen] = useState(false);
 
-  //Função para fechar a SHEET
+  // Função para fechar a SHEET
   const handleClose = () => {
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
-  //Definição do formulario
+  // Definição do formulário
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -65,35 +66,36 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
       descricao: "",
       ativo: true,
     },
-  })
+  });
 
-  //Função para abrir a Sheet
+  // Função para abrir a Sheet
   const handleOpen = () => {
-    form.resetField("nome")
-    form.resetField("descricao")
-    form.resetField("ativo")
-    setIsOpen(true)
-  }
+    form.reset();
+    setIsOpen(true);
+  };
 
-  //Definição do submit handler.
+  // Definição do submit handler.
   async function onSubmit(values: FormProps) {
     const newItem: tySubGrupo = {
       nome: values.nome.toUpperCase(),
       descricao: values.descricao,
       ativo: values.ativo,
-    }
-    const retorno = await onAddItem(newItem)
+    };
+    const retorno = await onAddItem(newItem);
     if (retorno) {
-      setIsOpen(false)
+      setIsOpen(false);
     } else {
-      alert("Esse subtipo ja existe!")
-      setIsOpen(true)
+      alert("Esse subtipo já existe!");
     }
   }
 
   return (
-    <Sheet open={isOpen}>
-      <Button variant="outline" onClick={handleOpen}>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <Button
+        variant="outline"
+        className="hover:bg-sky-100"
+        onClick={handleOpen}
+      >
         + SubGrupo
       </Button>
       <SheetContent
@@ -109,87 +111,101 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
           overflow-auto 
           rounded-2xl 
           bg-white p-8 
-          text-gray-900 shadow 
-          justify-self-center`}
+          text-gray-900 shadow-lg 
+          flex flex-col`}
       >
         <SheetHeader>
-          <SheetTitle>Novo SubGrupo</SheetTitle>
+          <SheetTitle className="text-2xl text-left">Novo SubGrupo</SheetTitle>
+          <SheetClose asChild>
+            <button
+              onClick={handleClose}
+              className="absolute right-5 top-1"
+            ></button>
+          </SheetClose>
         </SheetHeader>
-        {/* //Inclusão do formulário */}
-        {isOpen && (
-          <div className="flex flex-col w-full items-end space-y-2">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
-              >
-                <FormField
-                  control={form.control}
-                  name="nome"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nome</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Nome" {...field} />
-                      </FormControl>
-                      <FormDescription>Nome do subgrupo.</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="descricao"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Descrição</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Descricao" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Digite a descrição do subgrupo.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+        {/* Inclusão do formulário */}
+        <div className="flex flex-col w-full items-center space-y-4">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-8 w-full max-w-[400px]"
+            >
+              <FormField
+                control={form.control}
+                name="nome"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-lg font-semibold">
+                      Nome
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Nome"
+                        className="placeholder:text-gray-400"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="descricao"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-lg font-semibold">
+                      Descrição
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Descrição"
+                        className="placeholder:text-gray-400"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex items-center">
                 <FormField
                   control={form.control}
                   name="ativo"
                   render={({ field }) => (
-                    <FormItem 
-                      className="flex items-center space-x-2"
-                    >
-                      <FormLabel className={"mr-2"}>Ativo</FormLabel>
+                    <FormItem className="flex flex-col items-center space-y-2">
+                      <FormLabel>Ativo</FormLabel>
                       <FormControl>
-                        <Checkbox 
-                          className={"align-top"} 
-                          checked={field.value}
-                          //defaultChecked
-                          onCheckedChange={field.onChange} />
+                        {/* {...field} checked={field.value}  */}
+                        <Checkbox />
                       </FormControl>
-                      <FormDescription>
-                        Defina se o subgrupo está ativo.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <div className="text-right mt-8 space-x-4">
-                  <SheetFooter>
-                    <Button variant="outline" type="submit">
-                      Incluir
-                    </Button>
-                    <Button variant="outline" onClick={handleClose}>
-                      Cancelar
-                    </Button>
-                  </SheetFooter>
-                </div>
-              </form>
-            </Form>
-          </div>
-        )}
+              </div>
+              <div className="text-sm font-semibold flex justify-end mt-7">
+                <SheetFooter>
+                  <Button
+                    variant="outline"
+                    type="submit"
+                    className="text-lg px-4 py-2 hover:bg-sky-100"
+                  >
+                    Incluir
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleClose}
+                    className="text-lg px-4 py-2 hover:bg-sky-100"
+                  >
+                    Cancelar
+                  </Button>
+                </SheetFooter>
+              </div>
+            </form>
+          </Form>
+        </div>
       </SheetContent>
     </Sheet>
-  )
+  );
 }

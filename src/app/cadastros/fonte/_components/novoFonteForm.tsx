@@ -117,11 +117,10 @@ export default function NovoFonteForm() {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <Button variant="outline" onClick={handleOpen}>
+      <Button variant="outline" className="hover:bg-slate-200" onClick={handleOpen}>
         + Fonte
       </Button>
       <SheetTrigger className="rounded p-2 hover:bg-slate-200">
-        {/* Add Conta */}
       </SheetTrigger>
       <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[410px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
         <DialogTitle className="text-xl font-bold">Nova Fonte</DialogTitle>
@@ -234,11 +233,11 @@ export default function NovoFonteForm() {
                     />
                   </div>
                 </div>
-                <SheetFooter className="text-sm font-semibold flex justify-end mt-7">
+                <SheetFooter className="text-sm font-semibold flex justify-end mt-7 ">
                   <Button
                     variant="outline"
                     type="submit"
-                    className="text-lg px-2 py-1"
+                    className="text-lg px-2 py-1 hover:bg-slate-200"
                   >
                     Incluir
                   </Button>
@@ -246,7 +245,7 @@ export default function NovoFonteForm() {
                     <Button
                       variant="outline"
                       onClick={handleClose}
-                      className="text-lg px-2 py-1"
+                      className="text-lg px-2 py-1 hover:bg-slate-200"
                     >
                       Cancelar
                     </Button>
