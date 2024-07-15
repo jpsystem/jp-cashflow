@@ -1,14 +1,14 @@
-"use client"
+"use client";
 // COMPONENTE PAI
 
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { useForm, Controller } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import LabelError from "@/components/ui/jp/labelError"
-import { useContext, useEffect, useState } from "react"
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import LabelError from "@/components/ui/jp/labelError";
+import { useContext, useEffect, useState } from "react";
 //COMPONENTE DIALOG
 import {
   Dialog,
@@ -18,7 +18,7 @@ import {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 //Componente SHEET shadcn/ui
 import {
   Sheet,
@@ -29,9 +29,15 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
+} from "@/components/ui/sheet";
 //COMPONENTE FORM
-import { Checkbox } from "@/components/ui/checkbox"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -40,13 +46,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { TrashIcon } from "@/app/_components/iconsForm"
-import { sub } from "date-fns"
-import TabelaFonte from "./tabelaFontes"
-import { Textarea } from "@/components/ui/textarea"
-import * as React from "react"
-import { Dropdown, DropdownHeader } from "flowbite-react"
+} from "@/components/ui/form";
+import { TrashIcon } from "@/app/_components/iconsForm";
+import { sub } from "date-fns";
+import TabelaFonte from "./tabelaFontes";
+import { Textarea } from "@/components/ui/textarea";
+import * as React from "react";
+import { Dropdown } from "flowbite-react";
+import { FaChevronDown } from "react-icons/fa";
 
 // Definição do objeto ZOD de validação
 const schema = z.object({
@@ -58,35 +65,35 @@ const schema = z.object({
       return {
         message:
           "Informe 'D' para débito, 'C' para crédito ou 'M' para conta de movimentação.",
-      }
+      };
     },
   }),
-})
+});
 
 // Definição do type fonte
 type tyFonte = {
-  id?: number
-  nome: string
-  descricao: string | null
-  tipo: string
-  ativo: boolean
-}
+  id?: number;
+  nome: string;
+  descricao: string | null;
+  tipo: string;
+  ativo: boolean;
+};
 
-type FormProps = z.infer<typeof schema>
+type FormProps = z.infer<typeof schema>;
 
 ////////////////////////////////////////////////////////////////
 
 export default function NovoFonteForm() {
   // Variavel de estado isOpen
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   // Função para fechar o DIALOG
   const handleClose = () => {
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   // Lista das fontes
-  const [Fonte] = useState<tyFonte[]>([])
+  const [Fonte] = useState<tyFonte[]>([]);
 
   // Definição do formulário
   const form = useForm<FormProps>({
@@ -97,32 +104,33 @@ export default function NovoFonteForm() {
       tipo: "D",
       ativo: true,
     },
-  })
+  });
 
   // Função para abrir a Sheet
   const handleOpen = () => {
-    form.resetField("nome")
-    form.resetField("descricao")
-    form.resetField("tipo")
-    form.resetField("ativo")
-    setIsOpen(true)
-  }
+    form.resetField("nome");
+    form.resetField("descricao");
+    form.resetField("tipo");
+    form.resetField("ativo");
+    setIsOpen(true);
+  };
 
   // Função para executar no Submit
   function onSubmit(values: FormProps) {
-    console.log("VALORES", values)
-    console.log("SUBS", Fonte)
-    setIsOpen(false)
+    console.log("VALORES", values);
+    console.log("SUBS", Fonte);
+    setIsOpen(false);
   }
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <Button variant="outline" onClick={handleOpen}>
+      <Button
+        variant="outline"
+        className="hover:bg-slate-200"
+        onClick={handleOpen}
+      >
         + Fonte
       </Button>
-      <SheetTrigger className="rounded p-2 hover:bg-slate-200">
-        {/* Add Conta */}
-      </SheetTrigger>
       <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[410px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
         <DialogTitle className="text-xl font-bold">Nova Fonte</DialogTitle>
         <SheetClose asChild>
@@ -175,7 +183,7 @@ export default function NovoFonteForm() {
                   )}
                 />
                 <div className="flex justify-between items-center">
-                  <div className="flex-1 mr-4">
+                  <div className="flex-1 mr-4 text-sm">
                     <FormField
                       control={form.control}
                       name="tipo"
@@ -184,32 +192,41 @@ export default function NovoFonteForm() {
                           <FormControl>
                             <div className="flex flex-col space-y-2">
                               <FormLabel className="">Tipo</FormLabel>
-                              <Button
-                                className="border border-input bg-background shadow-sm 
-                                           hover:bg-accent hover:text-accent-foreground
-                                           w-32 h-9"
-                              >
-                                <Dropdown label="Selecione">
-                                  <Dropdown.Item
-                                    className="text-sm"
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    className="w-40 h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
+                                  >
+                                    {field.value === "D"
+                                      ? "Débito"
+                                      : field.value === "C"
+                                      ? "Crédito"
+                                      : "Movimentação"}
+                                    <FaChevronDown className="ml-2" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-white text-sm">
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
                                     onClick={() => field.onChange("D")}
                                   >
                                     Débito
-                                  </Dropdown.Item>
-                                  <Dropdown.Item
-                                    className="text-sm"
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
                                     onClick={() => field.onChange("C")}
                                   >
                                     Crédito
-                                  </Dropdown.Item>
-                                  <Dropdown.Item
-                                    className="text-sm"
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
                                     onClick={() => field.onChange("M")}
                                   >
                                     Movimentação
-                                  </Dropdown.Item>
-                                </Dropdown>
-                              </Button>
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -234,11 +251,11 @@ export default function NovoFonteForm() {
                     />
                   </div>
                 </div>
-                <SheetFooter className="text-sm font-semibold flex justify-end mt-7">
+                <SheetFooter className="text-sm font-semibold flex justify-end mt-7 ">
                   <Button
                     variant="outline"
                     type="submit"
-                    className="text-lg px-2 py-1"
+                    className="text-lg px-2 py-1 hover:bg-slate-200"
                   >
                     Incluir
                   </Button>
@@ -246,7 +263,7 @@ export default function NovoFonteForm() {
                     <Button
                       variant="outline"
                       onClick={handleClose}
-                      className="text-lg px-2 py-1"
+                      className="text-lg px-2 py-1 hover:bg-slate-200"
                     >
                       Cancelar
                     </Button>
@@ -258,5 +275,5 @@ export default function NovoFonteForm() {
         )}
       </SheetContent>
     </Sheet>
-  )
+  );
 }

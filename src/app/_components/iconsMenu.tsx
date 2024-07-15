@@ -6,6 +6,7 @@ import {
   LuFileEdit,
   LuCalendarCheck,
   LuDatabase,
+  LuAlignJustify
 } from "react-icons/lu"
 
 import { useSession } from "next-auth/react"
@@ -35,3 +36,8 @@ export function IconAgenda(props: any) {
 export function IconCadastros(props: any) {
   return <LuDatabase {...props} />
 }
+
+export function IconMenu(props: any) {
+  return <LuAlignJustify {...props} />
+}
+

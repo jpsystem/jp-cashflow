@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
 // Imports
-import { Input } from "@/components/ui/input"
-import { format, startOfMonth, endOfMonth, parseISO, addHours } from "date-fns"
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { useState } from "react"
-import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input";
+import { format, startOfMonth, endOfMonth, parseISO, addHours } from "date-fns";
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Sheet,
   SheetClose,
@@ -17,7 +17,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
+} from "@/components/ui/sheet";
 import {
   Form,
   FormControl,
@@ -25,22 +25,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { DialogTitle } from "@/components/ui/dialog"
-import { Dropdown, DropdownItem } from "flowbite-react"
+} from "@/components/ui/form";
+import { DialogTitle } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { FaChevronDown } from "react-icons/fa";
 
 // Definição dos tipos de dados do formulário
 type FormProps = {
-  valor: string
-  periodo: string
-  descricao: string
-  dtLancamento: string
-  fonte: string
-  destino: string
-  conta: string
-  subConta: string
-  operacao: "D" | "C" | "M"
-}
+  valor: string;
+  periodo: string;
+  descricao: string;
+  dtLancamento: string;
+  fonte: string;
+  destino: string;
+  conta: string;
+  subConta: string;
+  operacao: "D" | "C" | "M";
+};
 
 // Schema de validação com zod
 const schema = z.object({
@@ -58,10 +64,10 @@ const schema = z.object({
         "Informe 'D' para débito, 'C' para crédito ou 'M' para conta de movimentação.",
     }),
   }),
-})
+});
 
 export default function NovoLancamentosForm() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -75,20 +81,20 @@ export default function NovoLancamentosForm() {
       subConta: "",
       operacao: "D",
     },
-  })
+  });
 
-  const handleOpen = () => setIsOpen(true)
-  const handleClose = () => setIsOpen(false)
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
 
   const onSubmit = (values: FormProps) => {
-    console.log("VALORES", values)
-    setIsOpen(false)
-  }
+    console.log("VALORES", values);
+    setIsOpen(false);
+  };
 
   // Calcula o primeiro e o último dia do mês atual
-  const currentDate = new Date()
-  const firstDayOfMonth = startOfMonth(currentDate)
-  const lastDayOfMonth = endOfMonth(currentDate)
+  const currentDate = new Date();
+  const firstDayOfMonth = startOfMonth(currentDate);
+  const lastDayOfMonth = endOfMonth(currentDate);
 
   return (
     <div className="flex flex-col">
@@ -112,23 +118,37 @@ export default function NovoLancamentosForm() {
                       <FormControl>
                         <div className="flex flex-col space-y-2">
                           <Button className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground w-full hover:bg-gray-400">
-                            <Dropdown label="Selecione Conta">
-                              <DropdownItem
-                                onClick={() => field.onChange("Conta1")}
-                              >
-                                Conta 1
-                              </DropdownItem>
-                              <DropdownItem
-                                onClick={() => field.onChange("Conta2")}
-                              >
-                                Conta 2
-                              </DropdownItem>
-                              <DropdownItem
-                                onClick={() => field.onChange("Conta3")}
-                              >
-                                Conta 3
-                              </DropdownItem>
-                            </Dropdown>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
+                                >
+                                  {field.value || "Selecione Conta"}
+                                  <FaChevronDown className="ml-2" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="bg-white text-sm">
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("Conta1")}
+                                >
+                                  Conta 1
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("Conta2")}
+                                >
+                                  Conta 2
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("Conta3")}
+                                >
+                                  Conta 3
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </Button>
                         </div>
                       </FormControl>
@@ -144,24 +164,38 @@ export default function NovoLancamentosForm() {
                       <FormLabel>Sub-Conta</FormLabel>
                       <FormControl>
                         <div className="flex flex-col space-y-2">
-                          <Button className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground w-full  hover:bg-gray-400">
-                            <Dropdown label="Selecione Sub-Conta">
-                              <DropdownItem
-                                onClick={() => field.onChange("SubConta1")}
-                              >
-                                Sub-Conta 1
-                              </DropdownItem>
-                              <DropdownItem
-                                onClick={() => field.onChange("SubConta2")}
-                              >
-                                Sub-Conta 2
-                              </DropdownItem>
-                              <DropdownItem
-                                onClick={() => field.onChange("SubConta3")}
-                              >
-                                Sub-Conta 3
-                              </DropdownItem>
-                            </Dropdown>
+                          <Button className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground w-full hover:bg-gray-400">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
+                                >
+                                  {field.value || "Selecione Sub-Conta"}
+                                  <FaChevronDown className="ml-2" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="bg-white text-sm">
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("SubConta1")}
+                                >
+                                  Sub-Conta 1
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("SubConta2")}
+                                >
+                                  Sub-Conta 2
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("SubConta3")}
+                                >
+                                  Sub-Conta 3
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </Button>
                         </div>
                       </FormControl>
@@ -222,8 +256,10 @@ export default function NovoLancamentosForm() {
                           {...field}
                           value={format(parseISO(field.value), "yyyy-MM-dd")}
                           onChange={(e) => {
-                            const newDate = parseISO(e.target.value)
-                            field.onChange(format(addHours(newDate, 12), "yyyy-MM-dd"))
+                            const newDate = parseISO(e.target.value);
+                            field.onChange(
+                              format(addHours(newDate, 12), "yyyy-MM-dd")
+                            );
                           }}
                         />
                       </FormControl>
@@ -241,24 +277,38 @@ export default function NovoLancamentosForm() {
                       <FormLabel>Fonte</FormLabel>
                       <FormControl>
                         <div className="flex flex-col space-y-2">
-                          <Button className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground w-full h-9 hover:bg-gray-400">
-                            <Dropdown label="Selecione Fonte">
-                              <DropdownItem
-                                onClick={() => field.onChange("Fonte1")}
-                              >
-                                Fonte 1
-                              </DropdownItem>
-                              <DropdownItem
-                                onClick={() => field.onChange("Fonte2")}
-                              >
-                                Fonte 2
-                              </DropdownItem>
-                              <DropdownItem
-                                onClick={() => field.onChange("Fonte3")}
-                              >
-                                Fonte 3
-                              </DropdownItem>
-                            </Dropdown>
+                          <Button className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground w-full hover:bg-gray-400">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
+                                >
+                                  {field.value || "Selecione Fonte"}
+                                  <FaChevronDown className="ml-2" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="bg-white text-sm">
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("Fonte1")}
+                                >
+                                  Fonte 1
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("Fonte2")}
+                                >
+                                  Fonte 2
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("Fonte3")}
+                                >
+                                  Fonte 3
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </Button>
                         </div>
                       </FormControl>
@@ -270,28 +320,42 @@ export default function NovoLancamentosForm() {
                   control={form.control}
                   name="destino"
                   render={({ field }) => (
-                    <FormItem className="flex-1 ">
+                    <FormItem className="flex-1">
                       <FormLabel>Destino</FormLabel>
                       <FormControl>
                         <div className="flex flex-col space-y-2">
                           <Button className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground w-full hover:bg-gray-400">
-                            <Dropdown label="Selecione Destino">
-                              <DropdownItem
-                                onClick={() => field.onChange("Destino1")}
-                              >
-                                Destino 1
-                              </DropdownItem>
-                              <DropdownItem
-                                onClick={() => field.onChange("Destino2")}
-                              >
-                                Destino 2
-                              </DropdownItem>
-                              <DropdownItem
-                                onClick={() => field.onChange("Destino3")}
-                              >
-                                Destino 3
-                              </DropdownItem>
-                            </Dropdown>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
+                                >
+                                  {field.value || "Selecione Destino"}
+                                  <FaChevronDown className="ml-2" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="bg-white text-sm">
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("Destino1")}
+                                >
+                                  Destino 1
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("Destino2")}
+                                >
+                                  Destino 2
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange("Destino3")}
+                                >
+                                  Destino 3
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </Button>
                         </div>
                       </FormControl>
@@ -300,21 +364,46 @@ export default function NovoLancamentosForm() {
                   )}
                 />
               </div>
-              <SheetFooter className="text-sm font-semibold flex justify-end mt-7">
-                <Button
-                  variant="outline"
-                  type="submit"
-                  className="text-lg px-2 py-1"
-                >
-                  Incluir
-                </Button>
+              <div className="flex gap-2">
+                <FormField
+                  control={form.control}
+                  name="operacao"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Operação</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="placeholder:text-gray-400 text-center w-full"
+                          placeholder="Operação"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="periodo"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Período</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="placeholder:text-gray-400 text-center w-full"
+                          placeholder="Período"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <SheetFooter>
                 <SheetClose asChild>
-                  <Button
-                    variant="outline"
-                    className="ml-4 text-lg px-2 py-1"
-                    onClick={handleClose}
-                  >
-                    Cancelar
+                  <Button type="submit" className="mt-2">
+                    Confirmar
                   </Button>
                 </SheetClose>
               </SheetFooter>
@@ -323,5 +412,5 @@ export default function NovoLancamentosForm() {
         </SheetContent>
       </Sheet>
     </div>
-  )
+  );
 }
