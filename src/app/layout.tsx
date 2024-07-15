@@ -93,7 +93,7 @@ export default async function RootLayout({
                   <DrawerContent>
                     <DrawerHeader  className="">
                     </DrawerHeader>
-                    <nav className="flex flex-col items-center w-full sm:w-44 h-full py-4 text-sky-50 ">
+                    <nav className="flex flex-col items-center w-full sm:w-44 h-full py-4 bg-sky-900 text-sky-50 ">
                       <Link
                         className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-sky-800"
                         href="/home"

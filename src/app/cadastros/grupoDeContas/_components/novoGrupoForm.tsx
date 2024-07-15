@@ -13,7 +13,7 @@ import TabelaSubGrupos from "./tabelaSubGrupos";
 import { Textarea } from "@/components/ui/textarea";
 import { tyGrupo, tySubGrupo, tyGrupoLista } from "@/types/types";
 
-//Componente SHEET shadcn/ui
+// Componente SHEET shadcn/ui
 import {
   Sheet,
   SheetClose,
@@ -24,18 +24,17 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-//COMPONENTE FORM
+// Componente FORM
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
-//COMPONENTE TABLE
+// Componente TABLE
 import {
   Table,
   TableBody,
@@ -46,10 +45,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-//Configurando o zod para validação do formulário
+// Novo componente de dropdown do shadcn/ui
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+// Ícone de seta para baixo
+import { FaChevronDown } from "react-icons/fa";
+
+// Configurando o zod para validação do formulário
 const schema = z.object({
   nome: z.string().min(2, "Campo obrigatório!"),
   descricao: z.string().min(2, "Campo obrigatório!"),
+  ativo: z.boolean().default(true),
   tipo: z.enum(["D", "C", "M"], {
     errorMap: () => ({
       message:
@@ -124,7 +135,6 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
       >
         + grupo
       </Button>
-      <SheetTrigger className="rounded p-2 hover:bg-slate-200"></SheetTrigger>
       <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[590px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
         <SheetHeader>
           <SheetTitle className="text-2xl">Novo grupo de Contas</SheetTitle>
@@ -170,23 +180,77 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="tipo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tipo</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="placeholder:text-gray-400"
-                          placeholder="Tipo"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="flex justify-between items-center">
+                  <div className="flex-1 mr-4 text-sm">
+                    <FormField
+                      control={form.control}
+                      name="tipo"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="flex flex-col space-y-2">
+                              <FormLabel className="">Tipo</FormLabel>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    className="w-40 h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
+                                  >
+                                    {field.value === "D"
+                                      ? "Débito"
+                                      : field.value === "C"
+                                      ? "Crédito"
+                                      : "Movimentação"}
+                                    <FaChevronDown className="ml-2" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-white text-sm">
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                    onClick={() => field.onChange("D")}
+                                  >
+                                    Débito
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                    onClick={() => field.onChange("C")}
+                                  >
+                                    Crédito
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                    onClick={() => field.onChange("M")}
+                                  >
+                                    Movimentação
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="flex items-center">
+                    <FormField
+                      control={form.control}
+                      name="ativo"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col items-center space-y-2">
+                          <FormLabel>Ativo</FormLabel>
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
                 <div className="flex-row">
                   <div>
                     <TabelaSubGrupos
