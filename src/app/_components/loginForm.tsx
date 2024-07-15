@@ -33,15 +33,15 @@ export default function LoginForm() {
     <div className="flex items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-2 text-center">
-          <CardTitle className="text-4xl font-bold">Login</CardTitle>
-          <CardDescription className="text-2xl">
+          <CardTitle className="text-4xl font-bold text-sky-900">Login</CardTitle>
+          <CardDescription className="text-2xl text-sky-800">
             Entre com os dados para o login
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2 text-2xl">
-              <Label htmlFor="nickname" className="text-2xl">
+              <Label htmlFor="nickname" className="text-2xl text-sky-900">
                 Login
               </Label>
               <Input
@@ -53,7 +53,7 @@ export default function LoginForm() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-2xl">
+              <Label htmlFor="password" className="text-2xl text-sky-900">
                 Senha
               </Label>
               <Input
@@ -65,11 +65,11 @@ export default function LoginForm() {
               />
             </div>
             <Button
-              className="w-full hover:bg-gray-100"
+              className="w-full hover:bg-sky-100 hover:text-sky-900 text-sky-900"
               variant={"outline"}
               type="submit"
             >
-              Entrar no sistema
+              Login
             </Button>
             {error === "CredentialsSignin" && (
               <div className="space-y-2 text-red-600">Erro no login!</div>
