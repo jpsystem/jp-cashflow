@@ -121,11 +121,11 @@ export default function ClientDrawer() {
             </PopoverContent>
           </Popover>
         </nav>
-        <DrawerFooter className="space-x-2">
+        {/* <DrawerFooter className="space-x-2">
           <Button variant="outline" onClick={() => setIsDrawerOpen(false)}>
             Close
           </Button>
-        </DrawerFooter>
+        </DrawerFooter> */}
       </DrawerContent>
     </Drawer>
   );
