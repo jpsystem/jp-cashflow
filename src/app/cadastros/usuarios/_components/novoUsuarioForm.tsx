@@ -85,12 +85,12 @@ export default function NovoUsuarioForm() {
     <div className="flex items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-3xl font-bold">Cadastro</CardTitle>
-          <CardDescription>Entre com os dados para o cadastro</CardDescription>
+          <CardTitle className="text-3xl font-bold text-sky-800">Cadastro</CardTitle>
+          <CardDescription className="text-sky-700">Entre com os dados para o cadastro</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(handleForm)} className="space-y-4">
-            <div className="space-y-2">
+            <div className="space-y-2 text-sky-700">
               <Label htmlFor="login">Login</Label>
               <Input id="login" type="text" {...register("login")} />
               {errors.login ? (
@@ -99,7 +99,7 @@ export default function NovoUsuarioForm() {
                 ""
               )}
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 text-sky-700">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" {...register("email")} />
               {errors.email ? (
@@ -108,7 +108,7 @@ export default function NovoUsuarioForm() {
                 ""
               )}
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 text-sky-700">
               <Label htmlFor="nome">Nome completo</Label>
               <Input id="nome" type="text" {...register("nome")} />
               {errors.nome ? (
@@ -117,7 +117,7 @@ export default function NovoUsuarioForm() {
                 ""
               )}
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 text-sky-700">
               <Label htmlFor="perfil">Perfil</Label>
               <Input id="perfil" type="text" {...register("perfil")} />
               {errors.perfil ? (
@@ -126,7 +126,7 @@ export default function NovoUsuarioForm() {
                 ""
               )}
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 text-sky-700">
               <Label htmlFor="senha">Senha</Label>
               <Input id="senha" type="password" {...register("senha")} />
               {errors.senha ? (
@@ -135,7 +135,7 @@ export default function NovoUsuarioForm() {
                 ""
               )}
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 text-sky-700">
               <Label htmlFor="confirmaSenha">Confirmação da Senha</Label>
               <Input
                 id="confirmaSenha"
@@ -150,15 +150,15 @@ export default function NovoUsuarioForm() {
             </div>
             <div className="flex space-x-4">
               <Button
-                className="flex-1 hover:bg-gray-100"
-                variant={"outline"}
+                className="flex-1 text-sky-600 hover:text-sky-800 text-xl"
+                variant="outline"
                 type="submit"
               >
                 Cadastrar
               </Button>
               <Button
-                className="flex-1 hover:bg-gray-100"
-                variant={"outline"}
+                className="flex-1 text-sky-600 hover:text-sky-800 text-xl"
+                variant="outline"
                 type="button"
                 onClick={() => router.back()}
               >

@@ -71,7 +71,7 @@ export default async function RootLayout({
                 className="flex items-center gap-2 text-sm sm:text-lg font-semibold"
                 href="#"
               >
-                <ActivityIcon className="w-6 h-6 text-sky-50" />
+                <ActivityIcon className="w-6 h-6 text-sky-50 ml-2" />
                 <span className="text-sky-50">
                   © 2023 JP System Ltda. All rights reserved.
                 </span>
@@ -87,7 +87,7 @@ export default async function RootLayout({
                       size="lg"
                       text="Logout"
                       variant="outline"
-                      className="hover:bg-sky-800 hover:text-sky-50 text-sky-50 border-r border-black"
+                      className="hover:bg-sky-800 hover:text-sky-100 text-sky-50 border-r border-sky-50 mr-2"
                     />
                   </>
                 )}

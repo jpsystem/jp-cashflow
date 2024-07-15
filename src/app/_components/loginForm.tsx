@@ -84,7 +84,7 @@ export default function LoginForm() {
             >
               Esqueceu a senha?
             </Link>
-            <p className="text-center text-gray-500 dark:text-gray-400">
+            <p className="text-center hover:opacity-100 text-sky-800 opacity-40">
               ainda não está cadastrado?
               <Link className="underline" href="/cadastros/usuarios/cadastro">
                 Cadastrar
