@@ -33,7 +33,8 @@ export default function ClientDrawer() {
   };
 
   return (
-    <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+    <div className="flex flex-col h-screen justify-between">
+    <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} direction="left">
       <DrawerTrigger asChild>
         <div className="w-10">
           <Button variant="ghost" onClick={() => setIsDrawerOpen(true)}>
@@ -41,7 +42,7 @@ export default function ClientDrawer() {
           </Button>
         </div>
       </DrawerTrigger>
-      <DrawerContent className="">
+      <DrawerContent className="flex flex-col h-full">
         <DrawerHeader></DrawerHeader>
         <nav className="flex flex-col items-center w-full sm:w-44 h-full py-4 bg-sky-900 text-sky-50 ">
           <Link
@@ -121,12 +122,10 @@ export default function ClientDrawer() {
             </PopoverContent>
           </Popover>
         </nav>
-        {/* <DrawerFooter className="space-x-2">
-          <Button variant="outline" onClick={() => setIsDrawerOpen(false)}>
-            Close
-          </Button>
-        </DrawerFooter> */}
+        <DrawerFooter className="p-4 sm:p-6 bg-sky-900 mt-auto h-fit bottom-auto">
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
+    </div>
   );
 }
