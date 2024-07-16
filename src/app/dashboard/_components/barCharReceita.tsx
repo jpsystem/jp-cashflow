@@ -18,22 +18,22 @@ ChartJS.register(
   Legend
 );
 
-interface Despesa {
+interface Receita {
   conta: string;
   valor: number;
 }
 
 interface BarChartProps {
-  despesas: Despesa[];
+  receitas: Receita[];
 }
 
-export default function BarChart({ despesas }: BarChartProps) {
+export default function BarChart({ receitas }: BarChartProps) {
   const data = {
-    labels: despesas.map((despesa) => despesa.conta),
+    labels: receitas.map((receita) => receita.conta),
     datasets: [
       {
         label: "Total da conta",
-        data: despesas.map((despesa) => despesa.valor),
+        data: receitas.map((receita) => receita.valor),
         // backgroundColor: 'rgba(75, 192, 192, 0.2)',
         // borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: "rgba(252, 211, 77, 0.5)",
@@ -53,7 +53,7 @@ export default function BarChart({ despesas }: BarChartProps) {
       title: {
         color:'rgb(7 89 133)',
         display: true,
-        text: "Totais das Despesas no Periodo",
+        text: "Totais das Receitas no Periodo",
       },
     },
   };
