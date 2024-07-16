@@ -17,7 +17,7 @@ const despesas = [
 
 export default function Page(){
   return(
-    <>
+    <div className="flex flex-col min-h-[80vh] items-start gap-4 px-4 pb-4 md:justify-center md:px-6 md:gap-5">
       <div className="flex flex-col items-center w-[90%] m-10 p-0">
         <div className="flex flex-col w-full mb-10 justify-center">
           <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center">
@@ -37,7 +37,7 @@ export default function Page(){
             <BarChart despesas={despesas} />
         </div>
       </div>    
-    </>
+    </div>
   )
 
 }
