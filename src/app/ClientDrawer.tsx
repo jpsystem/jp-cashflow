@@ -38,7 +38,7 @@ export default function ClientDrawer() {
       <DrawerTrigger asChild>
         <div className="w-10">
           <Button variant="ghost" onClick={() => setIsDrawerOpen(true)}>
-            <IconMenu />
+            <IconMenu className="text-sky-900" />
           </Button>
         </div>
       </DrawerTrigger>
