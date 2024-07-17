@@ -93,7 +93,7 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <Button
         variant="outline"
-        className="hover:bg-sky-100"
+        className="hover:bg-sky-100 text-sky-900 border-2"
         onClick={handleOpen}
       >
         + SubGrupo
@@ -106,16 +106,17 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
           -translate-x-1/2 
           -translate-y-1/2 
           h-fit
-          max-w-[500px] 
+          max-w-[400px] 
           max-h-[600px] 
           overflow-auto 
           rounded-2xl 
           bg-white p-8 
-          text-gray-900 shadow-lg 
-          flex flex-col`}
+          shadow-lg 
+          flex flex-col
+          `}
       >
         <SheetHeader>
-          <SheetTitle className="text-2xl text-left">Novo SubGrupo</SheetTitle>
+          <SheetTitle className="text-2xl text-left text-sky-900">Novo SubGrupo</SheetTitle>
           <SheetClose asChild>
             <button
               onClick={handleClose}
@@ -135,13 +136,13 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
                 name="nome"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-lg font-semibold">
+                    <FormLabel className="text-lg font-semibold text-sky-900">
                       Nome
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Nome"
-                        className="placeholder:text-gray-400"
+                        className="placeholder:text-sky-800 border-2 border-sky-900"
                         {...field}
                       />
                     </FormControl>
@@ -154,13 +155,13 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
                 name="descricao"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-lg font-semibold">
+                    <FormLabel className="text-lg font-semibold text-sky-900">
                       Descrição
                     </FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Descrição"
-                        className="placeholder:text-gray-400"
+                        className="placeholder:text-sky-800 border-2 border-sky-900"
                         {...field}
                       />
                     </FormControl>
@@ -173,30 +174,30 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
                   control={form.control}
                   name="ativo"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col items-center space-y-2">
+                    <FormItem className="flex flex-col items-center space-y-2 text-sky-900">
                       <FormLabel>Ativo</FormLabel>
                       <FormControl>
                         {/* {...field} checked={field.value}  */}
-                        <Checkbox />
+                        <Checkbox className="border-2 border-sky-900"/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-              <div className="text-sm font-semibold flex justify-end mt-7">
+              <div className="text-sm font-semibold flex justify-end mt-7 text-sky-900">
                 <SheetFooter>
                   <Button
                     variant="outline"
                     type="submit"
-                    className="text-lg px-4 py-2 hover:bg-sky-100"
+                    className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
                   >
                     Incluir
                   </Button>
                   <Button
                     variant="outline"
                     onClick={handleClose}
-                    className="text-lg px-4 py-2 hover:bg-sky-100"
+                    className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
                   >
                     Cancelar
                   </Button>

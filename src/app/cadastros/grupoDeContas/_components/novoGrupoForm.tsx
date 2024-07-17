@@ -34,17 +34,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-// Componente TABLE
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
 // Novo componente de dropdown do shadcn/ui
 import {
   DropdownMenu,
@@ -130,14 +119,14 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <Button
         variant="outline"
-        className="hover:bg-slate-200"
+        className="hover:bg-slate-100 text-sky-900 border-2 border-sky-800 hover:text-sky-900"
         onClick={handleOpen}
       >
-        + grupo
+        + Grupo
       </Button>
-      <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[590px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
+      <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[590px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 shadow-lg">
         <SheetHeader>
-          <SheetTitle className="text-2xl">Novo grupo de Contas</SheetTitle>
+          <SheetTitle className="text-2xl text-sky-900">Novo grupo de Contas</SheetTitle>
         </SheetHeader>
         {isOpen && (
           <div className="mt-8">
@@ -151,10 +140,10 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
                   name="nome"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nome</FormLabel>
+                      <FormLabel className="text-sky-900">Nome</FormLabel>
                       <FormControl>
                         <Input
-                          className="placeholder:text-gray-400"
+                          className="placeholder:text-sky-800 border-2 border-sky-900"
                           placeholder="Nome"
                           {...field}
                         />
@@ -168,10 +157,10 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
                   name="descricao"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Descrição</FormLabel>
+                      <FormLabel className="text-sky-900">Descrição</FormLabel>
                       <FormControl>
                         <Textarea
-                          className="placeholder:text-gray-400"
+                          className="placeholder:text-sky-800 border-2 border-sky-900"
                           placeholder="Descrição"
                           {...field}
                         />
@@ -181,7 +170,7 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
                   )}
                 />
                 <div className="flex justify-between items-center">
-                  <div className="flex-1 mr-4 text-sm">
+                  <div className="text-sm">
                     <FormField
                       control={form.control}
                       name="tipo"
@@ -189,22 +178,22 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
                         <FormItem>
                           <FormControl>
                             <div className="flex flex-col space-y-2">
-                              <FormLabel className="">Tipo</FormLabel>
+                              <FormLabel className="text-sky-900">Tipo</FormLabel>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <Button
                                     variant="outline"
-                                    className="w-40 h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
+                                    className="w-15 h-7 text-sm px-2 py-1 flex items-center justify-between hover:bg-slate-200 text-sky-900 border-sky-900"
                                   >
                                     {field.value === "D"
                                       ? "Débito"
                                       : field.value === "C"
                                       ? "Crédito"
                                       : "Movimentação"}
-                                    <FaChevronDown className="ml-2" />
+                                    <FaChevronDown className="pl-2"/>
                                   </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="bg-white text-sm">
+                                <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
                                   <DropdownMenuItem
                                     className="hover:shadow-xl hover:bg-slate-200 text-sm"
                                     onClick={() => field.onChange("D")}
@@ -237,10 +226,11 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
                       control={form.control}
                       name="ativo"
                       render={({ field }) => (
-                        <FormItem className="flex flex-col items-center space-y-2">
+                        <FormItem className="flex flex-col items-center space-y-2 text-sky-900 ">
                           <FormLabel>Ativo</FormLabel>
                           <FormControl>
-                            <Checkbox
+                            <Checkbox id="ativo"
+                              className="border-2 border-sky-900"
                               checked={field.value}
                               onCheckedChange={field.onChange}
                             />
@@ -251,19 +241,20 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
                     />
                   </div>
                 </div>
-                <div className="flex-row">
-                  <div>
+                <div className="flex-row text-sky-900 ">
+                  <div className="">
                     <TabelaSubGrupos
                       data={subGruposP}
                       setSubGruposP={setSubGruposP}
                     />
                   </div>
                 </div>
-                <div className="text-sm font-semibold flex justify-end mt-7">
+                {/* {parte inferior} */}
+                <div className="text-sm font-semibold flex justify-end mt-7 text-sky-900">
                   <SheetFooter className="text-sm font-semibold flex justify-end mt-7">
                     <Button
                       variant="outline"
-                      className="text-lg px-2 py-1 hover:bg-slate-200"
+                      className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
                       type="submit"
                       onClick={() => setIsSubmit(true)}
                     >
@@ -271,7 +262,7 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
                     </Button>
                     <Button
                       variant="outline"
-                      className="text-lg px-2 py-1 hover:bg-slate-200"
+                      className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
                       onClick={handleClose}
                     >
                       Cancelar

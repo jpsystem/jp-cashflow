@@ -92,7 +92,7 @@ export default function TabelaSubGrupos({ data, setSubGruposP }: Props) {
             <TableCaption className="caption-top">
               <div className="flex flex-row justify-around w-full gap-4">
                 <div className="flex  font-bold space-y-2">
-                  <span className="flex text-2xl ">Lista de Sub-Grupos</span>
+                  <span className="flex text-2xl ">Lista de SubGrupos</span>
                 </div>
                 <div className="flex justify-end">
                   <NovoSubGrupo
@@ -126,10 +126,10 @@ export default function TabelaSubGrupos({ data, setSubGruposP }: Props) {
               {subGrupos.map((grupo, index) => (
                 <TableRow key={index} className={grupo.ativo ? 'text-black' : 'text-red-500'} >
                   {/* <TableCell className="font-medium">{index}</TableCell> */}
-                  <TableCell>{grupo.nome}</TableCell>
-                  <TableCell>{grupo.descricao}</TableCell>
-                  <TableCell>{grupo.ativo ? 'True' : 'False'}</TableCell>
-                  <TableCell>
+                  <TableCell className="text-sky-900">{grupo.nome}</TableCell>
+                  <TableCell className="text-sky-900">{grupo.descricao}</TableCell>
+                  <TableCell className="text-sky-900">{grupo.ativo ? 'True' : 'False'}</TableCell>
+                  <TableCell className="text-sky-900">
                     <Button
                       onClick={() => handleEditSubGrupo(index)} 
                       className="h-8 w-8" 

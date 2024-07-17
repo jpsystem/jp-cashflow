@@ -1,17 +1,27 @@
-"use client"
+"use client";
 // COMPONENTE PAI
 
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { alteraGrupo, novoGrupoComSubgrupos } from "@/actions/grupoActions"
-import { Checkbox } from "@/components/ui/checkbox"
-import { z } from "zod"
-import React, { useEffect, useState } from "react"
-import TabelaSubGrupos from "./tabelaSubGrupos"
-import { Textarea } from "@/components/ui/textarea"
-import { tyGrupo, tySubGrupo, } from "@/types/types"
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { alteraGrupo, novoGrupoComSubgrupos } from "@/actions/grupoActions";
+import { Checkbox } from "@/components/ui/checkbox";
+import { z } from "zod";
+import React, { useEffect, useState } from "react";
+import TabelaSubGrupos from "./tabelaSubGrupos";
+import { Textarea } from "@/components/ui/textarea";
+import { tyGrupo, tySubGrupo } from "@/types/types";
+// Novo componente de dropdown do shadcn/ui
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+// Ícone de seta para baixo
+import { FaChevronDown } from "react-icons/fa";
 
 //Componente SHEET shadcn/ui
 import {
@@ -20,7 +30,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet"
+} from "@/components/ui/sheet";
 
 //COMPONENTE FORM
 import {
@@ -31,9 +41,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
 
-import { Grupo, SubGrupo } from "@prisma/client"
+import { Grupo, SubGrupo } from "@prisma/client";
 
 //Configurando o zod para validação do formulário
 const schema = z.object({
@@ -41,9 +51,9 @@ const schema = z.object({
   descricao: z.string().min(2, "Campo obrigatório!"),
   tipo: z.string(),
   ativo: z.boolean(),
-})
+});
 
-type FormProps = z.infer<typeof schema>
+type FormProps = z.infer<typeof schema>;
 
 interface Props {
   pGrupo?: Grupo;
@@ -53,36 +63,40 @@ interface Props {
   setIsEdita: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function EditaGrupoForm( {pGrupo, 
-                                        pSubGrupos, 
-                                        setAtualizaGruposEdicao, 
-                                        isEdita, 
-                                        setIsEdita}: Props) {
-  const [isOpen, setIsOpen] = useState(isEdita)
-  const [subGruposP, setSubGruposP] = useState<tySubGrupo[]>([])
+export default function EditaGrupoForm({
+  pGrupo,
+  pSubGrupos,
+  setAtualizaGruposEdicao,
+  isEdita,
+  setIsEdita,
+}: Props) {
+  const [isOpen, setIsOpen] = useState(isEdita);
+  const [subGruposP, setSubGruposP] = useState<tySubGrupo[]>([]);
 
   //Criar uma função para o parse do array pSubGrupos
   //para a variavel de estado subGruposP
-  useEffect(() =>{
+  useEffect(() => {
     const lista: tySubGrupo[] = [];
-    const fetchData = async ()=> {
-      pSubGrupos?.map(subGrupo => lista.push({
-        id: subGrupo.id,
-        nome: subGrupo.nome,
-        descricao: subGrupo.descricao || undefined,
-        ativo: subGrupo.ativo,
-        grupoId: subGrupo.grupoId,
-      }));
+    const fetchData = async () => {
+      pSubGrupos?.map((subGrupo) =>
+        lista.push({
+          id: subGrupo.id,
+          nome: subGrupo.nome,
+          descricao: subGrupo.descricao || undefined,
+          ativo: subGrupo.ativo,
+          grupoId: subGrupo.grupoId,
+        })
+      );
       setSubGruposP(lista);
-    }
-  },[pSubGrupos])
+    };
+  }, [pSubGrupos]);
   //======================================
 
   //Função a ser executada no evento
   //click do botão cancelar
   const handleClose = () => {
-    setIsEdita(false)
-  }
+    setIsEdita(false);
+  };
 
   //Inicialização do hook useForm
   const form = useForm<FormProps>({
@@ -93,7 +107,7 @@ export default function EditaGrupoForm( {pGrupo,
       tipo: pGrupo?.tipo || undefined,
       ativo: pGrupo?.ativo,
     },
-  })
+  });
 
   //Função a ser executada no evento onSubmit
   // do componente form
@@ -104,28 +118,30 @@ export default function EditaGrupoForm( {pGrupo,
       descricao: values.descricao,
       tipo: values.tipo,
       ativo: values.ativo,
-    }
-    altGrupo(novoGrupo)
-    setIsOpen(false)
+    };
+    altGrupo(novoGrupo);
+    setIsOpen(false);
   }
 
   //Essa função altera os dados do Grupo
   async function altGrupo(dadosGrupo: tyGrupo) {
     alteraGrupo(dadosGrupo)
-    .then((grupo) =>{
-      console.log("Grupo e SubGrupos criado: ", grupo);
-      setAtualizaGruposEdicao(true);
-    })
-    .catch((error) => {
-      console.log("Erro ao criar Grupo e SubGrupos: ", error)
-    })
+      .then((grupo) => {
+        console.log("Grupo e SubGrupos criado: ", grupo);
+        setAtualizaGruposEdicao(true);
+      })
+      .catch((error) => {
+        console.log("Erro ao criar Grupo e SubGrupos: ", error);
+      });
   }
 
   return (
     <Sheet open={isOpen}>
-      <SheetContent className="fixed border-4 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[800px] min-w-[800px] overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow">
+      <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[590px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 shadow-lg">
         <SheetHeader>
-          <SheetTitle className="text-2xl">Editar grupo de Contas</SheetTitle>
+          <SheetTitle className="text-2xl text-sky-900">
+            Editar grupo de Contas
+          </SheetTitle>
         </SheetHeader>
         {isOpen && (
           <div className="mt-8">
@@ -139,11 +155,14 @@ export default function EditaGrupoForm( {pGrupo,
                   name="nome"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nome</FormLabel>
+                      <FormLabel className="text-sky-900">Nome</FormLabel>
                       <FormControl>
-                        <Input placeholder="Nome" {...field} />
+                        <Input
+                          className="text-sky-800 border-2 border-sky-900"
+                          placeholder="Nome"
+                          {...field}
+                        />
                       </FormControl>
-                      <FormDescription>Nome do grupo.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -153,52 +172,94 @@ export default function EditaGrupoForm( {pGrupo,
                   name="descricao"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Descrição</FormLabel>
+                      <FormLabel className="text-sky-900">Descrição</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Descrição" {...field} />
-                      </FormControl>
-                      <FormDescription>Descrição do grupo.</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="tipo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tipo</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Tipo" {...field} />
-                      </FormControl>
-                      <FormDescription>Tipo da conta.</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="ativo"
-                  render={({ field }) => (
-                    <FormItem
-                      className="flex items-center space-x-2"
-                    >
-                      <FormLabel className={"mr-2"}>Ativo</FormLabel>
-                      <FormControl>
-                        <Checkbox 
-                          className={"align-top"} 
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
+                        <Textarea
+                          className="text-sky-800 border-2 border-sky-900"
+                          placeholder="Descrição"
+                          {...field}
                         />
                       </FormControl>
-                      <FormDescription>
-                        Defina se o subgrupo está ativo.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
-                />                
-                <div className="flex-row">
+                />
+                <div className="flex justify-between items-center">
+                  <div className="text-sm">
+                    <FormField
+                      control={form.control}
+                      name="tipo"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <div className="flex flex-col space-y-2">
+                              <FormLabel className="text-sky-900">
+                                Tipo
+                              </FormLabel>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    className="w-15 h-7 text-sm px-2 py-1 flex items-center justify-between hover:bg-slate-200 text-sky-900 border-sky-900"
+                                  >
+                                    {field.value === "D"
+                                      ? "Débito"
+                                      : field.value === "C"
+                                      ? "Crédito"
+                                      : "Movimentação"}
+                                    <FaChevronDown className="pl-2" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                    onClick={() => field.onChange("D")}
+                                  >
+                                    Débito
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                    onClick={() => field.onChange("C")}
+                                  >
+                                    Crédito
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                    onClick={() => field.onChange("M")}
+                                  >
+                                    Movimentação
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="flex items-center">
+                    <FormField
+                      control={form.control}
+                      name="ativo"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col items-center space-y-2 text-sky-900 ">
+                          <FormLabel>Ativo</FormLabel>
+                          <FormControl>
+                            <Checkbox
+                              id="ativo"
+                              className="border-2 border-sky-900"
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className="flex-row text-sky-900">
                   <div>
                     <TabelaSubGrupos
                       data={subGruposP}
@@ -206,15 +267,20 @@ export default function EditaGrupoForm( {pGrupo,
                     />
                   </div>
                 </div>
-                <div className="text-right mt-8 space-x-4">
+                <div className="text-right mt-8 space-x-4 text-sky-900">
                   <SheetFooter>
                     <Button
                       variant="outline"
+                      className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
                       type="submit"
                     >
                       Salvar
                     </Button>
-                    <Button variant="outline" onClick={handleClose}>
+                    <Button
+                      variant="outline"
+                      className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
+                      onClick={handleClose}
+                    >
                       Cancelar
                     </Button>
                   </SheetFooter>
@@ -225,5 +291,5 @@ export default function EditaGrupoForm( {pGrupo,
         )}
       </SheetContent>
     </Sheet>
-  )
+  );
 }
