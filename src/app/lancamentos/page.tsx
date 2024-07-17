@@ -6,10 +6,10 @@ export default async function LancamentosPage() {
     <div className="overflow-x-auto">
       <div className="justify-items-center flex flex-col min-h-[80vh]md:justify-center md:px-6 md:gap-5 min-w-screen">
         <div className="flex flex-col w-full gap-4">
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center">
+          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center text-sky-900">
             Grupos de Lançamentos
           </h1>
-          <p className="text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 text-center">
+          <p className="text-sky-800 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-center ">
             Gerenciar os lançamentos para o controle financeiro
           </p>
         </div>
