@@ -54,7 +54,7 @@ export default function Page() {
         </div>
 
         <div className="flex justify-end items-center mb-4 w-full">
-          <label className="flex items-center mr-4">
+          <label className="flex items-center mr-4 text-sky-900">
             <input
               type="checkbox"
               checked={mostrarDespesas}
@@ -63,7 +63,7 @@ export default function Page() {
             />
             Despesas
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center mr-4 text-sky-900">
             <input
               type="checkbox"
               checked={!mostrarDespesas}
