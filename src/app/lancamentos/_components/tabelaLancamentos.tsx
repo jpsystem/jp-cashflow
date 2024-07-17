@@ -117,25 +117,25 @@ const TabelaLancamentos = () => {
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center border-2 w-[2%] text-sky-900 border-sky-900">
+              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900">
                 Conta
               </TableHead>
-              <TableHead className="text-center border-2  w-[2%] text-sky-900 border-sky-900">
+              <TableHead className="text-center border-2  w-[2%] text-sky-50 border-sky-50 bg-sky-900">
                 Sub Conta
               </TableHead>
-              <TableHead className="text-center border-2 w-[43%] text-sky-900 border-sky-900">
+              <TableHead className="text-center border-2 w-[43%] text-sky-50 border-sky-50 bg-sky-900">
                 Descrição
               </TableHead>
-              <TableHead className="text-center border-2 w-[6%] text-sky-900 border-sky-900">
+              <TableHead className="text-center border-2 w-[6%] text-sky-50 border-sky-50 bg-sky-900">
                 Valor
               </TableHead>
-              <TableHead className="text-center border-2 w-[2%] text-sky-900 border-sky-900">
+              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900">
                 Fonte
               </TableHead>
-              <TableHead className="text-center border-2 w-[7%] text-sky-900 border-sky-900">
+              <TableHead className="text-center border-2 w-[7%] text-sky-50 border-sky-50 bg-sky-900">
                 Data
               </TableHead>
-              <TableHead className="text-center border-2 w-[10%] text-sky-900 border-sky-900 ">
+              <TableHead className="text-center border-2 w-[10%] text-sky-50 border-sky-50 bg-sky-900">
                 Ações
               </TableHead>
             </TableRow>
