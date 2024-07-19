@@ -28,22 +28,22 @@ export default function Page() {
   const toggleReceitas = () => setMostrarDespesas(false);
 
   return (
-    <div className="flex flex-col min-h-[80vh] items-start gap-4 px-4 pb-4 md:justify-center md:px-6 md:gap-5">
-      <div className="flex flex-col items-center w-[90%] m-10 p-0">
-        <div className="flex flex-col w-full mb-10 justify-center">
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center text-sky-900">
+    <div className="flex flex-col h-[800px] items-center px-4 pt-0 pb-16 md:justify-center md:px-6 md:gap-5 ">
+      <div className="flex flex-col items-center w-full max-w-screen-lg m-4 md:m-10 p-0">
+        <div className="flex flex-col w-full mb-4 md:mb-10 justify-center">
+          <h1 className="text-xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center text-sky-900 pt-0">
             Dashboard
           </h1>
-          <p className="md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-sky-800 text-center">
-            Painel de estatisticas do periodo.
+          <p className="text-sm md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-sky-800 text-center">
+            Painel de estatísticas do período.
           </p>
         </div>
-        <div className="flex justify-between w-[100%] mb-10 p-4 rounded-md shadow-lg">
+        <div className="flex flex-wrap justify-between w-full mb-4 md:mb-10 p-4 rounded-md shadow-lg gap-4">
           <CardConta icone="despesas.png" conta="Despesas" valor={1520.0} />
           <CardConta icone="receitas.png" conta="Receitas" valor={1850.0} />
           <CardConta
             icone="saldo.png"
-            conta="Saldo disponivel"
+            conta="Saldo disponível"
             valor={1520.0}
           />
           <CardConta
@@ -54,27 +54,26 @@ export default function Page() {
         </div>
 
         <div className="flex justify-end items-center mb-4 w-full">
-          <label className="flex items-center mr-4 text-sky-900">
+          <label className="flex items-center mr-2 md:mr-4 text-sky-900">
             <input
               type="checkbox"
               checked={mostrarDespesas}
               onChange={toggleDespesas}
-              className="mr-2"
+              className="mr-1 md:mr-2"
             />
             Despesas
           </label>
-          <label className="flex items-center mr-4 text-sky-900">
+          <label className="flex items-center text-sky-900">
             <input
               type="checkbox"
               checked={!mostrarDespesas}
               onChange={toggleReceitas}
-              className="mr-2"
+              className="mr-1 md:mr-2"
             />
             Receitas
           </label>
         </div>
-
-        <div className="flex items-center w-[100%] h-[100%] bg-white p-4 rounded-lg shadow-md">
+        <div className="flex items-center w-full bg-white p-2 md:p-4 rounded-lg shadow-md">
           {mostrarDespesas ? (
             <BarChart despesas={despesas} />
           ) : (

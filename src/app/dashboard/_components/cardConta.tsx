@@ -10,14 +10,14 @@ interface CardContaProps {
 export default function CardConta({ icone, conta, valor }: CardContaProps) {
   return (
     <>
-      <div className="flex justify-between space-x-4 text-sky-800">
+      <div className="flex justify-between space-x-6 text-sky-800">
         <Avatar>
           <AvatarImage src={"/" + icone} />
           <AvatarFallback>
             <LuInfo />
           </AvatarFallback>
         </Avatar>
-        <div className="space-y-1">
+        <div className="space-y-0">
           <h1 className="text-sm font-semibold text-sky-900">{conta}</h1>
           <h1 className="text-lg font-bold text-sky-800">
             {"R$ " + valor.toString()}

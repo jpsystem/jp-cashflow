@@ -6,9 +6,9 @@ import { getServerSession } from "next-auth";
 import { auth as authOptions } from "@/lib/auth-config";
 import AuthProvider from "@/components/providers/auth-provider";
 import Modal from "@/components/ui/jp/modal/modal";
-import ActivityIcon from "./ActivityIcon";
-import UserCircleIcon from "./UserCircleIcon";
-import ClientDrawer from "./ClientDrawer"; // Importando o Client Component
+import ActivityIcon from "./_components/ActivityIcon";
+import UserCircleIcon from "./_components/UserCircleIcon";
+import ClientDrawer from "./_components/ClientDrawer"; // Importando o Client Component
 import LogoutButton from "./_components/logoutButton";
 
 const inter = Inter({ subsets: ["latin"] });
