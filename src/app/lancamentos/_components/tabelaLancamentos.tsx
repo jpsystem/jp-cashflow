@@ -1,26 +1,18 @@
 "use client";
 
-import { format } from "date-fns";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { useState } from "react";
+import { format, startOfMonth, endOfMonth } from "date-fns";
+import DatePicker from "react-datepicker";
+import { ptBR } from "date-fns/locale"; // Importa a localização em português
+import "react-datepicker/dist/react-datepicker.css";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import {
   Select,
+  SelectTrigger,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
-  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import {
@@ -36,6 +28,13 @@ import { Button } from "@/components/ui/button";
 import { Pen, Replace, Trash2 } from "lucide-react";
 
 const TabelaLancamentos = () => {
+  const [startDate, setSelectedDate] = useState<Date | null>(new Date());
+
+  // Calcula o primeiro e o último dia do mês atual
+  const currentDate = new Date();
+  const firstDayOfMonth = startOfMonth(currentDate);
+  const lastDayOfMonth = endOfMonth(currentDate);
+
   return (
     <div className="p-4">
       <div className="max-w-full mx-auto md:max-w-6xl overflow-x-auto min-w-screen">
@@ -71,7 +70,7 @@ const TabelaLancamentos = () => {
                   <SelectTrigger className="w-full text-sky-800 border-2">
                     <SelectValue placeholder="Selecione a Sub-Conta" />
                   </SelectTrigger>
-                  <SelectContent className=" border-2 border-sky-900 p-0 m-0">
+                  <SelectContent className="border-2 border-sky-900 p-0 m-0">
                     <SelectGroup className="bg-white text-sky-800">
                       <SelectItem value="Sub-Conta 1">Sub-Conta 1</SelectItem>
                       <SelectItem value="Sub-Conta 2">Sub-Conta 2</SelectItem>
@@ -79,14 +78,29 @@ const TabelaLancamentos = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div>
+              <link
+                rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+              ></link>
+              <div className="text-sky-900 text-lg">
                 <Label className="block text-sm font-medium text-sky-900">
                   Data
                 </Label>
-                <Input
-                  className="text-sky-800 border-sky-900 border-2"
-                  type="date"
-                  defaultValue={format(new Date(), "yyyy-MM")}
+                <DatePicker
+                  showIcon
+                  icon="fa fa-calendar"
+                  dateFormat="E - dd/MMMM"
+                  selected={startDate}
+                  minDate={firstDayOfMonth}
+                  maxDate={lastDayOfMonth}
+                  onChange={(date) => setSelectedDate(date)}
+                  closeOnScroll={true}
+                  className="text-sky-800 border-2 border-sky-900 rounded-md text-center h-9 pb-1 w-[262px] text-lg hover:bg-slate-100"
+                  showMonthDropdown={false}
+                  showYearDropdown={false}
+                  showPopperArrow={false}
+                  isClearable={false}
+                  locale={ptBR} // Configura a localização para português
                 />
               </div>
               <div>
@@ -109,10 +123,10 @@ const TabelaLancamentos = () => {
           </CardContent>
         </Card>
       </div>
-      <div className="overflow-x-auto mt-4 ">
+      <div className="overflow-x-auto mt-4">
         <h1 className="text-2xl font-bold mb-4 text-sky-900">Lançamentos</h1>
         <Table className="min-w-full overflow-auto rounded-2xl p-8 border-sky-800 border-2 shadow">
-          <TableCaption className="text-sky-800 ">
+          <TableCaption className="text-sky-800">
             Uma lista sobre seus lançamentos recentes.
           </TableCaption>
           <TableHeader>
@@ -120,7 +134,7 @@ const TabelaLancamentos = () => {
               <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900">
                 Conta
               </TableHead>
-              <TableHead className="text-center border-2  w-[2%] text-sky-50 border-sky-50 bg-sky-900">
+              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900">
                 Sub Conta
               </TableHead>
               <TableHead className="text-center border-2 w-[43%] text-sky-50 border-sky-50 bg-sky-900">

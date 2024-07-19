@@ -2,6 +2,9 @@
 
 import { Input } from "@/components/ui/input";
 import { format, startOfMonth, endOfMonth, parseISO, addHours } from "date-fns";
+import { ptBR } from "date-fns/locale"; // Importa a localização em português
+import "react-datepicker/dist/react-datepicker.css";
+import { FaCalendarAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,12 +36,15 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { FaChevronDown } from "react-icons/fa";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 // Definição dos tipos de dados do formulário
 type FormProps = {
   valor: string;
   descricao: string;
-  dtLancamento: string;
+  dtLancamento: Date | null;
   fonte: string;
   destino: string;
   conta: string;
@@ -49,7 +55,7 @@ type FormProps = {
 const schema = z.object({
   valor: z.string().min(1, "Campo obrigatório!"),
   descricao: z.string().min(1, "Campo obrigatório!"),
-  dtLancamento: z.string(),
+  dtLancamento: z.date(),
   fonte: z.string().min(1, "Campo obrigatório!"),
   destino: z.string().min(1, "Campo obrigatório!"),
   conta: z.string().min(1, "Campo obrigatório!"),
@@ -63,7 +69,7 @@ export default function NovoLancamentosForm() {
     defaultValues: {
       valor: "",
       descricao: "",
-      dtLancamento: format(new Date(), "yyyy-MM-dd"),
+      dtLancamento: new Date(),
       fonte: "",
       destino: "",
       conta: "",
@@ -89,6 +95,7 @@ export default function NovoLancamentosForm() {
 
   return (
     <div className="flex flex-col">
+      
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button
@@ -201,7 +208,9 @@ export default function NovoLancamentosForm() {
                   name="descricao"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sky-900 caret-sky-900">Descrição</FormLabel>
+                      <FormLabel className="text-sky-900 caret-sky-900">
+                        Descrição
+                      </FormLabel>
                       <FormControl>
                         <Textarea
                           className="placeholder:text-sky-900 w-full"
@@ -223,7 +232,7 @@ export default function NovoLancamentosForm() {
                       <FormLabel className="text-sky-900">Valor</FormLabel>
                       <FormControl>
                         <Input
-                          className="placeholder:text-sky-900 w-full"
+                          className="placeholder:text-sky-900 w-full text-lg"
                           placeholder="Valor"
                           {...field}
                         />
@@ -236,30 +245,34 @@ export default function NovoLancamentosForm() {
                   control={form.control}
                   name="dtLancamento"
                   render={({ field }) => (
-                    <FormItem className="flex-1">
+                    <FormItem className="flex-1 ">
                       <FormLabel className="text-sky-900">Data</FormLabel>
                       <FormControl>
-                        <Input
-                          className="placeholder:text-sky-900 text-center w-full"
-                          type="date"
-                          min={format(firstDayOfMonth, "yyyy-MM-dd")}
-                          max={format(lastDayOfMonth, "yyyy-MM-dd")}
-                          {...field}
-                          value={format(parseISO(field.value), "yyyy-MM-dd")}
-                          onChange={(e) => {
-                            const newDate = parseISO(e.target.value);
-                            field.onChange(
-                              format(addHours(newDate, 12), "yyyy-MM-dd")
-                            );
-                          }}
-                        />
+                        <div className="relative border-sky-800 ">
+                          <DatePicker
+                            showIcon
+                            icon = "fa fa-calendar"
+                            selected={field.value}
+                            onChange={(date) => field.onChange(date)}
+                            dateFormat="E - dd/MMMM"
+                            minDate={firstDayOfMonth}
+                            maxDate={lastDayOfMonth}
+                            className="text-sky-800 border-sky-900 rounded-md text-center h-9 pb-1 w-[362px] text-lg hover:bg-slate-100"
+                            showMonthDropdown={false}
+                            showYearDropdown={false}
+                            showPopperArrow={false}                         
+                            isClearable={false}
+                            locale={ptBR} // Configura a localização para português
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 mt-4">
                 <FormField
                   control={form.control}
                   name="fonte"
@@ -267,39 +280,37 @@ export default function NovoLancamentosForm() {
                     <FormItem className="flex-1">
                       <FormLabel className="text-sky-900">Fonte</FormLabel>
                       <FormControl>
-                        <div className="flex flex-col space-y-2">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
-                              >
-                                {field.value || "Selecione a Fonte"}
-                                <FaChevronDown className="ml-2" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
-                              <DropdownMenuItem
-                                className="hover:shadow-xl hover:bg-slate-400 text-sm"
-                                onClick={() => field.onChange("Conta1")}
-                              >
-                                Fonte 1
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="hover:shadow-xl hover:bg-slate-400 text-sm"
-                                onClick={() => field.onChange("Conta2")}
-                              >
-                                Fonte 2
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="hover:shadow-xl hover:bg-slate-400 text-sm"
-                                onClick={() => field.onChange("Conta3")}
-                              >
-                                Fonte 3
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
+                            >
+                              {field.value || "Selecione a Fonte"}
+                              <FaChevronDown className="ml-2" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
+                            <DropdownMenuItem
+                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                              onClick={() => field.onChange("Fonte1")}
+                            >
+                              Fonte 1
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                              onClick={() => field.onChange("Fonte2")}
+                            >
+                              Fonte 2
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                              onClick={() => field.onChange("Fonte3")}
+                            >
+                              Fonte 3
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -312,11 +323,37 @@ export default function NovoLancamentosForm() {
                     <FormItem className="flex-1">
                       <FormLabel className="text-sky-900">Destino</FormLabel>
                       <FormControl>
-                        <Input
-                          className="placeholder:text-sky-900 w-full"
-                          placeholder="Destino"
-                          {...field}
-                        />
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
+                            >
+                              {field.value || "Selecione o Destino"}
+                              <FaChevronDown className="ml-2" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
+                            <DropdownMenuItem
+                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                              onClick={() => field.onChange("Destino1")}
+                            >
+                              Destino 1
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                              onClick={() => field.onChange("Destino2")}
+                            >
+                              Destino 2
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                              onClick={() => field.onChange("Destino3")}
+                            >
+                              Destino 3
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -324,11 +361,18 @@ export default function NovoLancamentosForm() {
                 />
               </div>
               <SheetFooter className="mt-7">
-              <Button type="submit" className="h-9 w-22 border-2 text-sky-900 border-sky-800">
+                <Button
+                  type="submit"
+                  className="h-9 w-22 border-2 text-sky-900 border-sky-800"
+                >
                   Confirmar
                 </Button>
                 <SheetClose asChild>
-                  <Button className="h-9 w-22 border-2 text-sky-900 border-sky-800" variant="outline" onClick={handleClose}>
+                  <Button
+                    className="h-9 w-22 border-2 text-sky-900 border-sky-800"
+                    variant="outline"
+                    onClick={handleClose}
+                  >
                     Cancelar
                   </Button>
                 </SheetClose>
