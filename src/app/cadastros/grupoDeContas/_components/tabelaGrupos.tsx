@@ -81,7 +81,7 @@ export default function TabelaGrupos({ dados }: Props) {
                 <TableHead className=" bg-sky-900 border-2 border-sky-50 text-center text-sky-50">
                   Subcontas
                 </TableHead>
-                <TableHead className=" bg-sky-900 border-2 border-sky-50 w-[100px] text-center text-sky-50">
+                <TableHead className=" bg-sky-900 border-2 border-sky-50 text-center text-sky-50">
                   Ações
                 </TableHead>
               </TableRow>
@@ -92,13 +92,13 @@ export default function TabelaGrupos({ dados }: Props) {
                   <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[13%]">
                     {item.nome}
                   </TableCell>
-                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[34%] text-center">
+                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[64%] text-center">
                     {item.descricao}
                   </TableCell>
-                  <TableCell className="border-2 border-sky-900 text-center text-sky-900 w-[2%]">
+                  <TableCell className="border-2 border-sky-900 text-center text-sky-900 w-[1%]">
                     {item.qtdSubGrupos}
                   </TableCell>
-                  <TableCell className="border-2 border-sky-900 w-[4%]">
+                  <TableCell className="border-2 border-sky-900 w-[10%]">
                     <div className="flex gap-1 justify-center text-sky-800">
                       <Button
                         onClick={() => handleEditGrupo(item.id)}
