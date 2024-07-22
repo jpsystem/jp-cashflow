@@ -45,7 +45,7 @@ model Fonte {
   id                Int     @id @default(autoincrement())
   nome              String  @unique
   descricao         String?
-  tipo              String  @default("M")
+  tipo              String  @default("M") // M-Movimento, A-APlicação e C-Crédito
   ativo             Boolean @default(true)
   fonte_lancamentos Lancamento[]
   fonte_saldos      Saldo[]

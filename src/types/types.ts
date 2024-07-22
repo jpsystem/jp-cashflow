@@ -23,10 +23,10 @@ export type tyGrupo = {
 
 export type tyFonte = {
   id?:        number;
-  nome:       String;
-  descricao:  String;
-  tipo:       String;
-  ativo?:     boolean;
+  nome:       string;
+  descricao?:  string;
+  tipo:       string;
+  ativo:     boolean;
 }
 
 export type tySubGrupo = {

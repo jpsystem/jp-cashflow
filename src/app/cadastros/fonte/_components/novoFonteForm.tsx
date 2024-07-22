@@ -1,89 +1,42 @@
 "use client";
-// COMPONENTE PAI
 
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import LabelError from "@/components/ui/jp/labelError";
-import { useContext, useEffect, useState } from "react";
-//COMPONENTE DIALOG
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-//Componente SHEET shadcn/ui
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-//COMPONENTE FORM
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
+import { DialogTitle} from "@/components/ui/dialog";
+import { Sheet, SheetClose, SheetContent, SheetFooter} from "@/components/ui/sheet";
+import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,  DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { TrashIcon } from "@/app/_components/iconsForm";
-import { sub } from "date-fns";
-import TabelaFonte from "./tabelaFontes";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import * as React from "react";
-import { Dropdown } from "flowbite-react";
 import { FaChevronDown } from "react-icons/fa";
+import { CreateFonte } from "@/actions/fonteActions";
+import { tyFonte } from "@/types/types";
+import queryClient from "@/lib/reactQuery";
 
 // Definição do objeto ZOD de validação
 const schema = z.object({
   nome: z.string().min(2, "Campo obrigatorio, Mínimo (2) caracteres"),
   descricao: z.string().min(2, "Campo obrigatorio, Mínimo (2) caracteres"),
   ativo: z.boolean(),
-  tipo: z.enum(["D", "C", "M"], {
+  tipo: z.enum(["A", "C", "M"], {
     errorMap: () => {
       return {
         message:
-          "Informe 'D' para débito, 'C' para crédito ou 'M' para conta de movimentação.",
+          "Informe 'A' para conta de aplicações, 'C' para conta de crédito ou 'M' para conta de movimentação.",
       };
     },
   }),
 });
 
-// Definição do type fonte
-type tyFonte = {
-  id?: number;
-  nome: string;
-  descricao: string | null;
-  tipo: string;
-  ativo: boolean;
-};
-
 type FormProps = z.infer<typeof schema>;
 
-////////////////////////////////////////////////////////////////
-
 export default function NovoFonteForm() {
+
   // Variavel de estado isOpen
   const [isOpen, setIsOpen] = useState(false);
 
@@ -92,16 +45,13 @@ export default function NovoFonteForm() {
     setIsOpen(false);
   };
 
-  // Lista das fontes
-  const [Fonte] = useState<tyFonte[]>([]);
-
   // Definição do formulário
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
       nome: "",
       descricao: "",
-      tipo: "D",
+      tipo: "M",
       ativo: true,
     },
   });
@@ -117,10 +67,23 @@ export default function NovoFonteForm() {
 
   // Função para executar no Submit
   function onSubmit(values: FormProps) {
-    console.log("VALORES", values);
-    console.log("SUBS", Fonte);
+    const novoFonte: tyFonte = {
+      nome: values.nome,
+      descricao: values?.descricao,
+      tipo: values.tipo,
+      ativo: values.ativo,
+    }
+    incluirFonte(novoFonte)
     setIsOpen(false);
   }
+  
+  //Função para incluir uma nova fonte
+  async function incluirFonte(dadosFonte: tyFonte){
+    await CreateFonte(dadosFonte);
+     //Limpar o cache da consulta para atualizar os dados
+     queryClient.invalidateQueries("fontes")   
+  }
+  
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -198,8 +161,8 @@ export default function NovoFonteForm() {
                                     variant="outline"
                                     className="w-40 h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
                                   >
-                                    {field.value === "D"
-                                      ? "Débito"
+                                    {field.value === "A"
+                                      ? "Aplicação"
                                       : field.value === "C"
                                       ? "Crédito"
                                       : "Movimentação"}
@@ -209,9 +172,9 @@ export default function NovoFonteForm() {
                                 <DropdownMenuContent className="bg-white text-sm">
                                   <DropdownMenuItem
                                     className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                    onClick={() => field.onChange("D")}
+                                    onClick={() => field.onChange("A")}
                                   >
-                                    Débito
+                                    Aplicação
                                   </DropdownMenuItem>
                                   <DropdownMenuItem
                                     className="hover:shadow-xl hover:bg-slate-200 text-sm"

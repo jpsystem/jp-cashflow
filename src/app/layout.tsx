@@ -5,11 +5,17 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { auth as authOptions } from "@/lib/auth-config";
 import AuthProvider from "@/components/providers/auth-provider";
-import Modal from "@/components/ui/jp/modal/modal";
-import ActivityIcon from "./ActivityIcon";
-import UserCircleIcon from "./UserCircleIcon";
-import ClientDrawer from "./ClientDrawer"; // Importando o Client Component
+
+//import Modal from "@/components/ui/jp/modal/modal";
+import ActivityIcon from "./_components/ActivityIcon";
+import UserCircleIcon from "./_components/UserCircleIcon";
+import ClientDrawer from "./_components/ClientDrawer"; // Importando o Client Component
 import LogoutButton from "./_components/logoutButton";
+
+//==========================================================
+import  Query2ClientProvider from '@/lib/queryProvider';
+import queryClient from "@/lib/reactQuery";
+//==========================================================
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +36,7 @@ export default async function RootLayout({
       </head>
       <body className={inter.className}>
         <AuthProvider>
+        <Query2ClientProvider client={queryClient}>
           <div className="flex flex-col min-h-screen text-lg sm:text-2xl">
             {/* Parte superior */}
             <div className="flex items-center w-full h-14 px-4 bg-sky-900 border-b dark:border-gray-700 text-sky-50">
@@ -94,7 +101,8 @@ export default async function RootLayout({
               </div>
             </div>
           </div>
-          <Modal />
+          {/* <Modal /> */}
+          </Query2ClientProvider>
         </AuthProvider>
       </body>
     </html>

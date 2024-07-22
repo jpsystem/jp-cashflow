@@ -1,38 +1,47 @@
-"use client"
-
+'use client'
 import { Button } from "@/components/ui/button"
 import { CardContent, Card } from "@/components/ui/card"
+import { useQuery} from 'react-query';
+import queryClient from "@/lib/reactQuery";
+import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
+import { FileEditIcon, TrashIcon } from "@/app/_components/iconsForm"
+import { DeleteFontes, ListaFontes } from "@/actions/fonteActions";
 
-import {
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableCell,
-  TableBody,
-  Table,
-} from "@/components/ui/table"
+export  default function  TabelaFontes() {
 
-import {
-  ChevronLeftIcon,
-  FileEditIcon,
-  MenuIcon,
-  Package2Icon,
-  TrashIcon,
-} from "@/app/_components/iconsForm"
-import { tyFonte } from "@/types/types"
+  //Criação e execução do HOOK useQuery
+  //Carrega as fontes
+  const { data, isLoading } = useQuery( "fontes", async () => {
+    const response = await ListaFontes();
+    // console.log("DATA", data)
+    return response;
+  })
 
-interface TabelaFontesProps {
-  data: tyFonte[]
-}
-
-export default function TabelaFontes({data}: TabelaFontesProps) {
+  //Tratamento para exibição de menssagem de espera
+  //enquanto estiver processando a consulta do UseQuery
+  if( isLoading) {
+    return <div className="loading">
+              <h1>Carregando…</h1>
+            </div>
+  }
+  
   function retTipo(tipo: String){
     let retorno = "";
-    if(tipo ==="M") retorno = "Movimento";
+    if(tipo ==="M") retorno = "Movimentação";
     if(tipo ==="C") retorno = "Crédito";
     if(tipo ==="A") retorno = "Aplicação";
     return retorno;
   }
+
+
+  // Função para excluir um item da lista
+  const handleDeleteSubGrupo = async (index: number) => {
+    await DeleteFontes(index);
+    //Limpar o cache da consulta para atualizar os dados
+    queryClient.invalidateQueries("fontes")
+  }
+
+
   return (
     <div className="flex flex-col w-full items-center">
       <Card className="w-full">
@@ -40,7 +49,7 @@ export default function TabelaFontes({data}: TabelaFontesProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">ID</TableHead>
+                {/* <TableHead className="w-[100px]">ID</TableHead> */}
                 <TableHead>Fonte</TableHead>
                 <TableHead>Descrição</TableHead>
                 <TableHead>Tipo</TableHead>
@@ -49,9 +58,9 @@ export default function TabelaFontes({data}: TabelaFontesProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((item: any) => (
+              {data?.map((item: any) => (
                 <TableRow key={item.id}>
-                  <TableCell>{item.id}</TableCell>
+                  {/* <TableCell>{item.id}</TableCell> */}
                   <TableCell>{item.nome}</TableCell>
                   <TableCell>{item.descricao}</TableCell>
                   <TableCell>{retTipo(item.tipo)}</TableCell>
@@ -61,7 +70,12 @@ export default function TabelaFontes({data}: TabelaFontesProps) {
                       <FileEditIcon className="h-4 w-4" />
                       <span className="sr-only">Edit</span>
                     </Button>
-                    <Button className="h-8 w-8" size="icon" variant="ghost">
+                    <Button
+                      onClick={() => handleDeleteSubGrupo(item.id)} 
+                      className="h-8 w-8" 
+                      size="icon" 
+                      variant="ghost"
+                    >
                       <TrashIcon className="h-4 w-4" />
                       <span className="sr-only">Delete</span>
                     </Button>
