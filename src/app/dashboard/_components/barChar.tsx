@@ -34,8 +34,6 @@ export default function BarChart({ despesas }: BarChartProps) {
       {
         label: "Total da conta",
         data: despesas.map((despesa) => despesa.valor),
-        // backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        // borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: "rgba(252, 211, 77, 0.5)",
         borderColor: "rgba(180, 83, 9, 1)",
         borderWidth: 1,
