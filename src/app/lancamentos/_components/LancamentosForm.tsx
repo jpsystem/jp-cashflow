@@ -39,7 +39,6 @@ import { FaChevronDown } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-
 // Definição dos tipos de dados do formulário
 type FormProps = {
   valor: string;
@@ -95,7 +94,6 @@ export default function NovoLancamentosForm() {
 
   return (
     <div className="flex flex-col">
-      
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button
@@ -251,7 +249,7 @@ export default function NovoLancamentosForm() {
                         <div className="relative border-sky-800 ">
                           <DatePicker
                             showIcon
-                            icon = "fa fa-calendar"
+                            icon="fa fa-calendar"
                             selected={field.value}
                             onChange={(date) => field.onChange(date)}
                             dateFormat="E - dd/MMMM"
@@ -260,7 +258,7 @@ export default function NovoLancamentosForm() {
                             className="text-sky-800 border-sky-900 rounded-md text-center h-9 pb-1 w-[362px] text-lg hover:bg-slate-100"
                             showMonthDropdown={false}
                             showYearDropdown={false}
-                            showPopperArrow={false}                         
+                            showPopperArrow={false}
                             isClearable={false}
                             locale={ptBR} // Configura a localização para português
                           />
@@ -270,7 +268,10 @@ export default function NovoLancamentosForm() {
                     </FormItem>
                   )}
                 />
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+                <link
+                  rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                ></link>
               </div>
               <div className="flex gap-2 mt-4">
                 <FormField
