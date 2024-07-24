@@ -27,7 +27,7 @@ const obterMesAno = () => {
   return mesAno;
 };
 
-const CheckboxMesAno = () => {
+const BoxMesAno = () => {
   const [mesAnoSelecionado, setMesAnoSelecionado] = useState("");
 
   const handleChangeMesAno = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -36,9 +36,12 @@ const CheckboxMesAno = () => {
 
   return (
     <div className="flex items-center space-x-1">
-      <div className="flex space-x-4 p-4">
+      <div className="space-x-4 p-4">
         <select
-          className="form-select block w-full px-3 py-1.5 text-base font-normal text-sky-900 bg-white bg-clip-padding bg-no-repeat border border-solid border-sky-900 rounded transition ease-in-out m-0 focus:text-sky-800 focus:bg-white focus:border-sky-700 focus:outline-none"
+          className="form-select block px-3 py-1.5 text-base 
+           font-normal text-sky-900 bg-white bg-clip-padding bg-no-repeat
+           border border-solid border-sky-900 rounded transition ease-in-out m-0 
+           focus:text-sky-800 focus:bg-white focus:border-sky-700 focus:outline-none"
           value={mesAnoSelecionado}
           onChange={handleChangeMesAno}
         >
@@ -50,11 +53,8 @@ const CheckboxMesAno = () => {
           ))}
         </select>
       </div>
-      <div className="flex flex-col">
-        <Checkbox className="border-sky-900" />
-      </div>
     </div>
   );
 };
 
-export default CheckboxMesAno;
+export default BoxMesAno;
