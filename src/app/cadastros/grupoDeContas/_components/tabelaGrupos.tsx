@@ -63,14 +63,15 @@ export default function TabelaGrupos() {
 
   return (
     <div className="flex flex-col w-full items-center">
-      { showConfirmation ? (
+      { showConfirmation && (
           <ConfirmationBox
             title="Confirmação!"
-            menssage="Essa ação vai escluir o grupo e todos os subgrupos associados. Tem certeza de que deseja continuar?"
+            menssage="Essa ação vai excluir o grupo e todos os subgrupos associados. Tem certeza de que deseja continuar?"
             onConfirm={handleConfirm}
             onCancel={handleCancel}
           />
-        ):(
+        )
+      }
           <Card className="w-full rounded">
             <CardContent className="p-0">
               <Table className="border-collapse border-spacing-0">
@@ -139,8 +140,6 @@ export default function TabelaGrupos() {
               </Table>
             </CardContent>
           </Card>
-        )
-      }
     </div>
   );
 }
