@@ -60,11 +60,12 @@ const schema = z.object({
 
 type FormProps = z.infer<typeof schema>;
 
-interface Props {
-  setAtualizaGrupos: React.Dispatch<React.SetStateAction<boolean>>;
-}
+// interface Props {
+//   setAtualizaGrupos: React.Dispatch<React.SetStateAction<boolean>>;
+// }
 
-export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
+// { setAtualizaGrupos }: Props
+export default function NovoGrupoForm() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubimit, setIsSubmit] = useState(false);
   const [subGruposP, setSubGruposP] = useState<tySubGrupo[]>([]);
@@ -108,7 +109,7 @@ export default function NovoGrupoForm({ setAtualizaGrupos }: Props) {
     novoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
       .then((grupo) => {
         console.log("Grupo e SubGrupos criado: ", grupo);
-        setAtualizaGrupos(true);
+        //setAtualizaGrupos(true);
       })
       .catch((error) => {
         console.log("Erro ao criar Grupo e SubGrupos: ", error);

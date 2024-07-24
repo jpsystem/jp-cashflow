@@ -5,6 +5,16 @@ import { tyFonte } from "@/types/types"
 import prisma from "@/lib/db"
 //import { Fonte } from "@prisma/client"
 
+// Função para listar fontes
+export async function ListaFontes() {
+  
+  const fontes = await prisma.fonte.findMany();
+  //revalidatePath("/cadastros/fonte")
+  
+  return Promise.resolve(fontes); //Promise.resolve(fontes);
+}
+
+
 // Função para criar uma fonte no banco de dados
 export async function CreateFonte(data: tyFonte) {
   const fonte = await prisma.fonte.create({
@@ -19,14 +29,7 @@ export async function CreateFonte(data: tyFonte) {
   return fonte;
 }
 
-// Função para listar fontes (ajuste conforme a lógica de negócio)
-export async function ListaFontes() {
-  
-  const fontes = await prisma.fonte.findMany();
-  //revalidatePath("/cadastros/fonte")
-  
-  return Promise.resolve(fontes); //Promise.resolve(fontes);
-}
+
 
 // Função para listar fontes (ajuste conforme a lógica de negócio)
 export async function DeleteFontes(index: number) {

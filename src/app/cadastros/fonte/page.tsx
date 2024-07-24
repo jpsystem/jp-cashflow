@@ -1,15 +1,9 @@
 import NovoFonteForm from "./_components/novoFonteForm"
 import TabelaFonte from "./_components/tabelaFontes"
 
-//import queryClient from "@/lib/reactQuery";
-
-
 export default async function Fontes() {
   
-  //const data = await ListaFontes();
-
   return (
-    
     <div className="flex flex-col min-h-[80vh] items-start gap-4 px-4 pb-4 md:justify-center md:px-6 md:gap-5">
       <div className="flex flex-col w-full gap-4">
         <div className="flex flex-col w-full justify-center">
@@ -26,7 +20,5 @@ export default async function Fontes() {
       </div>
       <TabelaFonte />
     </div>
-    
   )
-  
 }

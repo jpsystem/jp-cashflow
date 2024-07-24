@@ -4,6 +4,7 @@ import { tySubGrupo, tyGrupo, tyGrupoLista } from "@/types/types"
 import prisma from "@/lib/db"
 import {Grupo, SubGrupo } from "@prisma/client"
 
+// Função para listar Grupos
 export async function ListaGrupos() {
   let retorno = {
     status: 0,
@@ -66,8 +67,8 @@ export async function retGrupo(grupoId: number): Promise<{ grupo?: Grupo | null;
     return { grupo , subGrupos: grupo?.subGrupos || [] };
   } catch (error){
     console.error('Error fetching grupo:', error)
-    // return { grupo: undefined, subGrupos: [] };
-    throw error;
+    return { grupo: undefined, subGrupos: [] };
+    //throw error;
   }
   
 }

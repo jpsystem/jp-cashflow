@@ -7,17 +7,7 @@ import { FileEditIcon, TrashIcon } from "@/app/_components/iconsForm"
 import NovoSubGrupo from "./novoSubGrupo"
 import EditaSubGrupo from "./editaSubGrupo"
 import { tySubGrupo } from "@/types/types"
-
-//Componente TABLE shadcn/ui
-import {
-  Table,
-  TableCaption,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { Table, TableCaption, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table"
 
 interface Props {
   data: tySubGrupo[]
