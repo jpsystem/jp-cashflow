@@ -131,62 +131,62 @@ const TabelaLancamentos = () => {
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900">
+              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
                 Conta
               </TableHead>
-              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900">
+              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
                 Sub Conta
               </TableHead>
-              <TableHead className="text-center border-2 w-[43%] text-sky-50 border-sky-50 bg-sky-900">
+              <TableHead className="text-center border-2 w-[43%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
                 Descrição
               </TableHead>
-              <TableHead className="text-center border-2 w-[6%] text-sky-50 border-sky-50 bg-sky-900">
+              <TableHead className="text-center border-2 w-[6%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
                 Valor
               </TableHead>
-              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900">
+              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
                 Fonte
               </TableHead>
-              <TableHead className="text-center border-2 w-[7%] text-sky-50 border-sky-50 bg-sky-900">
+              <TableHead className="text-center border-2 w-[7%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
                 Data
               </TableHead>
-              <TableHead className="text-center border-2 w-[10%] text-sky-50 border-sky-50 bg-sky-900">
+              <TableHead className="text-center border-2 w-[12%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
                 Ações
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell className="text-center border-2 text-sky-800 border-sky-900">
+              <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">
                 Conta1
               </TableCell>
-              <TableCell className="text-center border-2 text-sky-800 border-sky-900">
+              <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">
                 2
               </TableCell>
-              <TableCell className="text-center border-2 text-sky-800 border-sky-900">
+              <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">
                 Crédito tipo mt texto aqui oq eu faço aaaa
                 aaaaaaaaaaaaaaaaaaaaaaaaaaa sjdasdjasdasdasjd
                 askjdlsadajksdasdkjladaskdlasdjaks asoçdkl asd kasod asidop
                 asidopa sdioasd ipa
                 sasasasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
               </TableCell>
-              <TableCell className="text-center border-2 text-sky-800 border-sky-900">
+              <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">
                 R$250.00
               </TableCell>
-              <TableCell className="text-center border-2 text-sky-800 border-sky-900">
+              <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">
                 2
               </TableCell>
-              <TableCell className="text-center border-2 text-sky-800 border-sky-900">
+              <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">
                 24/5/2024
               </TableCell>
               <TableCell className="text-center border-2 text-sky-800 border-sky-900">
                 <Button variant="ghost">
-                  <Pen className="mr-1 h-4 w-4 text-xs" />
+                  <Pen className="mr-1 h-5 w-8 text-lg"/>
                 </Button>
                 <Button variant="ghost">
-                  <Replace className="mr-2 h-4 w-4" />
+                  <Replace className="mr-2 h-6 w-4"/>
                 </Button>
                 <Button variant="ghost">
-                  <Trash2 className="mr-2 h-4 w-4" />
+                  <Trash2 className="mr-2 h-6 w-4"/>
                 </Button>
               </TableCell>
             </TableRow>
