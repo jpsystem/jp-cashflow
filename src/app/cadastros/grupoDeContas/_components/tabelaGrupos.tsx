@@ -59,7 +59,13 @@ export default function TabelaGrupos() {
     //queryClient.invalidateQueries("grupos")
   }
 
-
+  if(isLoading){
+    return(
+      <div>
+       <p>Carregando...</p> 
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col w-full items-center">
