@@ -45,3 +45,29 @@ Para migrar para o bonco ou seja criar as tabelas no BD a partir do modelo
 Para atualizar o BD com as alterações feitas no modelo
   npx prisma migrate dev --name nome-da-alteração
 
+###########################
+PRISMA TRANSACTIONS
+##########################
+
+await prisma.$transaction(async (trx) => {
+  const retConst = await trx.user.findUnique({ where: { id: nn}})
+
+  if (!retConst ) return res.send("Erro retorno da pesquisa)
+
+  if (retConst > 0) return res.send("Existe dados!")
+  
+  await trx.tabela.create({ data: {
+    campo1: valor1,
+    campo2: valor2,
+    campo3: valor3,
+  },
+  })
+
+  await trx.tabela2.create({ data: {
+    campo1: valor1,
+    campo2: valor2,
+    campo3: valor3,
+  },
+  })
+
+})

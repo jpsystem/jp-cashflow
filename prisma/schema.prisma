@@ -22,12 +22,13 @@ model User {
 }
 
 model Grupo {
-  id        Int     @id @default(autoincrement())
-  nome      String  @unique
-  descricao String?
-  tipo      String  @default("D")
-  ativo     Boolean @default(true)
-  subGrupos SubGrupo[]
+  id                Int     @id @default(autoincrement())
+  nome              String  @unique
+  descricao         String?
+  tipo              String  @default("D")
+  ativo             Boolean @default(true)
+  subGrupos         SubGrupo[]
+  grupo_orcamentos  Orcamento[]
 }
 
 model SubGrupo {
@@ -52,11 +53,12 @@ model Fonte {
 }
 
 model Periodo {
-  id            Int       @id @default(autoincrement())
-  periodo       String    @unique
-  dtAtualizacao DateTime
-  status        String    @default("A") 
-  periodo_saldos Saldo[]
+  id                  Int       @id @default(autoincrement())
+  periodo             String    @unique
+  dtAtualizacao       DateTime
+  status              String    @default("A") 
+  periodo_saldos      Saldo[]
+  periodo_orcamentos  Orcamento[]
 }
 
 model Saldo {
@@ -79,4 +81,14 @@ model Lancamento {
   subGrupoId    Int //Chave estrangeira para tabela SubGrupo
   fonte         Fonte?    @relation(fields: [fonteId], references: [id])
   fonteId       Int //Chave estrangeira para tabela Fonte
+}
+
+model Orcamento {
+  id        Int      @id @default(autoincrement())
+  valor     Decimal  @default(0.00)
+  grupo     Grupo?   @relation(fields: [grupoId], references: [id])
+  grupoId   Int //Chave estrangeira para tabela Fonte
+  periodo   Periodo?   @relation(fields: [periodoId], references: [id])
+  periodoId Int //Chave estrangeira para tabela Periodo
+  @@unique([periodoId, grupoId]) //Só acaita um Orcamento de um grupo por periodo
 }

@@ -1,9 +1,7 @@
 'use server'
 
 import { tyFonte } from "@/types/types"
-//import { revalidatePath } from "next/cache"
 import prisma from "@/lib/db"
-//import { Fonte } from "@prisma/client"
 
 // Função para listar fontes
 export async function ListaFontes() {
@@ -13,7 +11,6 @@ export async function ListaFontes() {
   
   return Promise.resolve(fontes); //Promise.resolve(fontes);
 }
-
 
 // Função para criar uma fonte no banco de dados
 export async function CreateFonte(data: tyFonte) {
@@ -28,8 +25,6 @@ export async function CreateFonte(data: tyFonte) {
   //revalidatePath('/cadastros/fonte')
   return fonte;
 }
-
-
 
 // Função para listar fontes (ajuste conforme a lógica de negócio)
 export async function DeleteFontes(index: number) {

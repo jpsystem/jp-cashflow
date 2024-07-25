@@ -36,7 +36,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
         <Query2ClientProvider client={queryClient}>
-          <div className="flex flex-col min-h-screen text-lg sm:text-2xl">
+          <div className="flex flex-col min-h-screen max-h-screen text-lg sm:text-2xl">
             {/* Parte superior */}
             <div className="flex items-center w-full h-14 px-4 bg-sky-900 border-b dark:border-gray-700 text-sky-50">
               <Link
@@ -65,14 +65,14 @@ export default async function RootLayout({
               </div>
             </div>
             {/* Parte central */}
-            <div className="flex flex-1 w-full min-h-[80vh] overflow-hidden md:flex">
+            <div className="flex flex-1 w-full max-h-[80vh] overflow-hidden md:flex">
               {session && <ClientDrawer />}
-              <div className="flex-1 flex flex-col w-full p-4 min-h-0 bg-white">
+              <div className="flex flex-1 flex-col w-full p-16 min-h-0 overflow-y-auto bg-white">
                 {children}
               </div>
             </div>
             {/* Parte inferior */}
-            <div className="flex items-center w-full h-14 px=4 bg-sky-900 border-b-5 dark:border-gray-700">
+            <div className="flex items-center w-full h-14 px-4 py-4 bg-sky-900 border-b-5 dark:border-gray-700">
               <Link
                 className="flex items-center gap-2 text-sm sm:text-lg font-semibold"
                 href="#"

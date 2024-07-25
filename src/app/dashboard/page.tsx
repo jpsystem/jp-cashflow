@@ -28,10 +28,10 @@ export default function Page() {
   const toggleReceitas = () => setMostrarDespesas(false);
 
   return (
-    <div className="flex flex-col h-[800px] items-center px-4 pt-0 pb-16 md:justify-center md:px-6 md:gap-5 ">
-      <div className="flex flex-col items-center w-full max-w-screen-lg m-4 md:m-10 p-0">
-        <div className="flex flex-col w-full mb-4 md:mb-10 justify-center">
-          <h1 className="text-xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center text-sky-900 pt-0">
+    <div className="flex flex-col min-h-[60vh] items-center px-4 py-0 pb-16 md:justify-center md:px-6 md:gap-5 ">
+      <div className="flex flex-col items-center h-full w-full max-w-screen-lg m-4 md:m-10 py-0">
+        <div className="flex flex-col w-full mb-14 md:mb-10 justify-center">
+          <h1 className="text-xl font-bold tracking-tighter sm:text-2xl md:text-2xl text-center text-sky-900 py-0">
             Dashboard
           </h1>
           <p className="text-sm md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-sky-800 text-center">

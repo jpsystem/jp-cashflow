@@ -56,6 +56,7 @@ export async function retGrupos() {
     return (grupos = [{}])
   }
 }
+
 //Essa função retorna os dados do Grupo para Edição
 export async function retGrupo(grupoId: number): Promise<{ grupo?: Grupo | null; 
                                 subGrupos: SubGrupo[] }> {
@@ -166,3 +167,16 @@ export async function alteraGrupo(data: tyGrupo){
   }
   return retorno;
 }
+
+// Função para excluir um registro da tabela grupos e dos subgrupos
+// export async function DeleteGrupo(index: number) {
+//   await prisma.$transaction(async (trx) => {
+//     const 
+//   })
+//   const fonte = await prisma.fonte.delete({
+//     where: { id: index },
+//   });
+
+  
+//   return Promise.resolve(fonte); //Promise.resolve(fontes);
+// }
