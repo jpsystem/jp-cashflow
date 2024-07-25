@@ -33,8 +33,9 @@ export default function ClientDrawer() {
   };
 
   return (
-    <div className="flex flex-col h-screen justify-between">
+    <div className="flex flex-col h-screen justify-between mt-0">
       <Drawer
+        scroll-smooth
         open={isDrawerOpen}
         onOpenChange={setIsDrawerOpen}
         direction="left"
@@ -47,15 +48,14 @@ export default function ClientDrawer() {
           </div>
         </DrawerTrigger>
         <DrawerContent className="flex flex-col h-full">
-          <DrawerHeader></DrawerHeader>
-          <nav className="flex flex-col items-center w-full sm:w-44 h-full py-4 bg-sky-900 text-sky-50 ">
+          <nav className="flex flex-col items-center justify-center w-full sm:w-44 h-full py-0 bg-sky-900 text-sky-50 mt-0">
             <Link
               className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-sky-800"
               href="/home"
               onClick={handleLinkClick}
             >
               <IconHome className="w-6 h-6" />
-              <span className="text-base sm:text-3xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
+              <span className="text-base sm:text-3xl xl:text-2xl 2xl:text-2xl leading-none md:flex mt-0">
                 Home
               </span>
             </Link>
@@ -91,9 +91,9 @@ export default function ClientDrawer() {
             </Link>
             <Popover>
               <PopoverTrigger asChild>
-                <button className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-sky-800">
+                <button className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-sky-800 ">
                   <IconCadastros className="w-6 h-6" />
-                  <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
+                  <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex mb-16">
                     Cadastros
                   </span>
                 </button>
@@ -136,7 +136,6 @@ export default function ClientDrawer() {
               </PopoverContent>
             </Popover>
           </nav>
-          <DrawerFooter className="p-4 sm:p-6 bg-sky-900 mt-auto h-fit bottom-auto"></DrawerFooter>
         </DrawerContent>
       </Drawer>
     </div>

@@ -72,7 +72,7 @@ export default async function RootLayout({
               </div>
             </div>
             {/* Parte inferior */}
-            <div className="flex items-center w-full h-14 px=4 bg-sky-900 border-b-5 dark:border-gray-700">
+            <div className="flex items-center w-full h-14 px-0 bg-sky-900 border-b-5 dark:border-gray-700">
               <Link
                 className="flex items-center gap-2 text-sm sm:text-lg font-semibold"
                 href="#"
