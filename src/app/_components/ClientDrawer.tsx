@@ -33,7 +33,8 @@ export default function ClientDrawer() {
   };
 
   return (
-    <div className="flex flex-col h-screen justify-between mt-0">
+    <div className="flex flex-col">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <Drawer
         scroll-smooth
         open={isDrawerOpen}
@@ -41,59 +42,59 @@ export default function ClientDrawer() {
         direction="left"
       >
         <DrawerTrigger asChild>
-          <div className="w-10">
+          <div className="w-10q">
             <Button variant="ghost" onClick={() => setIsDrawerOpen(true)}>
               <IconMenu />
             </Button>
           </div>
         </DrawerTrigger>
-        <DrawerContent className="flex flex-col h-full">
-          <nav className="flex flex-col items-center justify-center w-full sm:w-44 h-full py-0 bg-sky-900 text-sky-50 mt-0">
+        <DrawerContent className="flex flex-col h-[67vh] md:h-[91vh] sm:h-[91vh] lg:h-[88vh] xl:h-[88vh] 2xl:h-[89vh]">
+          <nav className="flex flex-col py-0 bg-sky-900 text-sky-50 flex-1">
             <Link
-              className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-sky-800"
+              className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
               href="/home"
               onClick={handleLinkClick}
             >
-              <IconHome className="w-6 h-6" />
-              <span className="text-base sm:text-3xl xl:text-2xl 2xl:text-2xl leading-none md:flex mt-0">
+              <IconHome className="w-6 h-6 mr-3" />
+              <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
                 Home
               </span>
             </Link>
             <Link
-              className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-sky-800"
+              className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
               href="/dashboard"
               onClick={handleLinkClick}
             >
-              <IconDashBoard className="w-6 h-6" />
-              <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
+              <IconDashBoard className="w-6 h-6 mr-3" />
+              <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
                 Dashboard
               </span>
             </Link>
             <Link
-              className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-sky-800"
+              className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
               href="/lancamentos"
               onClick={handleLinkClick}
             >
-              <IconLancamentos className="w-6 h-6" />
-              <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
+              <IconLancamentos className="w-6 h-6 mr-3" />
+              <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
                 Lançamentos
               </span>
             </Link>
             <Link
-              className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-sky-800"
+              className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
               href="#"
               onClick={handleLinkClick}
             >
-              <IconAgenda className="w-6 h-6" />
-              <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex">
+              <IconAgenda className="w-6 h-6 mr-3" />
+              <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
                 Agendamento
               </span>
             </Link>
             <Popover>
               <PopoverTrigger asChild>
-                <button className="flex flex-col items-center w-full px-3 py-4 text-center hover:bg-sky-800 ">
-                  <IconCadastros className="w-6 h-6" />
-                  <span className="text-base sm:text-2xl xl:text-2xl 2xl:text-2xl leading-none md:flex mb-16">
+                <button className="flex items-center w-full px-3 py-4 hover:bg-sky-800">
+                  <IconCadastros className="w-6 h-6 mr-3" />
+                  <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
                     Cadastros
                   </span>
                 </button>
@@ -105,32 +106,38 @@ export default function ClientDrawer() {
               >
                 <PopoverClose asChild>
                   <Link
-                    className="flex items-center w-full px-3 py-4 text-center hover:bg-sky-800 bg-sky-900 bg-cover"
+                    className="flex items-center w-full px-3 py-4 hover:bg-sky-800 bg-sky-900 bg-cover"
                     href="/cadastros/grupoDeContas"
                     onClick={handleLinkClick}
                   >
-                    <IconCadastros className="mr-2 h-4 w-4 text-base sm:text-2xl xl:text-3xl 2xl:text-4xl leading-none md:flex" />
-                    Grupo de Contas
+                    <IconCadastros className="w-5 h-5 mr-3" />
+                    <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+                      Grupo de Contas
+                    </span>
                   </Link>
                 </PopoverClose>
                 <PopoverClose asChild>
                   <Link
-                    className="flex items-center w-full px-3 py-4 text-center hover:bg-sky-800 bg-sky-900 bg-cover"
+                    className="flex items-center w-full px-3 py-4 hover:bg-sky-800 bg-sky-900 bg-cover"
                     href="/cadastros/fonte"
                     onClick={handleLinkClick}
                   >
-                    <IconCadastros className="mr-2 h-4 w-4 text-base sm:text-2xl xl:text-3xl 2xl:text-4xl leading-none md:flex " />
-                    Contas financeiras
+                    <IconCadastros className="w-5 h-5 mr-3" />
+                    <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+                      Contas financeiras
+                    </span>
                   </Link>
                 </PopoverClose>
                 <PopoverClose asChild>
                   <Link
-                    className="flex items-center w-full px-3 py-4 text-center hover:bg-sky-800 bg-sky-900 bg-cover"
+                    className="flex items-center w-full px-3 py-4 hover:bg-sky-800 bg-sky-900 bg-cover"
                     href="/cadastros/orcamentos"
                     onClick={handleLinkClick}
                   >
-                    <IconCadastros className="mr-2 h-4 w-4 text-base sm:text-2xl xl:text-3xl 2xl:text-4xl leading-none md:flex" />
-                    Orçamento
+                    <IconCadastros className="w-5 h-5 mr-3" />
+                    <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+                      Orçamento
+                    </span>
                   </Link>
                 </PopoverClose>
               </PopoverContent>

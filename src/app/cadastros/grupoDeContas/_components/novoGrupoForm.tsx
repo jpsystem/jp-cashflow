@@ -115,7 +115,7 @@ export default function NovoGrupoForm() {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <Button
         variant="outline"
-        className="hover:bg-slate-100 text-sky-900 border-2 border-sky-800 hover:text-sky-900"
+        className="hover:bg-slate-100 text-sky-900 border-2 border-sky-800 hover:text-sky-900 text-xl"
         onClick={handleOpen}
       >
         + Grupo

@@ -92,16 +92,16 @@ export default function TabelaGrupos() {
                 )}
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="bg-sky-900 border-2 border-sky-50 text-sky-50 text-center">
+                    <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">
                       Conta
                     </TableHead>
-                    <TableHead className=" bg-sky-900 border-2 border-sky-50 text-sky-50 text-center">
+                    <TableHead className=" bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">
                       Descrição
                     </TableHead>
-                    <TableHead className=" bg-sky-900 border-2 border-sky-50 text-center text-sky-50">
+                    <TableHead className=" bg-sky-900 border-2 border-sky-700 text-center text-sky-50">
                       Subcontas
                     </TableHead>
-                    <TableHead className=" bg-sky-900 border-2 border-sky-50 text-center text-sky-50">
+                    <TableHead className=" bg-sky-900 border-2 border-sky-700 text-center text-sky-50">
                       Ações
                     </TableHead>
                   </TableRow>
