@@ -1,15 +1,16 @@
 "use client";
 
 import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetClose,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface ConfirmationBoxProps {
   title: string;
@@ -24,47 +25,23 @@ export default function ConfirmationBox({
   onConfirm,
   onCancel,
 }: ConfirmationBoxProps) {
-  // Variável de estado isOpen
-  const [isOpen, setIsOpen] = useState(true);
-
-  // Função para fechar o DIALOG
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[280px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 shadow-lg">
-        <SheetClose asChild>
-          <Button
-            variant="ghost"
-            onClick={() => setIsOpen(!isOpen)}
-            className="absolute right-0 top-1"
-          ></Button>
-        </SheetClose>
-        <SheetHeader>
-          <SheetTitle className="text-2xl text-sky-900 pt-0 pb-1">
-            {title}
-          </SheetTitle>
-          <p className="text-lg text-sky-700 pt-2">{menssage}</p>
-        </SheetHeader>
-        <SheetFooter className="pt-11 pb-0 text-sky-900">
-          <Button
-            variant="outline"
-            className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
-            onClick={onConfirm}
-          >
-            Confirmar
-          </Button>
-          <Button
-            variant="outline"
-            className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
-            onClick={onCancel}
-          >
-            Cancelar
-          </Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
-  );
+    
+    <AlertDialog open={true}>
+      <AlertDialogOverlay className="bg-amber-900/60"/>
+      <AlertDialogContent className="bg-sky-50">
+      
+        <AlertDialogHeader>
+          <AlertDialogTitle className="text-lg text-amber-800 font-semibold">{title}</AlertDialogTitle>
+          <AlertDialogDescription className="text-sm text-muted-foreground">
+            {menssage}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel className="text-lg text-amber-950 font-semibold hover:bg-amber-50 " onClick={onCancel}>Cancelar</AlertDialogCancel>
+          <AlertDialogAction className="text-lg text-sky-950 font-semibold hover:bg-amber-50 " onClick={onConfirm}>Confirmar</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
 }
