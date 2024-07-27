@@ -35,8 +35,9 @@ export  default function  TabelaFontes() {
 
 
   // Função para excluir um item da lista
-  const handleDeleteSubGrupo = async (index: number) => {
+  const handleDeleteFonte = async (index: number) => {
     await DeleteFontes(index);
+    
     //Limpar o cache da consulta para atualizar os dados
     queryClient.invalidateQueries("fontes")
   }
@@ -71,7 +72,7 @@ export  default function  TabelaFontes() {
                       <span className="sr-only">Edit</span>
                     </Button>
                     <Button
-                      onClick={() => handleDeleteSubGrupo(item.id)} 
+                      onClick={() => handleDeleteFonte(item.id)} 
                       className="h-8 w-8" 
                       size="icon" 
                       variant="ghost"

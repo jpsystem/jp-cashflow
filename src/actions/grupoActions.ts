@@ -40,7 +40,7 @@ export async function retGrupos() {
         Grupo.nome as nome,
         Grupo.descricao as descricao,
         Grupo.ativo as ativo,
-        Count(*) as qtdSubGrupos
+        Count(SubGrupo.id) as qtdSubGrupos
       From 
         Grupo
       Left Join 
@@ -168,15 +168,19 @@ export async function alteraGrupo(data: tyGrupo){
   return retorno;
 }
 
-// Função para excluir um registro da tabela grupos e dos subgrupos
-// export async function DeleteGrupo(index: number) {
-//   await prisma.$transaction(async (trx) => {
-//     const 
-//   })
-//   const fonte = await prisma.fonte.delete({
-//     where: { id: index },
-//   });
-
-  
-//   return Promise.resolve(fonte); //Promise.resolve(fontes);
-// }
+//Função para excluir um registro da tabela grupos e dos subgrupos
+export async function DeleteGrupo(index: number) {
+  await prisma.$transaction(async (trx) => {
+    try {      
+      const subGrupos = await prisma.subGrupo.deleteMany({
+        where: { grupoId: index },
+      })
+      const grupo = await prisma.grupo.delete({
+        where: { id: index },
+      });
+      return Promise.resolve(grupo);
+    } catch (error) {
+      return Promise.resolve(error);
+    }
+  })
+}

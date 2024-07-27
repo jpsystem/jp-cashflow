@@ -60,7 +60,7 @@ function WarningBox({ tipo, mensagem, onCancel }: WarningBoxProps) {
   return (
     <AlertDialog open={true}>
       <AlertDialogOverlay className="bg-amber-900/60"/>
-      <AlertDialogContent className="bg-sky-50/80 w-[35rem] sm:w-[35rem] border-2 border-sky-950">
+      <AlertDialogContent className="bg-sky-50 w-[35rem] sm:w-[35rem] border-2 border-sky-950">
         <AlertDialogHeader>
           <AlertDialogTitle className={`text-lg mb-4 text-center ${formatAlerta?.estilo} font-semibold`}>{formatAlerta?.titulo}</AlertDialogTitle>
           <AlertDialogDescription className="text-sm text-center text-muted-foreground">

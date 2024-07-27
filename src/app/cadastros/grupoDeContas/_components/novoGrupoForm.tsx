@@ -12,6 +12,8 @@ import React, { useState } from "react";
 import TabelaSubGrupos from "./tabelaSubGrupos";
 import { Textarea } from "@/components/ui/textarea";
 import { tyGrupo, tySubGrupo, tyGrupoLista } from "@/types/types";
+import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
+import queryClient from "@/lib/reactQuery";
 
 // Componente SHEET shadcn/ui
 import {
@@ -45,6 +47,7 @@ import {
 // Ícone de seta para baixo
 import { FaChevronDown } from "react-icons/fa";
 
+
 // Configurando o zod para validação do formulário
 const schema = z.object({
   nome: z.string().min(2, "Campo obrigatório!"),
@@ -65,14 +68,22 @@ export default function NovoGrupoForm() {
   const [isSubmit, setIsSubmit] = useState(false);
   const [subGruposP, setSubGruposP] = useState<tySubGrupo[]>([]);
 
-  const handleClose = () => {
-    form.reset();
+  //Variaveis para a caixa de avisos (WarningBox)
+  const [showAlerta, setShowAlerta] = useState(false);
+  const [tipo, setTipo] = useState<tipoEnu>(tipoEnu.Alerta);
+  const [mensagem, setMensagem] = useState("Menssagem default");
+
+  //Função para fechar a caixa de aviso
+  const handleFechar=()=>{
     setSubGruposP([]);
     setIsOpen(false);
+    setShowAlerta(false);
   };
 
-  const handleOpen = () => {
-    setIsOpen(true);
+  const handleClose = () => {
+    //form.reset();
+    setSubGruposP([]);
+    setIsOpen(false);
   };
 
   const form = useForm<FormProps>({
@@ -81,193 +92,213 @@ export default function NovoGrupoForm() {
       nome: "",
       descricao: "",
       tipo: "D",
+      ativo: true,
     },
   });
+
+  const handleOpen = () => {
+    form.resetField("nome");
+    form.resetField("descricao");
+    form.resetField("tipo");
+    form.resetField("ativo");
+    setIsOpen(true);
+  };
+
+
 
   function onSubmit(values: FormProps) {
     const novoGrupo: tyGrupo = {
       nome: values.nome,
       descricao: values.descricao,
       tipo: values.tipo,
+      ativo: values.ativo,
     };
     if (isSubmit) {
       incluirGrupo(novoGrupo, subGruposP);
-      form.reset();
+      //form.reset();
       setIsOpen(false);
     }
   }
 
-  async function incluirGrupo(
-    dadosGrupo: tyGrupo,
-    dadosSubGrupos: tySubGrupo[]
-  ) {
-    novoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
-      .then((grupo) => {
-        console.log("Grupo e SubGrupos criado: ", grupo);
-        //setAtualizaGrupos(true);
-      })
-      .catch((error) => {
-        console.log("Erro ao criar Grupo e SubGrupos: ", error);
-      });
+  async function incluirGrupo( dadosGrupo: tyGrupo, dadosSubGrupos: tySubGrupo[]) {
+    await novoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
+      //.then((grupo) => {
+        setTipo(tipoEnu.Sucesso);
+        setMensagem(`A conta foi incluida com sucesso!` );
+        setShowAlerta(true);
+        
+        //Limpar o cache da consulta para atualizar os dados
+        queryClient.invalidateQueries("grupos")        
+
   }
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <Button
-        variant="outline"
-        className="hover:bg-slate-100 text-sky-900 border-2 border-sky-800 hover:text-sky-900 text-xl"
-        onClick={handleOpen}
-      >
-        + Grupo
-      </Button>
-      <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  max-h-[500px] min-w-[680px] overflow-auto rounded-2xl bg-white p-6 shadow-lg">
-        <SheetHeader>
-          <SheetTitle className="text-2xl text-sky-900">
-            Novo grupo de Contas
-          </SheetTitle>
-        </SheetHeader>
-        {isOpen && (
-          <div className="mt-8">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
-              >
-                <div className="grid grid-cols-12 gap-4">
-                  <div className="col-span-5">
-                    <FormField
-                      control={form.control}
-                      name="nome"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sky-900">Nome</FormLabel>
-                          <FormControl>
-                            <Input
-                              className="placeholder:text-sky-800 border-2 border-sky-900"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+    <>
+      { showAlerta && (
+          <WarningBox
+            tipo={tipo}
+            mensagem={mensagem}
+            onCancel={handleFechar}
+          />
+        )
+      }    
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <Button
+          variant="outline"
+          className="hover:bg-slate-100 text-sky-900 border-2 border-sky-800 hover:text-sky-900 text-xl"
+          onClick={handleOpen}
+        >
+          + Grupo
+        </Button>
+        <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  max-h-[500px] min-w-[680px] overflow-auto rounded-2xl bg-white p-6 shadow-lg">
+          <SheetHeader>
+            <SheetTitle className="text-2xl text-sky-900">
+              Novo grupo de Contas
+            </SheetTitle>
+          </SheetHeader>
+          {isOpen && (
+            <div className="mt-8">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4"
+                >
+                  <div className="grid grid-cols-12 gap-4">
+                    <div className="col-span-5">
+                      <FormField
+                        control={form.control}
+                        name="nome"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-sky-900">Nome</FormLabel>
+                            <FormControl>
+                              <Input
+                                className="placeholder:text-sky-800 border-2 border-sky-900"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="col-span-5">
+                      <FormField
+                        control={form.control}
+                        name="tipo"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-sky-900">Tipo</FormLabel>
+                            <FormControl>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    className="w-full text-sm flex items-center justify-between hover:bg-slate-200 text-sky-900 border-sky-900"
+                                  >
+                                    {field.value === "D"
+                                      ? "Débito"
+                                      : field.value === "C"
+                                      ? "Crédito"
+                                      : "Movimentação"}
+                                    <FaChevronDown />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                    onClick={() => field.onChange("D")}
+                                  >
+                                    Débito
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                    onClick={() => field.onChange("C")}
+                                  >
+                                    Crédito
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                    onClick={() => field.onChange("M")}
+                                  >
+                                    Movimentação
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <FormField
+                        control={form.control}
+                        name="ativo"
+                        render={({ field }) => (
+                          <FormItem className="col-span-1 flex flex-col items-center mt-5">
+                            <FormLabel className="text-sky-900">Ativo</FormLabel>
+                            <FormControl>
+                              <Checkbox
+                                id="ativo"
+                                className="border-2 border-sky-900"
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
-                  <div className="col-span-5">
-                    <FormField
-                      control={form.control}
-                      name="tipo"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sky-900">Tipo</FormLabel>
-                          <FormControl>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  className="w-full text-sm flex items-center justify-between hover:bg-slate-200 text-sky-900 border-sky-900"
-                                >
-                                  {field.value === "D"
-                                    ? "Débito"
-                                    : field.value === "C"
-                                    ? "Crédito"
-                                    : "Movimentação"}
-                                  <FaChevronDown />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
-                                <DropdownMenuItem
-                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                  onClick={() => field.onChange("D")}
-                                >
-                                  Débito
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                  onClick={() => field.onChange("C")}
-                                >
-                                  Crédito
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                  onClick={() => field.onChange("M")}
-                                >
-                                  Movimentação
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <FormField
-                      control={form.control}
-                      name="ativo"
-                      render={({ field }) => (
-                        <FormItem className="col-span-1 flex flex-col items-center mt-5">
-                          <FormLabel className="text-sky-900">Ativo</FormLabel>
-                          <FormControl>
-                            <Checkbox
-                              id="ativo"
-                              className="border-2 border-sky-900"
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-                <FormField
-                  control={form.control}
-                  name="descricao"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sky-900">Descrição</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          className="placeholder:text-sky-800 border-2 border-sky-900"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="text-sky-900">
-                  <TabelaSubGrupos
-                    data={subGruposP}
-                    setSubGruposP={setSubGruposP}
+                  <FormField
+                    control={form.control}
+                    name="descricao"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sky-900">Descrição</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            className="placeholder:text-sky-800 border-2 border-sky-900"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-                <div className="text-sm font-semibold flex justify-end mt-7 text-sky-900">
-                  <SheetFooter className="text-sm font-semibold flex justify-end mt-7">
-                    <Button
-                      variant="outline"
-                      className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
-                      type="submit"
-                      onClick={() => setIsSubmit(true)}
-                    >
-                      Incluir
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
-                      onClick={handleClose}
-                    >
-                      Cancelar
-                    </Button>
-                  </SheetFooter>
-                </div>
-              </form>
-            </Form>
-          </div>
-        )}
-      </SheetContent>
-    </Sheet>
+                  <div className="text-sky-900">
+                    <TabelaSubGrupos
+                      data={subGruposP}
+                      setSubGruposP={setSubGruposP}
+                    />
+                  </div>
+                  <div className="text-sm font-semibold flex justify-end mt-7 text-sky-900">
+                    <SheetFooter className="text-sm font-semibold flex justify-end mt-7">
+                      <Button
+                        variant="outline"
+                        className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
+                        type="submit"
+                        onClick={() => setIsSubmit(true)}
+                      >
+                        Incluir
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
+                        onClick={handleClose}
+                      >
+                        Cancelar
+                      </Button>
+                    </SheetFooter>
+                  </div>
+                </form>
+              </Form>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }
