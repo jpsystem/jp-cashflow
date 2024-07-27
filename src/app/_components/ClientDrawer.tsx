@@ -82,7 +82,7 @@ export default function ClientDrawer() {
             </Link>
             <Link
               className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
-              href="#"
+              href="/agendamentos"
               onClick={handleLinkClick}
             >
               <IconAgenda className="w-6 h-6 mr-3" />
