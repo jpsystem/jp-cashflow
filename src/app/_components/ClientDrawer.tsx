@@ -34,7 +34,7 @@ export default function ClientDrawer() {
 
   return (
     <div className="flex flex-col">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <Drawer
         scroll-smooth
         open={isDrawerOpen}
@@ -42,13 +42,13 @@ export default function ClientDrawer() {
         direction="left"
       >
         <DrawerTrigger asChild>
-          <div className="w-10q">
+          <div className="w-10">
             <Button variant="ghost" onClick={() => setIsDrawerOpen(true)}>
               <IconMenu />
             </Button>
           </div>
         </DrawerTrigger>
-        <DrawerContent className="flex flex-col h-[67vh] md:h-[91vh] sm:h-[91vh] lg:h-[88vh] xl:h-[88vh] 2xl:h-[89vh]">
+        <DrawerContent className="flex flex-col h-[calc(100vh-86px)]">
           <nav className="flex flex-col py-0 bg-sky-900 text-sky-50 flex-1">
             <Link
               className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
@@ -56,7 +56,7 @@ export default function ClientDrawer() {
               onClick={handleLinkClick}
             >
               <IconHome className="w-6 h-6 mr-3" />
-              <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+              <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
                 Home
               </span>
             </Link>
@@ -66,7 +66,7 @@ export default function ClientDrawer() {
               onClick={handleLinkClick}
             >
               <IconDashBoard className="w-6 h-6 mr-3" />
-              <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+              <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
                 Dashboard
               </span>
             </Link>
@@ -76,7 +76,7 @@ export default function ClientDrawer() {
               onClick={handleLinkClick}
             >
               <IconLancamentos className="w-6 h-6 mr-3" />
-              <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+              <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
                 Lançamentos
               </span>
             </Link>
@@ -86,7 +86,7 @@ export default function ClientDrawer() {
               onClick={handleLinkClick}
             >
               <IconAgenda className="w-6 h-6 mr-3" />
-              <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+              <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
                 Agendamento
               </span>
             </Link>
@@ -94,7 +94,7 @@ export default function ClientDrawer() {
               <PopoverTrigger asChild>
                 <button className="flex items-center w-full px-3 py-4 hover:bg-sky-800">
                   <IconCadastros className="w-6 h-6 mr-3" />
-                  <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+                  <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
                     Cadastros
                   </span>
                 </button>
@@ -111,7 +111,7 @@ export default function ClientDrawer() {
                     onClick={handleLinkClick}
                   >
                     <IconCadastros className="w-5 h-5 mr-3" />
-                    <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+                    <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
                       Grupo de Contas
                     </span>
                   </Link>
@@ -123,7 +123,7 @@ export default function ClientDrawer() {
                     onClick={handleLinkClick}
                   >
                     <IconCadastros className="w-5 h-5 mr-3" />
-                    <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+                    <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
                       Contas financeiras
                     </span>
                   </Link>
@@ -135,7 +135,7 @@ export default function ClientDrawer() {
                     onClick={handleLinkClick}
                   >
                     <IconCadastros className="w-5 h-5 mr-3" />
-                    <span className="text-base sm:text-lg xl:text-xl 2xl:text-xl flex items-center">
+                    <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
                       Orçamento
                     </span>
                   </Link>
