@@ -73,12 +73,12 @@ export default async function RootLayout({
               </div>
             </div>
             {/* Parte inferior */}
-            <footer className="fixed bottom-0 left-0 w-full h-14 px-5 bg-sky-900 border-t dark:border-gray-700 flex items-center z-10">
+            <footer className="fixed bottom-0 left-0 w-full h-14 px-4 bg-sky-900 border-t dark:border-gray-700 flex items-center z-1">
               <Link
                 className="flex items-center gap-2 text-sm sm:text-lg font-semibold"
                 href="#"
               >
-                <ActivityIcon className="w-6 h-6 text-sky-50 ml-2" />
+                <ActivityIcon className="w-6 h-6 text-sky-50" />
                 <span className="text-sky-50">
                   © 2023 JP System Ltda. All rights reserved.
                 </span>
