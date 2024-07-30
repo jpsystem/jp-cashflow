@@ -33,12 +33,12 @@ export default async function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className={`${inter.className} flex flex-col`}>
+      <body className={`${inter.className} flex flex-col h-screen`}>
         <AuthProvider>
           <Query2ClientProvider client={queryClient}>
-            <div className="flex flex-col">
-              {/* Parte superior */}
-              <div className="flex items-center w-full h-14 px-4 bg-sky-900 border-b dark:border-gray-700 text-sky-50">
+            {/* Parte superior */}
+            <header className="fixed top-0 left-0 w-full h-14 px-4 bg-sky-900 border-b dark:border-gray-700 text-sky-50 z-1">
+              <div className="flex items-center h-full">
                 <Link
                   className="flex items-center gap-2 text-xl sm:text-2xl font-semibold"
                   href="#"
@@ -64,37 +64,36 @@ export default async function RootLayout({
                   )}
                 </div>
               </div>
-              {/* Parte central */}
-              <div>
-                {session && <ClientDrawer />}
-                <div className="flex flex-col flex-grow w-full pr-8 pl-8 pt-2 pb-2 overflow-y-auto bg-white">
-                  {children}
-                </div>
+            </header>
+            {/* Parte central */}
+            <div className="flex flex-col flex-grow w-full pt-14 pb-14 overflow-y-auto">
+              {session && <ClientDrawer />}
+              <div className="flex flex-col flex-grow w-full pr-8 pl-8 pt-2 pb-2 bg-white">
+                {children}
               </div>
-              {/* Parte inferior */}
-              <footer className="fixed bottom-0 left-0 w-full h-14 px-5 bg-sky-900 border-t dark:border-gray-700 flex items-center">
-                <Link
-                  className="flex items-center gap-2 text-sm sm:text-lg font-semibold"
-                  href="#"
-                >
-                  <ActivityIcon className="w-6 h-6 text-sky-50 ml-2" />
-                  <span className="text-sky-50">
-                    © 2023 JP System Ltda. All rights reserved.
-                  </span>
-                </Link>
-                <div className="flex items-center gap-4 ml-auto mr-2">
-                  {session && (
-                    <LogoutButton
-                      size="lg"
-                      text="Logout"
-                      variant="outline"
-                      className="hover:bg-sky-800 hover:text-sky-100 text-sky-50 border-r border-sky-50"
-                    />
-                  )}
-                </div>
-              </footer>
             </div>
-            {/* <Modal /> */}
+            {/* Parte inferior */}
+            <footer className="fixed bottom-0 left-0 w-full h-14 px-4 bg-sky-900 border-t dark:border-gray-700 flex items-center z-1">
+              <Link
+                className="flex items-center gap-2 text-sm sm:text-lg font-semibold"
+                href="#"
+              >
+                <ActivityIcon className="w-6 h-6 text-sky-50" />
+                <span className="text-sky-50">
+                  © 2023 JP System Ltda. All rights reserved.
+                </span>
+              </Link>
+              <div className="flex items-center gap-4 ml-auto mr-2">
+                {session && (
+                  <LogoutButton
+                    size="lg"
+                    text="Logout"
+                    variant="outline"
+                    className="hover:bg-sky-800 hover:text-sky-100 text-sky-50 border-r border-sky-50"
+                  />
+                )}
+              </div>
+            </footer>
           </Query2ClientProvider>
         </AuthProvider>
       </body>
