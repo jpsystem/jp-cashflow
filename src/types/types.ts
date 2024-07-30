@@ -27,7 +27,7 @@ export type tyFonte = {
   descricao?:  string;
   tipo:       string;
   ativo:     boolean;
-  userId:    number,
+  userId?:    number,
 }
 
 export type tySubGrupo = {

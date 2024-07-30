@@ -53,7 +53,8 @@ export async function retGrupos(userID: number | undefined) {
         Grupo.id,
         Grupo.nome, 
         Grupo.descricao,
-        Grupo.ativo 
+        Grupo.ativo,
+        Grupo.userId 
     `
     return grupos
   } catch (err: any) {

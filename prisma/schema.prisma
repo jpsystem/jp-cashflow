@@ -71,7 +71,7 @@ model Fonte {
 
 model Periodo {
   id                  Int       @id @default(autoincrement())
-  periodo             String    
+  periodo             String    @db.VarChar(20)
   dtAtualizacao       DateTime
   status              String    @db.VarChar(5) @default("A") 
   periodo_saldos      Saldo[]
