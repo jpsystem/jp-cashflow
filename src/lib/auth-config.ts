@@ -35,9 +35,9 @@ export const auth: NextAuthOptions = {
           const retorno = await rep.json();
           const data = retorno.users;
           if(data){
-            user.id = data.id;
+            user.id = data.id.toString();
             user.email = data.email;
-            user.name = data.nome;
+            user.name = data.nome.toUpperCase();
             user.nickname = data.login;
             user.role = data.perfil;
           }
@@ -59,19 +59,16 @@ export const auth: NextAuthOptions = {
 
         if(user){
           nickname = user.nickname?.toLowerCase() || "default";
-          if(nickname === "jpsystem"){
-            token.role = "admin";
-            token.nickname = nickname;
-          }else{
-            token.role = "default";
-            token.nickname = nickname;          
-          }
+          token.role = user.role;
+          token.nickname = nickname;   
+          token.id = parseInt(user.id);
         }
         return token;
     },
     session({session, token}) {
         session.user.role = token.role;
         session.user.nickname = token.nickname;
+        session.user.id = token.id;
 
         return session;
     },

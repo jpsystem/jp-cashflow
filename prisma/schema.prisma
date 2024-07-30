@@ -16,24 +16,32 @@ datasource db {
 }
 
 model User {
-  id      Int     @id @default(autoincrement())
-  email   String  @db.VarChar(60) @unique
-  nome    String  @db.VarChar(60)
-  senha   String  @db.VarChar(20)
-  perfil  String  @db.VarChar(20) @default("default")
-  login   String  @db.VarChar(20) @unique
-  token   String? @db.VarChar(100)
-  dtToken DateTime?
+  id        Int     @id @default(autoincrement())
+  email     String  @db.VarChar(60) @unique
+  nome      String  @db.VarChar(60)
+  senha     String  @db.VarChar(20)
+  perfil    String  @db.VarChar(20) @default("default")
+  login     String  @db.VarChar(20) @unique
+  token     String? @db.VarChar(100)
+  dtToken   DateTime?
+  grupos    Grupo[]
+  fontes    Fonte[]
+  periodos Periodo[]
 }
 
 model Grupo {
   id                Int     @id @default(autoincrement())
-  nome              String  @db.VarChar(60) @unique
+  nome              String  @db.VarChar(60)
   descricao         String? @db.VarChar(100)
   tipo              String  @db.VarChar(5) @default("D")
   ativo             Boolean @default(true)
   subGrupos         SubGrupo[]
   grupo_orcamentos  Orcamento[]
+  //Divisão por usuário
+  user                      User?   @relation(fields: [userId], references: [id])
+  userId                    Int //Chave estrnageira para tabela usuario
+  @@unique([nome, userId])  //Só aceita um nome grupo unico por usuário
+
 }
 
 model SubGrupo {
@@ -49,21 +57,29 @@ model SubGrupo {
 
 model Fonte {
   id                Int     @id @default(autoincrement())
-  nome              String  @db.VarChar(60) @unique
+  nome              String  @db.VarChar(60)
   descricao         String? @db.VarChar(100)
   tipo              String  @db.VarChar(5) @default("M") // M-Movimento, A-APlicação e C-Crédito
   ativo             Boolean @default(true)
   fonte_lancamentos Lancamento[]
   fonte_saldos      Saldo[]
+  //Divisão por usuário
+  user                      User?   @relation(fields: [userId], references: [id])
+  userId                    Int //Chave estrnageira para tabela usuario
+  @@unique([nome, userId])  //Só aceita um nome fonte unico por usuário
 }
 
 model Periodo {
   id                  Int       @id @default(autoincrement())
-  periodo             String    @unique
+  periodo             String    
   dtAtualizacao       DateTime
   status              String    @db.VarChar(5) @default("A") 
   periodo_saldos      Saldo[]
   periodo_orcamentos  Orcamento[]
+  //Divisão por usuário
+  user                      User?   @relation(fields: [userId], references: [id])
+  userId                    Int //Chave estrnageira para tabela usuario
+  @@unique([periodo, userId])  //Só aceita um nome grupo unico por usuário
 }
 
 model Saldo {
@@ -97,88 +113,3 @@ model Orcamento {
   periodoId Int //Chave estrangeira para tabela Periodo
   @@unique([periodoId, grupoId]) //Só acaita um Orcamento de um grupo por periodo
 }
-
-
-//Modelo do SQLite
-// model User {
-//   id      Int     @id @default(autoincrement())
-//   email   String  @unique
-//   nome    String
-//   senha   String
-//   perfil  String  @default("default")
-//   login   String  @unique
-//   token   String?
-//   dtToken DateTime?
-// }
-
-// model Grupo {
-//   id                Int     @id @default(autoincrement())
-//   nome              String  @unique
-//   descricao         String?
-//   tipo              String  @default("D")
-//   ativo             Boolean @default(true)
-//   subGrupos         SubGrupo[]
-//   grupo_orcamentos  Orcamento[]
-// }
-
-// model SubGrupo {
-//   id              Int      @id @default(autoincrement())
-//   nome            String   
-//   descricao       String?
-//   ativo           Boolean  @default(true)
-//   grupo           Grupo?   @relation(fields: [grupoId], references: [id])
-//   grupoId         Int //Chave estrangeira para tabela Grupo
-//   SG_lancamentos  Lancamento[]
-//   @@unique([nome, grupoId]) //Só aceita um nome de subgrupo unico para o mesmo grupo
-// }
-
-// model Fonte {
-//   id                Int     @id @default(autoincrement())
-//   nome              String  @unique
-//   descricao         String?
-//   tipo              String  @default("M") // M-Movimento, A-APlicação e C-Crédito
-//   ativo             Boolean @default(true)
-//   fonte_lancamentos Lancamento[]
-//   fonte_saldos      Saldo[]
-// }
-
-// model Periodo {
-//   id                  Int       @id @default(autoincrement())
-//   periodo             String    @unique
-//   dtAtualizacao       DateTime
-//   status              String    @default("A") 
-//   periodo_saldos      Saldo[]
-//   periodo_orcamentos  Orcamento[]
-// }
-
-// model Saldo {
-//   id        Int      @id @default(autoincrement())
-//   valor     Decimal  @default(0.00)
-//   fonte     Fonte?   @relation(fields: [fonteId], references: [id])
-//   fonteId   Int //Chave estrangeira para tabela Fonte
-//   periodo   Periodo?   @relation(fields: [periodoId], references: [id])
-//   periodoId Int //Chave estrangeira para tabela Periodo
-//   @@unique([periodoId, fonteId]) //Só acaita um Saldo de uma fonte por periodo
-// }
-
-// model Lancamento {
-//   id            Int       @id @default(autoincrement())
-//   periodo       String
-//   valor         Decimal   @default(0.00)
-//   dtLancamento  DateTime?
-//   operacao      String    @default("D") 
-//   subGrupo      SubGrupo? @relation(fields: [subGrupoId], references: [id])
-//   subGrupoId    Int //Chave estrangeira para tabela SubGrupo
-//   fonte         Fonte?    @relation(fields: [fonteId], references: [id])
-//   fonteId       Int //Chave estrangeira para tabela Fonte
-// }
-
-// model Orcamento {
-//   id        Int      @id @default(autoincrement())
-//   valor     Decimal  @default(0.00)
-//   grupo     Grupo?   @relation(fields: [grupoId], references: [id])
-//   grupoId   Int //Chave estrangeira para tabela Fonte
-//   periodo   Periodo?   @relation(fields: [periodoId], references: [id])
-//   periodoId Int //Chave estrangeira para tabela Periodo
-//   @@unique([periodoId, grupoId]) //Só acaita um Orcamento de um grupo por periodo
-// }

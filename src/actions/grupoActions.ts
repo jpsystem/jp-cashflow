@@ -31,7 +31,8 @@ export async function ListaGrupos() {
 
 //Está função faz uma consulta no banco de dados
 //e retornar todos os grupos com a quantidade de subGrupos associado
-export async function retGrupos() {
+export async function retGrupos(userID: number | undefined) {
+  //console.log("userId: ", userID);
   let grupos: tyGrupoLista[]
   try {
     grupos = await prisma.$queryRaw`
@@ -40,11 +41,14 @@ export async function retGrupos() {
         Grupo.nome as nome,
         Grupo.descricao as descricao,
         Grupo.ativo as ativo,
+        Grupo.userId as userId,
         Count(SubGrupo.id) as qtdSubGrupos
       From 
         Grupo
       Left Join 
         SubGrupo On Grupo.id = SubGrupo.grupoId 
+      Where
+        userID = ${userID}
       Group By 
         Grupo.id,
         Grupo.nome, 
@@ -105,11 +109,16 @@ export async function novoGrupoComSubgrupos(
   dadosGrupo: tyGrupo,
   dadosSubGrupos: tySubGrupo[]
 ) {
+  // console.log("DadosGrupo: ",dadosGrupo)
+  // console.log("dadosSubGrupos: ",dadosSubGrupos)
+
   const grupo = await prisma.grupo.create({
     data: {
       nome: dadosGrupo.nome.toUpperCase(),
       descricao: dadosGrupo.descricao,
       tipo: dadosGrupo.tipo,
+      ativo: dadosGrupo.ativo,
+      userId: dadosGrupo.userId,
       subGrupos: {
         create: dadosSubGrupos.map((subGrupo) => ({
           nome: subGrupo.nome.toUpperCase(),

@@ -11,14 +11,21 @@ import { useState } from "react";
 import { Grupo, SubGrupo } from "@prisma/client";
 import EditaGrupoForm from "./editaGrupo";
 import ConfirmationBox from "@/app/_components/confirmationBox";
+// import retorno from "@/lib/retSecaoUserID";
+
+import { useSession } from 'next-auth/react';
 
 export default function TabelaGrupos() {
 
+  const { data: session } = useSession();
+
+  const p1 = session?.user.id;
   //Criação e execução do HOOK useQuery
   //Carrega as fontes
-  const { data, isLoading } = useQuery( "grupos", async () => {
-    const response:tyGrupoLista[] = await retGrupos();
-    return response;
+  const { data, isLoading } = useQuery( "grupos", async () => { 
+  const response:tyGrupoLista[] = await retGrupos(p1);
+  //console.log("Response: ",response);
+  return response;
   })
 
   //Variavel para a caixa de confirmação (ConfirmationBox)
@@ -119,7 +126,7 @@ export default function TabelaGrupos() {
                     {item.descricao}
                   </TableCell>
                   <TableCell className="border-2 border-sky-900 text-center text-sky-900 w-[1%]">
-                    {item.qtdSubGrupos.toString()}
+                    {item?.qtdSubGrupos.toString()}
                   </TableCell>
                   <TableCell className="border-2 border-sky-900 w-[10%]">
                     <div className="flex gap-1 justify-center text-sky-800">

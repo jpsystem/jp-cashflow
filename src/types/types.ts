@@ -18,7 +18,7 @@ export type tyGrupo = {
   descricao?:  string,
   tipo?:       string,
   ativo?:     boolean,
-  //userID?:    number,
+  userId?:    number,
 }
 
 export type tyFonte = {
@@ -27,6 +27,7 @@ export type tyFonte = {
   descricao?:  string;
   tipo:       string;
   ativo:     boolean;
+  userId:    number,
 }
 
 export type tySubGrupo = {
@@ -43,6 +44,7 @@ export type tyGrupoLista = {
   nome?:          string,
   descricao?:     string,
   ativo?:         boolean,
+  userId?:         number,
   qtdSubGrupos?:  number,
 }
 

@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { tyGrupo, tySubGrupo, tyGrupoLista } from "@/types/types";
 import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
 import queryClient from "@/lib/reactQuery";
+import {useSession } from "next-auth/react"
 
 // Componente SHEET shadcn/ui
 import {
@@ -64,6 +65,10 @@ const schema = z.object({
 type FormProps = z.infer<typeof schema>;
 
 export default function NovoGrupoForm() {
+  const { data: session } = useSession();
+  //console.log("Secao: ", session);
+  
+  // const [sessionUserID, setSessionUserId] = useState<number>(retUserID());
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
   const [subGruposP, setSubGruposP] = useState<tySubGrupo[]>([]);
@@ -112,6 +117,7 @@ export default function NovoGrupoForm() {
       descricao: values.descricao,
       tipo: values.tipo,
       ativo: values.ativo,
+      userId: session?.user.id,
     };
     if (isSubmit) {
       incluirGrupo(novoGrupo, subGruposP);
@@ -121,6 +127,8 @@ export default function NovoGrupoForm() {
   }
 
   async function incluirGrupo( dadosGrupo: tyGrupo, dadosSubGrupos: tySubGrupo[]) {
+    // console.log("DG: ", dadosGrupo);
+    // console.log("DS: ", dadosSubGrupos);
     await novoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
       //.then((grupo) => {
         setTipo(tipoEnu.Sucesso);
