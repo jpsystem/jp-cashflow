@@ -126,7 +126,7 @@ const TabelaLancamentos = () => {
       <div className="overflow-x-auto mt-4">
         <h1 className="text-2xl font-bold mb-4 text-sky-900">Lançamentos</h1>
         <Table className="min-w-full overflow-auto rounded-2xl p-8 border-sky-800 border-2 shadow">
-          <TableCaption className="text-sky-800">
+          <TableCaption className="text-sky-800 mb-2">
             Uma lista sobre seus lançamentos recentes.
           </TableCaption>
           <TableHeader>
