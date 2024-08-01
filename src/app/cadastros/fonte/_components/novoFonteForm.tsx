@@ -135,7 +135,7 @@ export default function NovoFonteForm() {
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <Button
           variant="outline"
-          className="hover:bg-slate-200"
+          className="hover:bg-slate-100 text-sky-900 border-2 border-sky-800 hover:text-sky-900 text-xl"
           onClick={handleOpen}
         >
           + Fonte

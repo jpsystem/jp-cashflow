@@ -109,7 +109,7 @@ export default function TabelaGrupos({userIdSession}: Props) {
             </TableHeader>
             <TableBody>
               {data?.map((item: any) => (
-                <TableRow key={item.id}>
+                <TableRow className ="hover:bg-slate-200" key={item.id}>
                   <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[13%]">
                     {item.nome}
                   </TableCell>

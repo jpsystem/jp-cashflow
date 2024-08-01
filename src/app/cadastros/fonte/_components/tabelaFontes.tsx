@@ -85,22 +85,23 @@ export  default function  TabelaFontes({userIdSession}: Props) {
             <TableHeader>
               <TableRow>
                 {/* <TableHead className="w-[100px]">ID</TableHead> */}
-                <TableHead>Fonte</TableHead>
-                <TableHead>Descrição</TableHead>
-                <TableHead>Tipo</TableHead>
-                <TableHead>Ativo</TableHead>
-                <TableHead className="w-[100px] text-center">Ações</TableHead>
+                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center" >Fonte</TableHead>
+                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">Descrição</TableHead>
+                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">Tipo</TableHead>
+                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">Ativo</TableHead>
+                <TableHead className="w-[100px] bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {data?.map((item: any) => (
-                <TableRow key={item.id}>
+                <TableRow className ="hover:bg-slate-200" key={item.id}>
                   {/* <TableCell>{item.id}</TableCell> */}
-                  <TableCell>{item.nome}</TableCell>
-                  <TableCell>{item.descricao}</TableCell>
-                  <TableCell>{retTipo(item.tipo)}</TableCell>
-                  <TableCell>{item.ativo.toString()}</TableCell>
-                  <TableCell className="flex gap-1 justify-center">
+                  <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[13%] " >{item.nome}</TableCell>
+                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[64%] text-center">{item.descricao}</TableCell>
+                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[6%] text-center">{retTipo(item.tipo)}</TableCell>
+                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[4%] text-center">{item.ativo.toString()}</TableCell>
+                  <TableCell className="border-2 border-sky-900 w-[10%]">
+                  <div className="flex gap-1 justify-center text-sky-800">
                     <Button className="h-8 w-8" size="icon" variant="ghost">
                       <FileEditIcon className="h-4 w-4" />
                       <span className="sr-only">Edit</span>
@@ -114,6 +115,7 @@ export  default function  TabelaFontes({userIdSession}: Props) {
                       <TrashIcon className="h-4 w-4" />
                       <span className="sr-only">Delete</span>
                     </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
