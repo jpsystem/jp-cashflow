@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { CardContent, Card } from "@/components/ui/card";
 import { useQuery} from 'react-query';
@@ -7,30 +8,28 @@ import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table, } from "
 import { FileEditIcon, TrashIcon } from "@/app/_components/iconsForm";
 import { DeleteGrupo, retGrupo, retGrupos } from "@/actions/grupoActions";
 import { tyGrupoLista } from "@/types/types";
-import { useEffect, useState } from "react";
-import { Grupo, SubGrupo } from "@prisma/client";
+import { useState } from "react";
 import EditaGrupoForm from "./editaGrupo";
 import ConfirmationBox from "@/app/_components/confirmationBox";
-import { useSession } from 'next-auth/react';
 
+interface Props {
+  userIdSession: number | undefined;
+}
 
-export default function TabelaGrupos() {
+export default function TabelaGrupos({userIdSession}: Props) {
 
   //Variavel para a caixa de confirmação (ConfirmationBox)
   const [showConfirmation, setShowConfirmation] = useState(false);
-  //Variaveis para ativar o forme (EditaGrupoForm)
-  const [isEdita, setIsEdita] = useState(false);
   //Variaveis para setar o indice selecionado
   const [indice, setIndice] = useState(0);
+  //Variaveis para ativar o forme (EditaGrupoForm)
+  const [isEdita, setIsEdita] = useState(false);
 
-  //Busca o id do usuário da seção
-  const { data: session } = useSession();
-  const idUsuario = session?.user.id;
-
+  console.log("Rederizado: ", userIdSession)
   //Criação e execução do HOOK useQuery
   //Carrega as fontes
   const { data, isLoading } = useQuery( "grupos", async () => { 
-    const response:tyGrupoLista[] = await retGrupos(idUsuario);
+    const response:tyGrupoLista[] = await retGrupos(userIdSession);
     //console.log("Response: ",response);
     return response;
   })

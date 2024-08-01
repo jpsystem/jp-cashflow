@@ -1,4 +1,5 @@
 'use client'
+
 import { Button } from "@/components/ui/button"
 import { CardContent, Card } from "@/components/ui/card"
 import { useQuery} from 'react-query';
@@ -10,21 +11,22 @@ import { useSession } from 'next-auth/react';
 import ConfirmationBox from "@/app/_components/confirmationBox";
 import { useState } from "react";
 
-export  default function  TabelaFontes() {
+interface Props {
+  userIdSession: number | undefined;
+}
+
+export  default function  TabelaFontes({userIdSession}: Props) {
   
   //Variavel para a caixa de confirmação (ConfirmationBox)
   const [showConfirmation, setShowConfirmation] = useState(false);
   //Variaveis para setar o indice selecionado
   const [indice, setIndice] = useState(0);
 
-  //Busca o id do usuário da seção
-  const { data: session } = useSession();
-  const idUsuario = session?.user.id;
 
   //Criação e execução do HOOK useQuery
   //Carrega as fontes
   const { data, isLoading } = useQuery( "fontes", async () => {
-    const response = await ListaFontes(idUsuario);
+    const response = await ListaFontes(userIdSession);
     // console.log("DATA", data)
     return response;
   })
