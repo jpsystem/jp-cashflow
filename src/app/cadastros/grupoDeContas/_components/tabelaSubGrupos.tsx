@@ -15,6 +15,7 @@ interface Props {
 }
 
 export default function TabelaSubGrupos({ data, setSubGruposP }: Props) {
+
   //Lista dos subGrupos
   const [subGrupos, setSubGrupos] = useState<tySubGrupo[]>(data)
   const [alterou, setAlterou] = useState(false)

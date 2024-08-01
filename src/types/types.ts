@@ -52,3 +52,19 @@ export type tySelects = {
   id?:            number,
   nome?:          string,
 }
+
+export type tyErro = {
+  name?: string, 
+  code?: string,
+  clientVersion?: string, 
+  meta?: {
+    modelName?: string, 
+    target?: string
+  } 
+}
+
+export type tyResult = {
+  status?: string,
+  menssagem?: string,
+  dados: {},
+}

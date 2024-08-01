@@ -131,25 +131,25 @@ const TabelaLancamentos = () => {
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
+              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-700 bg-sky-900 text-lg">
                 Conta
               </TableHead>
-              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
+              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-700 bg-sky-900 text-lg">
                 Sub Conta
               </TableHead>
-              <TableHead className="text-center border-2 w-[43%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
+              <TableHead className="text-center border-2 w-[43%] text-sky-50 border-sky-700 bg-sky-900 text-lg">
                 Descrição
               </TableHead>
-              <TableHead className="text-center border-2 w-[6%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
+              <TableHead className="text-center border-2 w-[6%] text-sky-50 border-sky-700 bg-sky-900 text-lg">
                 Valor
               </TableHead>
-              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
+              <TableHead className="text-center border-2 w-[2%] text-sky-50 border-sky-700 bg-sky-900 text-lg">
                 Fonte
               </TableHead>
-              <TableHead className="text-center border-2 w-[7%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
+              <TableHead className="text-center border-2 w-[7%] text-sky-50 border-sky-700 bg-sky-900 text-lg">
                 Data
               </TableHead>
-              <TableHead className="text-center border-2 w-[12%] text-sky-50 border-sky-50 bg-sky-900 text-lg">
+              <TableHead className="text-center border-2 w-[12%] text-sky-50 border-sky-700 bg-sky-900 text-lg">
                 Ações
               </TableHead>
             </TableRow>

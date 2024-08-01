@@ -1,12 +1,14 @@
 'use server'
 
-import { tyFonte } from "@/types/types"
+import { tyFonte, tyErro, tyResult } from "@/types/types"
 import prisma from "@/lib/db"
 
 // Função para listar fontes
-export async function ListaFontes() {
+export async function ListaFontes(userID: number | undefined) {
   
-  const fontes = await prisma.fonte.findMany();
+  const fontes = await prisma.fonte.findMany({
+    where: { userId: userID },
+  });
   //revalidatePath("/cadastros/fonte")
   
   return Promise.resolve(fontes); //Promise.resolve(fontes);
@@ -14,16 +16,28 @@ export async function ListaFontes() {
 
 // Função para criar uma fonte no banco de dados
 export async function CreateFonte(data: tyFonte) {
-  const fonte = await prisma.fonte.create({
-    data: {
-      nome: data.nome.toUpperCase(),
-      descricao: data.descricao,
-      tipo: data.tipo.toString(),
-      ativo: data.ativo,
-    },
-  })
-  //revalidatePath('/cadastros/fonte')
-  return fonte;
+  let result:tyResult = <tyResult>{};
+  try {
+    const fonte = await prisma.fonte.create({
+      data: {
+        nome: data.nome.toUpperCase(),
+        descricao: data.descricao,
+        tipo: data.tipo.toString(),
+        ativo: data.ativo,
+        userId: data.userId,
+      },
+    })
+    result.status = "Sucesso"
+    result.dados = fonte
+    return result    
+    
+  } catch (error) {
+
+    const erro = <tyErro>error;
+    result.status = "Erro"
+    result.menssagem = erro.code
+    return result    
+  }
 }
 
 // Função para listar fontes (ajuste conforme a lógica de negócio)

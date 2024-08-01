@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { CardContent, Card } from "@/components/ui/card";
 import { useQuery} from 'react-query';
@@ -8,32 +9,36 @@ import { FileEditIcon, TrashIcon } from "@/app/_components/iconsForm";
 import { DeleteGrupo, retGrupo, retGrupos } from "@/actions/grupoActions";
 import { tyGrupoLista } from "@/types/types";
 import { useState } from "react";
-import { Grupo, SubGrupo } from "@prisma/client";
 import EditaGrupoForm from "./editaGrupo";
 import ConfirmationBox from "@/app/_components/confirmationBox";
-// import retorno from "@/lib/retSecaoUserID";
 
-import { useSession } from 'next-auth/react';
+interface Props {
+  userIdSession: number | undefined;
+}
 
-export default function TabelaGrupos() {
-
-  const { data: session } = useSession();
-
-  const p1 = session?.user.id;
-  //Criação e execução do HOOK useQuery
-  //Carrega as fontes
-  const { data, isLoading } = useQuery( "grupos", async () => { 
-  const response:tyGrupoLista[] = await retGrupos(p1);
-  //console.log("Response: ",response);
-  return response;
-  })
+export default function TabelaGrupos({userIdSession}: Props) {
 
   //Variavel para a caixa de confirmação (ConfirmationBox)
   const [showConfirmation, setShowConfirmation] = useState(false);
-  //Variaveis para ativar o forme (EditaGrupoForm)
-  const [isEdita, setIsEdita] = useState(false);
   //Variaveis para setar o indice selecionado
   const [indice, setIndice] = useState(0);
+  //Variaveis para ativar o forme (EditaGrupoForm)
+  const [isEdita, setIsEdita] = useState(false);
+
+  console.log("Rederizado: ", userIdSession)
+  //Criação e execução do HOOK useQuery
+  //Carrega as fontes
+  const { data, isLoading } = useQuery( "grupos", async () => { 
+    const response:tyGrupoLista[] = await retGrupos(userIdSession);
+    //console.log("Response: ",response);
+    return response;
+  })
+
+  //Tratamento para exibição de menssagem de espera
+  //enquanto estiver processando a consulta do UseQuery
+  if(isLoading){
+    return(<div className="loading"><h1>Carregando...</h1></div>)
+  }
 
   //Função para cofirmar a exclusão
   const handleConfirm= async ()=>{
@@ -41,41 +46,27 @@ export default function TabelaGrupos() {
     //Limpar o cache da consulta para atualizar os dados
     queryClient.invalidateQueries("grupos")
 
-    //console.log("Confirmada a exclusão!");
+    //fecha caixa de confirmação
     setShowConfirmation(false);
   };
+
   //Função para cancelar a exclusão
   const handleCancel=()=>{
-    //console.log("Exclusão cancelada!")
+    //fecha caixa de confirmação
     setShowConfirmation(false);
-  };
-
-
-  const handleEditGrupo = async (index: number) => {
-    
-    setIndice(index);
-    setIsEdita(true);
-    // const { grupo, subGrupos } = await retGrupo(index);
-    // if (grupo !== null) {
-    //   setGrupo(grupo);
-    //   setSubGrupos(subGrupos);
-    // }
   };
 
   // Função para excluir um grupo
   const handleDeleteGrupo = async (index: number) => {
     setIndice(index);
-    //await DeleteGrupo(index);
     setShowConfirmation(true)
   }
 
-  if(isLoading){
-    return(
-      <div>
-       <h1>Carregando...</h1> 
-      </div>
-    )
-  }
+
+  const handleEditGrupo = async (index: number) => {
+    setIndice(index);
+    setIsEdita(true);
+  };
 
   return (
     <div className="flex flex-col w-full items-center">

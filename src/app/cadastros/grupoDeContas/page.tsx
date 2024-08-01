@@ -1,7 +1,12 @@
 import NovoGrupoForm from "./_components/novoGrupoForm"
 import TabelaGrupos from "./_components/tabelaGrupos"
+import { getServerSession } from "next-auth"
+import { auth as authOptions } from "@/lib/auth-config"
 
-export default function GrupoDeContas() {
+export default async function GrupoDeContas() {
+  
+  //Carregar variavei de secao
+  const session = await getServerSession(authOptions)
 
   return (
     
@@ -19,7 +24,7 @@ export default function GrupoDeContas() {
           <NovoGrupoForm />
         </div>
       </div>
-      <TabelaGrupos />
+      <TabelaGrupos userIdSession={session?.user.id} />
     </div>
   )
 }

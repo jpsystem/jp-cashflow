@@ -49,7 +49,7 @@ export default function ClientDrawer() {
           </div>
         </DrawerTrigger>
         <DrawerContent className="flex flex-col h-[calc(100vh-86px)]">
-          <nav className="flex flex-col py-0 bg-sky-900 text-sky-50 flex-1">
+          <nav className="flex flex-col py-0 bg-sky-900 text-sky-50 flex-1 justify-center mb-24">
             <Link
               className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
               href="/home"
@@ -101,7 +101,7 @@ export default function ClientDrawer() {
               </PopoverTrigger>
               <PopoverContent
                 align="start"
-                className="w-56 min-w-[200px] p-0 bg-cover border-r border-black text-sky-50"
+                className="w-56 min-w-[200px] p-0 bg-cover border-r border-black text-sky-50 mb-16"
                 side="right"
               >
                 <PopoverClose asChild>

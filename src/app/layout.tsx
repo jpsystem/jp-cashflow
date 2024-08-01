@@ -37,7 +37,7 @@ export default async function RootLayout({
         <AuthProvider>
           <Query2ClientProvider client={queryClient}>
             {/* Parte superior */}
-            <header className="fixed top-0 left-0 w-full h-14 px-4 bg-sky-900 border-b dark:border-gray-700 text-sky-50 z-1">
+            <header className="fixed top-0 left-0 w-full h-14 px-4 bg-sky-900 border-b dark:border-gray-700 text-sky-50 z-10">
               <div className="flex items-center h-full">
                 <Link
                   className="flex items-center gap-2 text-xl sm:text-2xl font-semibold"
@@ -66,14 +66,14 @@ export default async function RootLayout({
               </div>
             </header>
             {/* Parte central */}
-            <div className="flex flex-col flex-grow w-full pt-14 pb-14 overflow-y-auto">
+            <div className="flex flex-col flex-grow w-full pt-14 pb-14">
               {session && <ClientDrawer />}
-              <div className="flex flex-col flex-grow w-full pr-8 pl-8 pt-2 pb-2 bg-white">
+              <div className="flex flex-col flex-grow w-full pr-8 pl-8 pt-2 pb-2 bg-white overflow-y-scroll overflow-x-auto">
                 {children}
               </div>
             </div>
             {/* Parte inferior */}
-            <footer className="fixed bottom-0 left-0 w-full h-14 px-4 bg-sky-900 border-t dark:border-gray-700 flex items-center z-1">
+            <footer className="fixed bottom-0 left-0 w-full h-14 px-4 bg-sky-900 border-t dark:border-gray-700 flex items-center z-10">
               <Link
                 className="flex items-center gap-2 text-sm sm:text-lg font-semibold"
                 href="#"
