@@ -1,52 +1,23 @@
 "use client";
-// COMPONENTE PAI
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { novoGrupoComSubgrupos } from "@/actions/grupoActions";
-import { Checkbox } from "@/components/ui/checkbox";
 import { z } from "zod";
 import React, { useState } from "react";
-import TabelaSubGrupos from "./tabelaSubGrupos";
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { tyGrupo, tySubGrupo, tyGrupoLista } from "@/types/types";
-import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
-import queryClient from "@/lib/reactQuery";
-import {useSession } from "next-auth/react"
-
-// Componente SHEET shadcn/ui
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-
-// Componente FORM
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-
-// Novo componente de dropdown do shadcn/ui
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-// Ícone de seta para baixo
 import { FaChevronDown } from "react-icons/fa";
+import { novoGrupoComSubgrupos } from "@/actions/grupoActions";
+import { tyGrupo, tySubGrupo, tyResult } from "@/types/types";
+import queryClient from "@/lib/reactQuery";
+import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
+import {useSession } from "next-auth/react"
+import TabelaSubGrupos from "./tabelaSubGrupos";
 
 
 // Configurando o zod para validação do formulário
@@ -66,10 +37,10 @@ type FormProps = z.infer<typeof schema>;
 
 export default function NovoGrupoForm() {
   const { data: session } = useSession();
-  //console.log("Secao: ", session);
   
-  // const [sessionUserID, setSessionUserId] = useState<number>(retUserID());
+  // Variavel de estado isOpen
   const [isOpen, setIsOpen] = useState(false);
+
   const [isSubmit, setIsSubmit] = useState(false);
   const [subGruposP, setSubGruposP] = useState<tySubGrupo[]>([]);
 
@@ -85,12 +56,14 @@ export default function NovoGrupoForm() {
     setShowAlerta(false);
   };
 
+  // Função para fechar o DIALOG
   const handleClose = () => {
     //form.reset();
     setSubGruposP([]);
     setIsOpen(false);
   };
 
+  // Definição do formulário
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -101,6 +74,7 @@ export default function NovoGrupoForm() {
     },
   });
 
+  // Função para abrir a Sheet
   const handleOpen = () => {
     form.resetField("nome");
     form.resetField("descricao");
@@ -109,8 +83,7 @@ export default function NovoGrupoForm() {
     setIsOpen(true);
   };
 
-
-
+  // Função para executar no Submit
   function onSubmit(values: FormProps) {
     const novoGrupo: tyGrupo = {
       nome: values.nome,
@@ -121,22 +94,40 @@ export default function NovoGrupoForm() {
     };
     if (isSubmit) {
       incluirGrupo(novoGrupo, subGruposP);
-      //form.reset();
       setIsOpen(false);
     }
   }
 
+  //Função para incluir uma novo grupo com seus subgrupos
   async function incluirGrupo( dadosGrupo: tyGrupo, dadosSubGrupos: tySubGrupo[]) {
-    // console.log("DG: ", dadosGrupo);
-    // console.log("DS: ", dadosSubGrupos);
-    await novoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
-      //.then((grupo) => {
+    let retorno:tyResult ;
+    try {      
+      retorno = await novoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
+      console.log("RetornoClienteAqui: ", retorno);
+      if(retorno.status === "Sucesso"){
         setTipo(tipoEnu.Sucesso);
         setMensagem(`A conta foi incluida com sucesso!` );
         setShowAlerta(true);
-        
         //Limpar o cache da consulta para atualizar os dados
         queryClient.invalidateQueries("grupos")        
+      }else{
+        if(retorno.menssagem === "P2002")
+        {
+          setTipo(tipoEnu.Erro);
+          setMensagem("Grupo já cadastrado!" );
+          setShowAlerta(true);
+        }else{
+          setTipo(tipoEnu.Erro);
+          setMensagem("O correu um erro inesperado no servidor!" );
+          setShowAlerta(true);
+        }
+      }
+      
+    } catch (error) {
+      setTipo(tipoEnu.Erro);
+      setMensagem(`Ocorreu um erro inesperado! ${error}` );
+      setShowAlerta(true);
+    }
 
   }
 

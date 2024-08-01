@@ -41,7 +41,7 @@ export const auth: NextAuthOptions = {
             user.nickname = data.login;
             user.role = data.perfil;
           }
-          if(credentials.nickname ===  data.login && credentials.password === data.senha){
+          if(credentials.nickname.toUpperCase() ===  data.login && credentials.password === data.senha){
             return user
           }
           return null

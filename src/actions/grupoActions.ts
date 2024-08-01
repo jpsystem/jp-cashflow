@@ -1,8 +1,11 @@
 "use server"
 
-import { tySubGrupo, tyGrupo, tyGrupoLista } from "@/types/types"
+import { tyErro, tyResult, tySubGrupo, tyGrupo, tyGrupoLista } from "@/types/types"
 import prisma from "@/lib/db"
 import {Grupo, SubGrupo } from "@prisma/client"
+
+
+
 
 // Função para listar Grupos
 export async function ListaGrupos() {
@@ -110,29 +113,37 @@ export async function novoGrupoComSubgrupos(
   dadosGrupo: tyGrupo,
   dadosSubGrupos: tySubGrupo[]
 ) {
-  // console.log("DadosGrupo: ",dadosGrupo)
-  // console.log("dadosSubGrupos: ",dadosSubGrupos)
-
-  const grupo = await prisma.grupo.create({
-    data: {
-      nome: dadosGrupo.nome.toUpperCase(),
-      descricao: dadosGrupo.descricao,
-      tipo: dadosGrupo.tipo,
-      ativo: dadosGrupo.ativo,
-      userId: dadosGrupo.userId,
-      subGrupos: {
-        create: dadosSubGrupos.map((subGrupo) => ({
-          nome: subGrupo.nome.toUpperCase(),
-          descricao: subGrupo.descricao,
-        })),
+  let result:tyResult = <tyResult>{};
+  try {    
+    const grupo = await prisma.grupo.create({
+      data: {
+        nome: dadosGrupo.nome.toUpperCase(),
+        descricao: dadosGrupo.descricao,
+        tipo: dadosGrupo.tipo,
+        ativo: dadosGrupo.ativo,
+        userId: dadosGrupo.userId,
+        subGrupos: {
+          create: dadosSubGrupos.map((subGrupo) => ({
+            nome: subGrupo.nome.toUpperCase(),
+            descricao: subGrupo.descricao,
+          })),
+        },
       },
-    },
-    include: {
-      subGrupos: true,
-    },
-  })
+      include: {
+        subGrupos: true,
+      },
+    })
+    result.status = "Sucesso"
+    result.dados = grupo
+    return result
+    
+  } catch (error ) {
 
-  return grupo
+      const erro = <tyErro>error;
+      result.status = "Erro"
+      result.menssagem = erro.code
+      return result
+  }
 }
 
 export async function alteraSubGrupo(data: tySubGrupo) {

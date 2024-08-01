@@ -5,17 +5,15 @@ import { Button } from "@/components/ui/button";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
-import { DialogTitle} from "@/components/ui/dialog";
+import React, { useState } from "react";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,  DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import * as React from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { CreateFonte } from "@/actions/fonteActions";
-import { tyFonte } from "@/types/types";
+import { tyFonte, tyResult } from "@/types/types";
 import queryClient from "@/lib/reactQuery";
 import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
 import {useSession } from "next-auth/react"
@@ -47,6 +45,7 @@ export default function NovoFonteForm() {
   const [showAlerta, setShowAlerta] = useState(false);
   const [tipo, setTipo] = useState<tipoEnu>(tipoEnu.Alerta);
   const [mensagem, setMensagem] = useState("Menssagem default");
+
   //Função para fechar a caixa de aviso
   const handleFechar=()=>{
     //console.log("Exclusão cancelada!")
@@ -93,12 +92,33 @@ export default function NovoFonteForm() {
   
   //Função para incluir uma nova fonte
   async function incluirFonte(dadosFonte: tyFonte){
-    await CreateFonte(dadosFonte);
-    setTipo(tipoEnu.Sucesso);
-    setMensagem(`A fonte foi incluida com sucesso!` );
-    setShowAlerta(true);   
-     //Limpar o cache da consulta para atualizar os dados
-     queryClient.invalidateQueries("fontes")   
+    let retorno:tyResult ;
+    try {      
+      retorno = await CreateFonte(dadosFonte);
+      if(retorno.status === "Sucesso"){
+        setTipo(tipoEnu.Sucesso);
+        setMensagem(`A fonte foi incluida com sucesso!` );
+        setShowAlerta(true);   
+         //Limpar o cache da consulta para atualizar os dados
+         queryClient.invalidateQueries("fontes")   
+
+      }else{
+        if(retorno.menssagem === "P2002")
+          {
+            setTipo(tipoEnu.Erro);
+            setMensagem("A fonte já está cadastrada!" );
+            setShowAlerta(true);
+          }else{
+            setTipo(tipoEnu.Erro);
+            setMensagem("O correu um erro inesperado no servidor!" );
+            setShowAlerta(true);
+          }
+      }
+    } catch (error) {
+      setTipo(tipoEnu.Erro);
+      setMensagem(`Ocorreu um erro inesperado! ${error}` );
+      setShowAlerta(true);      
+    }
   }
   
 

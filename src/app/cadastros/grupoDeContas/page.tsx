@@ -1,8 +1,9 @@
 import NovoGrupoForm from "./_components/novoGrupoForm"
 import TabelaGrupos from "./_components/tabelaGrupos"
 
-export default function GrupoDeContas() {
 
+export default function GrupoDeContas() {
+  
   return (
     
     <div className="flex flex-col min-h-[80vh] items-start gap-4 px-4 pb-4 md:justify-center md:px-6 md:gap-5">
