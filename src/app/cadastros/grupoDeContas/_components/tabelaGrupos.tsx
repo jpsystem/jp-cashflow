@@ -6,8 +6,8 @@ import { useQuery} from 'react-query';
 import queryClient from "@/lib/reactQuery";
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table, } from "@/components/ui/table";
 import { FileEditIcon, TrashIcon } from "@/app/_components/iconsForm";
-import { DeleteGrupo, retGrupo, retGrupos } from "@/actions/grupoActions";
-import { tyGrupoLista } from "@/types/types";
+import { DeleteGrupo, RetGrupo, RetGrupos } from "@/actions/grupoActions";
+import { tyGrupo, tyGrupoLista } from "@/types/types";
 import { useState } from "react";
 import EditaGrupoForm from "./editaGrupo";
 import ConfirmationBox from "@/app/_components/confirmationBox";
@@ -22,15 +22,15 @@ export default function TabelaGrupos({userIdSession}: Props) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   //Variaveis para setar o indice selecionado
   const [indice, setIndice] = useState(0);
+  const [item, setItem]=useState<tyGrupo>();
+  
   //Variaveis para ativar o forme (EditaGrupoForm)
   const [isEdita, setIsEdita] = useState(false);
 
-  console.log("Rederizado: ", userIdSession)
   //Criação e execução do HOOK useQuery
   //Carrega as fontes
   const { data, isLoading } = useQuery( "grupos", async () => { 
-    const response:tyGrupoLista[] = await retGrupos(userIdSession);
-    //console.log("Response: ",response);
+    const response:tyGrupoLista[] = await RetGrupos(userIdSession);
     return response;
   })
 
@@ -63,8 +63,9 @@ export default function TabelaGrupos({userIdSession}: Props) {
   }
 
 
-  const handleEditGrupo = async (index: number) => {
+  const handleEditGrupo = async (index: number, item: tyGrupo) => {
     setIndice(index);
+    setItem(item)
     setIsEdita(true);
   };
 
@@ -81,16 +82,15 @@ export default function TabelaGrupos({userIdSession}: Props) {
       }
       <Card className="w-full rounded">
         <CardContent className="p-0">
+          {isEdita && (
+            <EditaGrupoForm
+              pIndice={indice}
+              pItem={item}
+              isEdita={isEdita}
+              setIsEdita={setIsEdita}
+            />
+          )}
           <Table className="border-collapse border-spacing-0">
-            {isEdita && (
-              <EditaGrupoForm
-                // pGrupo={grupo}
-                // pSubGrupos={subGrupos}
-                pIndice={indice}
-                isEdita={isEdita}
-                setIsEdita={setIsEdita}
-              />
-            )}
             <TableHeader>
               <TableRow>
                 <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">
@@ -98,6 +98,9 @@ export default function TabelaGrupos({userIdSession}: Props) {
                 </TableHead>
                 <TableHead className=" bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">
                   Descrição
+                </TableHead>
+                <TableHead className=" bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">
+                  Tipo
                 </TableHead>
                 <TableHead className=" bg-sky-900 border-2 border-sky-700 text-center text-sky-50">
                   Subcontas
@@ -116,13 +119,16 @@ export default function TabelaGrupos({userIdSession}: Props) {
                   <TableCell className="border-2 border-sky-900 text-sky-900 w-[64%] text-center">
                     {item.descricao}
                   </TableCell>
+                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[64%] text-center">
+                    {item.tipoDesc}
+                  </TableCell>
                   <TableCell className="border-2 border-sky-900 text-center text-sky-900 w-[1%]">
                     {item?.qtdSubGrupos.toString()}
                   </TableCell>
                   <TableCell className="border-2 border-sky-900 w-[10%]">
                     <div className="flex gap-1 justify-center text-sky-800">
                       <Button
-                        onClick={() => handleEditGrupo(item.id)}
+                        onClick={() => handleEditGrupo(item.id, item)}
                         className="h-8 w-8"
                         size="icon"
                         variant="ghost"

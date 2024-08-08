@@ -6,8 +6,8 @@ export type tyUsuario = {
   senha:         string,
   perfil:        string,
   login:         string,
-  token?:         string,
-  dtToken?:       Date,
+  token?:        string,
+  dtToken?:      Date,
   confirmaSenha: string,
 };
 
@@ -15,18 +15,18 @@ export type tyGrupo = {
   key?:       number,
   id?:        number,
   nome:       string,
-  descricao?:  string,
-  tipo?:       string,
-  ativo?:     boolean,
+  descricao?: string,
+  tipo?:      tipoGrupo,
+  ativo:      boolean,
   userId?:    number,
 }
 
 export type tyFonte = {
   id?:        number;
   nome:       string;
-  descricao?:  string;
+  descricao?: string;
   tipo:       string;
-  ativo:     boolean;
+  ativo:      boolean;
   userId?:    number,
 }
 
@@ -34,17 +34,20 @@ export type tySubGrupo = {
   key?:       number,
   id?:        number,
   nome:       string,
-  descricao?:  string,
+  descricao?: string,
   ativo?:     boolean,
   grupoId?:   number,
+  acao?:      string,
 }
 
 export type tyGrupoLista = {
   id?:            number,
   nome?:          string,
   descricao?:     string,
+  tipo?:          tipoGrupo, 
+  tipoDesc?:      string, 
   ativo?:         boolean,
-  userId?:         number,
+  userId?:        number,
   qtdSubGrupos?:  number,
 }
 
@@ -54,17 +57,29 @@ export type tySelects = {
 }
 
 export type tyErro = {
-  name?: string, 
-  code?: string,
+  name?:          string, 
+  code?:          string,
   clientVersion?: string, 
   meta?: {
     modelName?: string, 
-    target?: string
+    target?:    string
   } 
 }
 
 export type tyResult = {
-  status?: string,
+  status?:    string,
   menssagem?: string,
   dados: {},
+}
+
+export enum tipoGrupo{
+  Debito = "D",
+  Credito = "C",
+  Movimento = "M",
+}
+
+export enum tipoFonte{
+  Aplicacao = "A",
+  Credito = "C",
+  Movimentacao = "M",
 }

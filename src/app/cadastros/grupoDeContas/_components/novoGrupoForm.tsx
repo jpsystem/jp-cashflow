@@ -12,8 +12,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { FaChevronDown } from "react-icons/fa";
-import { novoGrupoComSubgrupos } from "@/actions/grupoActions";
-import { tyGrupo, tySubGrupo, tyResult } from "@/types/types";
+import { NovoGrupoComSubgrupos } from "@/actions/grupoActions";
+import { tyGrupo, tySubGrupo, tyResult, tipoGrupo } from "@/types/types";
 import queryClient from "@/lib/reactQuery";
 import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
 import {useSession } from "next-auth/react"
@@ -25,10 +25,11 @@ const schema = z.object({
   nome: z.string().min(2, "Campo obrigatório!"),
   descricao: z.string().min(2, "Campo obrigatório!"),
   ativo: z.boolean().default(true),
-  tipo: z.enum(["D", "C", "M"], {
+  tipo: z
+  .nativeEnum(tipoGrupo, {
     errorMap: () => ({
-      message:
-        "Informe 'D' para débito, 'C' para crédito ou 'M' para conta de movimentação.",
+           message:
+           "Informe 'D' para débito, 'C' para crédito ou 'M' para conta de movimentação.",
     }),
   }),
 });
@@ -38,10 +39,22 @@ type FormProps = z.infer<typeof schema>;
 export default function NovoGrupoForm() {
   const { data: session } = useSession();
   
-  // Variavel de estado isOpen
+    // Função para fechar a SHEET
+    const handleClose = () => {
+      //form.reset();
+      setSubGruposP([]);
+      setIsOpen(false);
+    };
+
+  // Variavel de estado isOpen para controle 
+  // do formulario de edição dos dados (NovoGrupoForm)
   const [isOpen, setIsOpen] = useState(false);
 
+  // Variavel de estado para evitar a execução no reeload do componente
+  // isSubmit só fica true se for clicado em Incluir
   const [isSubmit, setIsSubmit] = useState(false);
+  //um array para manipular os dados do subgrupo na lista
+  //ante de enviar para o banco de dados
   const [subGruposP, setSubGruposP] = useState<tySubGrupo[]>([]);
 
   //Variaveis para a caixa de avisos (WarningBox)
@@ -49,19 +62,14 @@ export default function NovoGrupoForm() {
   const [tipo, setTipo] = useState<tipoEnu>(tipoEnu.Alerta);
   const [mensagem, setMensagem] = useState("Menssagem default");
 
-  //Função para fechar a caixa de aviso
+  //Função para fechar o formulário de edição dos dados
   const handleFechar=()=>{
     setSubGruposP([]);
     setIsOpen(false);
     setShowAlerta(false);
   };
 
-  // Função para fechar o DIALOG
-  const handleClose = () => {
-    //form.reset();
-    setSubGruposP([]);
-    setIsOpen(false);
-  };
+
 
   // Definição do formulário
   const form = useForm<FormProps>({
@@ -69,12 +77,12 @@ export default function NovoGrupoForm() {
     defaultValues: {
       nome: "",
       descricao: "",
-      tipo: "D",
+      tipo: tipoGrupo.Debito,
       ativo: true,
     },
   });
 
-  // Função para abrir a Sheet
+  // Função para abrir o formulário de edição dos dados
   const handleOpen = () => {
     form.resetField("nome");
     form.resetField("descricao");
@@ -102,8 +110,7 @@ export default function NovoGrupoForm() {
   async function incluirGrupo( dadosGrupo: tyGrupo, dadosSubGrupos: tySubGrupo[]) {
     let retorno:tyResult ;
     try {      
-      retorno = await novoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
-      console.log("RetornoClienteAqui: ", retorno);
+      retorno = await NovoGrupoComSubgrupos(dadosGrupo, dadosSubGrupos)
       if(retorno.status === "Sucesso"){
         setTipo(tipoEnu.Sucesso);
         setMensagem(`A conta foi incluida com sucesso!` );
@@ -195,9 +202,9 @@ export default function NovoGrupoForm() {
                                     variant="outline"
                                     className="w-full text-sm flex items-center justify-between hover:bg-slate-200 text-sky-900 border-sky-900"
                                   >
-                                    {field.value === "D"
+                                    {field.value === tipoGrupo.Debito
                                       ? "Débito"
-                                      : field.value === "C"
+                                      : field.value === tipoGrupo.Credito
                                       ? "Crédito"
                                       : "Movimentação"}
                                     <FaChevronDown />
@@ -206,19 +213,19 @@ export default function NovoGrupoForm() {
                                 <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
                                   <DropdownMenuItem
                                     className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                    onClick={() => field.onChange("D")}
+                                    onClick={() => field.onChange(tipoGrupo.Debito)}
                                   >
                                     Débito
                                   </DropdownMenuItem>
                                   <DropdownMenuItem
                                     className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                    onClick={() => field.onChange("C")}
+                                    onClick={() => field.onChange(tipoGrupo.Credito)}
                                   >
                                     Crédito
                                   </DropdownMenuItem>
                                   <DropdownMenuItem
                                     className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                    onClick={() => field.onChange("M")}
+                                    onClick={() => field.onChange(tipoGrupo.Movimento)}
                                   >
                                     Movimentação
                                   </DropdownMenuItem>
@@ -267,14 +274,9 @@ export default function NovoGrupoForm() {
                       </FormItem>
                     )}
                   />
-                  <div className="text-sky-900">
-                    <TabelaSubGrupos
-                      data={subGruposP}
-                      setSubGruposP={setSubGruposP}
-                    />
-                  </div>
+
                   <div className="text-sm font-semibold flex justify-end mt-7 text-sky-900">
-                    <SheetFooter className="text-sm font-semibold flex justify-end mt-7">
+                    <SheetFooter className="text-sm mb-4 font-semibold flex justify-end mt-7">
                       <Button
                         variant="outline"
                         className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
@@ -294,6 +296,14 @@ export default function NovoGrupoForm() {
                   </div>
                 </form>
               </Form>
+              <div className="text-sky-900">
+                <TabelaSubGrupos
+                  origem="Novo"
+                  grupoId={0}
+                  dados={subGruposP}
+                  setSubGruposP={setSubGruposP}
+                />
+              </div>
             </div>
           )}
         </SheetContent>

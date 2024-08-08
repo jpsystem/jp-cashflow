@@ -4,111 +4,87 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { alteraGrupo, retGrupo } from "@/actions/grupoActions";
+import { AlteraGrupo, RetGrupo, RetSubGrupos } from "@/actions/grupoActions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { z } from "zod";
-import React, { useEffect, useState } from "react";
+import React, { FormEventHandler, useEffect, useState } from "react";
 import TabelaSubGrupos from "./tabelaSubGrupos";
 import { Textarea } from "@/components/ui/textarea";
-import { tyGrupo, tySubGrupo } from "@/types/types";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { tyGrupo, tySubGrupo, tipoGrupo, tyResult } from "@/types/types";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { FaChevronDown } from "react-icons/fa"; // Ícone de seta para baixo
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { useQuery } from "react-query";
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import queryClient from "@/lib/reactQuery";
-
-//Configurando o zod para validação do formulário
-const schema = z.object({
-  nome: z.string().min(2, "Campo obrigatório!"),
-  descricao: z.string().min(2, "Campo obrigatório!"),
-  tipo: z.string(),
-  ativo: z.boolean(),
-});
-
-type FormProps = z.infer<typeof schema>;
+import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
 
 interface Props {
   pIndice: number;
+  pItem: tyGrupo | undefined;
   isEdita: boolean;
   setIsEdita: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function EditaGrupoForm({
-  pIndice,
-  isEdita,
-  setIsEdita,
-}: Props) {
-  const { data } = useQuery("misto", async () => {
-    const { grupo, subGrupos } = await retGrupo(pIndice);
-    return { grupo, subGrupos };
-  });
+const schema = z.object({
+  nome: z.string().min(2, "Campo obrigatório!"),
+  descricao: z.string().min(2, "Campo obrigatório!"),
+  ativo: z.boolean().default(true),
+  tipo: z
+  .nativeEnum(tipoGrupo, {
+    errorMap: () => ({
+           message:
+           "Informe 'D' para débito, 'C' para crédito ou 'M' para conta de movimentação.",
+    }),
+  }),
+});
 
-  const [isOpen, setIsOpen] = useState(isEdita);
-  const [grupoP, setGrupoP] = useState<tyGrupo>();
-  const [subGruposP, setSubGruposP] = useState<tySubGrupo[]>([]);
+type FormProps = z.infer<typeof schema>;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const lista: tySubGrupo[] = [];
-      let dadoGrupo: tyGrupo;
-
-      dadoGrupo = {
-        id: data?.grupo?.id,
-        nome: data?.grupo?.nome ?? "",
-        descricao: data?.grupo?.descricao || undefined,
-        tipo: data?.grupo?.tipo,
-        ativo: data?.grupo?.ativo,
-      };
-      setGrupoP(dadoGrupo);
-
-      data?.subGrupos?.map((subGrupo) =>
-        lista.push({
-          id: subGrupo.id,
-          nome: subGrupo.nome,
-          descricao: subGrupo.descricao || undefined,
-          ativo: subGrupo.ativo,
-          grupoId: subGrupo.grupoId,
-        })
-      );
-      setSubGruposP(lista);
-    };
-    fetchData();
-  }, [data]);
-
+export default function EditaGrupoForm({ pIndice, pItem, isEdita, setIsEdita }: Props) {
+  //O variavel isEdita substitui isOpen e é tratada no formulario pai e serve
+  //para controle do formulario de edição doso dados (EditaGrupoForm)
+  const pativo = pItem?.ativo? true: false;
+  //Função para fechar a SHEET
   const handleClose = () => {
     setIsEdita(false);
   };
 
+  //Definição do formulario
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      nome: grupoP?.nome,
-      descricao: grupoP?.descricao || undefined,
-      tipo: grupoP?.tipo || undefined,
-      ativo: grupoP?.ativo,
+    defaultValues: { 
+      nome: pItem?.nome,
+      descricao: pItem?.descricao,
+      tipo: pItem?.tipo,
+      ativo: (pItem?.ativo? true: false),
     },
   });
 
-  function onSubmit(values: FormProps) {
+  // Variavel de estado para evitar a execução no reeload do componente
+  // isSubmit só fica true se for clicado em Incluir
+  const [isSubmit, setIsSubmit] = useState(false);
+
+  //um array para manipular os dados do grupo
+  //ante de enviar para o banco de dados
+  const [grupoP, setGrupoP] = useState<tyGrupo | undefined>(pItem);
+   //um array para manipular os dados do subgrupo na lista
+  //ante de enviar para o banco de dados
+  const [subGruposP, setSubGruposP] = useState<tySubGrupo[]>([]);
+
+  //Variaveis para a caixa de avisos (WarningBox)
+  const [showAlerta, setShowAlerta] = useState(false);
+  const [tipo, setTipo] = useState<tipoEnu>(tipoEnu.Alerta);
+  const [mensagem, setMensagem] = useState("Menssagem default");
+
+  //Função para fechar o formulário de edição dos dados
+  const handleFechar=()=>{
+    setSubGruposP([]);
+    setIsEdita(false);
+    setShowAlerta(false);
+  };
+
+  function onSubmit(values: FormProps, e: any) {
+    //e.preventDefault();
     const novoGrupo: tyGrupo = {
       id: grupoP?.id,
       nome: values.nome,
@@ -116,150 +92,72 @@ export default function EditaGrupoForm({
       tipo: values.tipo,
       ativo: values.ativo,
     };
-    altGrupo(novoGrupo);
-    setIsOpen(false);
+    if (isSubmit) {
+      altGrupo(novoGrupo);
+      setIsEdita(false);
+    }
   }
 
   async function altGrupo(dadosGrupo: tyGrupo) {
-    alteraGrupo(dadosGrupo)
-      .then((grupo) => {
-        console.log("Grupo e SubGrupos criado: ", grupo);
-        queryClient.invalidateQueries("grupos");
-      })
-      .catch((error) => {
-        console.log("Erro ao criar Grupo e SubGrupos: ", error);
-      });
+    let retorno:tyResult ;
+    try {
+      retorno = await AlteraGrupo(dadosGrupo)
+      if(retorno.status === "Sucesso"){
+        setTipo(tipoEnu.Sucesso);
+        setMensagem(`A grupo foi alterado com sucesso!` );
+        setShowAlerta(true);
+        queryClient.invalidateQueries("grupos")        
+      }else{
+        if(retorno.menssagem === "P2002")
+        {
+          setTipo(tipoEnu.Erro);
+          setMensagem("Erro de relacionamento!" );
+          setShowAlerta(true);
+        }else{
+          setTipo(tipoEnu.Erro);
+          setMensagem("O correu um erro inesperado no servidor!" );
+          setShowAlerta(true);
+        }
+      }    
+    } catch (error) {
+      setTipo(tipoEnu.Erro);
+      setMensagem(`Ocorreu um erro inesperado! ${error}` );
+      setShowAlerta(true);     
+    }
   }
 
   return (
     <>
-      {grupoP !== undefined && (
-        <Sheet open={isOpen}>
-          <Button
-            variant="outline"
-            className="hover:bg-slate-100 text-sky-900 border-2 border-sky-800 hover:text-sky-900"
-            onClick={() => setIsOpen(true)}
-          >
-            Editar grupo
-          </Button>
-          <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[500px] min-w-[680px] overflow-auto rounded-2xl bg-white p-6 shadow-lg">
-            <SheetHeader>
-              <SheetTitle className="text-2xl text-sky-900">
-                Editar grupo de Contas
-              </SheetTitle>
-            </SheetHeader>
-            {isOpen && (
-              <div className="mt-8">
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-4"
-                  >
-                    <div className="grid grid-cols-12 gap-4">
-                      <div className="col-span-5">
-                        <FormField
-                          control={form.control}
-                          name="nome"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-sky-900">
-                                Nome
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  className="placeholder:text-sky-800 border-2 border-sky-900"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div className="col-span-5">
-                        <FormField
-                          control={form.control}
-                          name="tipo"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-sky-900">
-                                Tipo
-                              </FormLabel>
-                              <FormControl>
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button
-                                      variant="outline"
-                                      className="w-full text-sm flex items-center justify-between hover:bg-slate-200 text-sky-900 border-sky-900"
-                                    >
-                                      {field.value === "D"
-                                        ? "Débito"
-                                        : field.value === "C"
-                                        ? "Crédito"
-                                        : "Movimentação"}
-                                      <FaChevronDown />
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
-                                    <DropdownMenuItem
-                                      className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                      onClick={() => field.onChange("D")}
-                                    >
-                                      Débito
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                      className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                      onClick={() => field.onChange("C")}
-                                    >
-                                      Crédito
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                      className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                      onClick={() => field.onChange("M")}
-                                    >
-                                      Movimentação
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <FormField
-                          control={form.control}
-                          name="ativo"
-                          render={({ field }) => (
-                            <FormItem className="col-span-1 flex flex-col items-center mt-5">
-                              <FormLabel className="text-sky-900">
-                                Ativo
-                              </FormLabel>
-                              <FormControl>
-                                <Checkbox
-                                  id="ativo"
-                                  className="border-2 border-sky-900"
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    </div>
+    { showAlerta && (
+          <WarningBox
+            tipo={tipo}
+            mensagem={mensagem}
+            onCancel={handleFechar}
+          />
+        )
+    }     
+    <Sheet open={isEdita} onOpenChange={setIsEdita} >
+      <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[500px] min-w-[680px] overflow-auto rounded-2xl bg-white p-6 shadow-lg">
+        <SheetHeader>
+          <SheetTitle className="text-2xl text-sky-900">Editar grupo de Contas </SheetTitle>
+        </SheetHeader>
+        {isEdita && (
+          <div className="mt-8">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                <div className="grid grid-cols-12 gap-4">
+                  <div className="col-span-5">
                     <FormField
                       control={form.control}
-                      name="descricao"
+                      name="nome"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sky-900">
-                            Descrição
-                          </FormLabel>
+                          <FormLabel className="text-sky-900">Nome</FormLabel>
                           <FormControl>
-                            <Textarea
+                            <Input
                               className="placeholder:text-sky-800 border-2 border-sky-900"
                               {...field}
                             />
@@ -268,38 +166,128 @@ export default function EditaGrupoForm({
                         </FormItem>
                       )}
                     />
-                    <div className="text-sky-900">
-                      <TabelaSubGrupos
-                        data={subGruposP}
-                        setSubGruposP={setSubGruposP}
-                      />
-                    </div>
-                    <div className="text-sm font-semibold flex justify-end mt-7 text-sky-900">
-                      <SheetFooter className="text-sm font-semibold flex justify-end mt-7">
-                        <Button
-                          variant="outline"
-                          className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
-                          type="submit"
-                        >
-                          Salvar
-                        </Button>
-                        <Button
-                          variant="outline"
-                          className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2 ml-3"
-                          type="button"
-                          onClick={handleClose}
-                        >
-                          Cancelar
-                        </Button>
-                      </SheetFooter>
-                    </div>
-                  </form>
-                </Form>
-              </div>
-            )}
-          </SheetContent>
-        </Sheet>
-      )}
+                  </div>
+                  <div className="col-span-5">
+                    <FormField
+                      control={form.control}
+                      name="tipo"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sky-900">Tipo</FormLabel>
+                          <FormControl>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full text-sm flex items-center justify-between hover:bg-slate-200 text-sky-900 border-sky-900"
+                                >
+                                  {field.value === tipoGrupo.Debito
+                                    ? "Débito"
+                                    : field.value === tipoGrupo.Credito
+                                    ? "Crédito"
+                                    : "Movimentação"}
+                                  <FaChevronDown />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange(tipoGrupo.Debito)}
+                                >
+                                  Débito
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange(tipoGrupo.Credito)}
+                                >
+                                  Crédito
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="hover:shadow-xl hover:bg-slate-200 text-sm"
+                                  onClick={() => field.onChange(tipoGrupo.Movimento)}
+                                >
+                                  Movimentação
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <FormField
+                      control={form.control}
+                      name="ativo"
+                      render={({ field }) => (
+                        <FormItem className="col-span-1 flex flex-col items-center mt-5">
+                          <FormLabel className="text-sky-900">Ativo</FormLabel>
+                          <FormControl>
+                            <Checkbox
+                              id="ativo"
+                              className="border-2 border-sky-900"
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                <FormField
+                  control={form.control}
+                  name="descricao"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sky-900">
+                        Descrição
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          className="placeholder:text-sky-800 border-2 border-sky-900"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="text-sm font-semibold flex justify-end mt-7 text-sky-900">
+                  <SheetFooter className="text-sm mb-8 font-semibold flex justify-end mt-7">
+                    <Button
+                      variant="outline"
+                      className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
+                      type="submit"
+                      onClick={() => setIsSubmit(true)}
+                    >
+                      Salvar
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2 ml-3"
+                      onClick={handleClose}
+                    >
+                      Cancelar
+                    </Button>
+                  </SheetFooter>
+                </div>
+              </form>
+            </Form>
+            <div className="text-sky-900">
+              <TabelaSubGrupos
+                origem="Edicao"
+                grupoId={pIndice}
+                dados={subGruposP}
+                setSubGruposP={setSubGruposP}
+              />
+            </div>
+          </div>
+        )}
+      </SheetContent>
+    </Sheet>
     </>
   );
 }

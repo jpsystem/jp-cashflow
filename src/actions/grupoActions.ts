@@ -5,8 +5,6 @@ import prisma from "@/lib/db"
 import {Grupo, SubGrupo } from "@prisma/client"
 
 
-
-
 // Função para listar Grupos
 export async function ListaGrupos() {
   let retorno = {
@@ -32,9 +30,34 @@ export async function ListaGrupos() {
   return retorno
 }
 
+//Função para retornar todos os subGrupos
+//conforme id do grupo especificado
+export async function RetSubGrupos(GrupoID: number | undefined){
+  const dados: tySubGrupo[]=[];
+  try {
+    const subgrupos = await prisma.subGrupo.findMany({
+      where: { grupoId: GrupoID},
+    })
+    if(subgrupos.length > 0){
+      subgrupos.map(item => {
+        dados.push({ 
+          id: item.id,
+          nome: item.nome,
+          descricao: item.descricao || undefined,
+          ativo: item.ativo,
+          grupoId: item.grupoId,
+        })
+      })
+    }
+  }catch(err) {
+    console.error('Ocorreu um erro na leitura dos dados! ', err)
+  }
+  return dados;
+}
+
 //Está função faz uma consulta no banco de dados
 //e retornar todos os grupos com a quantidade de subGrupos associado
-export async function retGrupos(userID: number | undefined) {
+export async function RetGrupos(userID: number | undefined) {
   //console.log("userId: ", userID);
   let grupos: tyGrupoLista[]
   try {
@@ -43,6 +66,12 @@ export async function retGrupos(userID: number | undefined) {
         Grupo.id as id,
         Grupo.nome as nome,
         Grupo.descricao as descricao,
+        Grupo.tipo as tipo,
+        CASE Grupo.tipo
+		      WHEN 'D' THEN 'Débito'
+          WHEN 'C' THEN 'Crédito'
+          ELSE 'Movimento'
+	      END as tipoDesc,
         Grupo.ativo as ativo,
         Grupo.userId as userId,
         Count(SubGrupo.id) as qtdSubGrupos
@@ -56,8 +85,12 @@ export async function retGrupos(userID: number | undefined) {
         Grupo.id,
         Grupo.nome, 
         Grupo.descricao,
+        Grupo.tipo,
         Grupo.ativo,
-        Grupo.userId 
+        Grupo.userId
+      Order By
+	      Grupo.tipo,
+        Grupo.nome 
     `
     return grupos
   } catch (err: any) {
@@ -66,7 +99,7 @@ export async function retGrupos(userID: number | undefined) {
 }
 
 //Essa função retorna os dados do Grupo para Edição
-export async function retGrupo(grupoId: number): Promise<{ grupo?: Grupo | null; 
+export async function RetGrupo(grupoId: number): Promise<{ grupo?: Grupo | null; 
                                 subGrupos: SubGrupo[] }> {
   try {
     const grupo = await prisma.grupo.findUnique({ 
@@ -77,39 +110,53 @@ export async function retGrupo(grupoId: number): Promise<{ grupo?: Grupo | null;
   } catch (error){
     console.error('Error fetching grupo:', error)
     return { grupo: undefined, subGrupos: [] };
-    //throw error;
   }
   
 }
 
-export async function CreateSubGrupo(data: tySubGrupo) {
-  let retorno = {
-    status: 0,
-    menssage: "Vazio",
-  }
+//Essa função altera os dados do Grupo
+export async function AlteraGrupo(data: tyGrupo){
+  let result:tyResult = <tyResult>{};
   try {
-    const subGrupo = await prisma.subGrupo.create({
+    const grupo = await prisma.grupo.update({
+      where: {id: data.id},
       data: {
         nome: data.nome.toUpperCase(),
         descricao: data.descricao,
-        grupoId: data.grupoId,
+        tipo: data.tipo,
+        ativo: data.ativo,
       },
     })
-    retorno.status = 1
-    retorno.menssage = `Cadastro do subGrupo ${subGrupo.id}: ${subGrupo.nome} efetuado com sucesso`
-  } catch (err: any) {
-    if (err.code === "P2002") {
-      retorno.status = 0
-      retorno.menssage = "O nome desse subGrupo já está cadastrado!"
-    } else {
-      retorno.status = 0
-      retorno.menssage = err.menssage
-    }
+    result.status = "Sucesso"
+    result.dados = grupo
+    return result    
+  } catch (err) {
+    const erro = <tyErro>err;
+    result.status = "Erro"
+    result.menssagem = erro.code
+    return result
   }
-  return retorno
 }
 
-export async function novoGrupoComSubgrupos(
+//Função para excluir um registro da tabela grupos e dos subgrupos associados
+export async function DeleteGrupo(index: number) {
+  await prisma.$transaction(async (trx) => {
+    try {      
+      const subGrupos = await prisma.subGrupo.deleteMany({
+        where: { grupoId: index },
+      })
+      const grupo = await prisma.grupo.delete({
+        where: { id: index },
+      });
+      return Promise.resolve(grupo);
+    } catch (error) {
+      return Promise.resolve(error);
+    }
+  })
+}
+
+//Essa função inclui um novoGrupo e todos os subgrupos associados
+export async function NovoGrupoComSubgrupos(
   dadosGrupo: tyGrupo,
   dadosSubGrupos: tySubGrupo[]
 ) {
@@ -146,11 +193,36 @@ export async function novoGrupoComSubgrupos(
   }
 }
 
-export async function alteraSubGrupo(data: tySubGrupo) {
-  let retorno = {
-    status: true,
-    menssage: "Alteração efetuada",
-  }
+//Essa função altera um Grupo que já existe e todos os subgrupos associados
+export async function AlterarGrupoComSubgrupos(
+  dadosGrupo: tyGrupo,
+  dadosSubGrupos: tySubGrupo[]
+) {
+  await prisma.$transaction(async (trx) => {
+    //Altera os dados do grupo
+    await AlteraGrupo(dadosGrupo)
+    //Laço para verificar os subgrupos
+    if(dadosSubGrupos.length > 0){
+      dadosSubGrupos.map(async (subGrupo) => {
+        if(subGrupo.acao = "A"){
+          await AlteraSubGrupo(subGrupo)
+        }
+        if(subGrupo.acao = "C"){
+          await CreateSubGrupo(subGrupo)
+        }
+        if(subGrupo.acao = "D"){
+          await DeleteSubGrupo(subGrupo.id || 0)
+        }
+      });
+    }
+  })
+
+}
+
+
+//Essa função altera os dados do subGrupo
+export async function AlteraSubGrupo(data: tySubGrupo) {
+  let result:tyResult = <tyResult>{};
   try {
     const subGrupo = await prisma.subGrupo.update({
       where: {id: data.id},
@@ -160,48 +232,58 @@ export async function alteraSubGrupo(data: tySubGrupo) {
         ativo: data.ativo,
       },
     })
+    result.status = "Sucesso"
+    result.dados = subGrupo
+    return result     
   } catch (err) {
-    retorno.status = false;
-    retorno.menssage = "O correu um error! ";
+    const erro = <tyErro>err;
+    result.status = "Erro"
+    result.menssagem = erro.code
+    return result
   }
-  return retorno;
 }
 
-export async function alteraGrupo(data: tyGrupo){
-  let retorno = {
-    status: true,
-    menssage: "Alteração efetuada",
-  }
+//Essa função inclui um novo subGrupo
+export async function CreateSubGrupo(data: tySubGrupo) {
+  let result:tyResult = <tyResult>{};
   try {
-    const grupo = await prisma.grupo.update({
-      where: {id: data.id},
+    const subGrupo = await prisma.subGrupo.create({
       data: {
-        nome: data.nome,
+        nome: data.nome.toUpperCase(),
         descricao: data.descricao,
-        tipo: data.tipo,
-        ativo: data.ativo,
+        grupoId: data.grupoId,
       },
-    })
-  } catch (err) {
-    retorno.status = false;
-    retorno.menssage = "O correu um error! ";
+    });
+
+    result.status = "Sucesso"
+    result.dados = subGrupo
+    return result      
+  } catch (err: any) {
+    const erro = <tyErro>err;
+    result.status = "Erro"
+    result.menssagem = erro.code
+    return result 
   }
-  return retorno;
 }
 
-//Função para excluir um registro da tabela grupos e dos subgrupos
-export async function DeleteGrupo(index: number) {
-  await prisma.$transaction(async (trx) => {
+
+//Função para excluir um registro do subgrupo
+export async function DeleteSubGrupo(subGrupoId: number) {
+    let result:tyResult = <tyResult>{};
     try {      
-      const subGrupos = await prisma.subGrupo.deleteMany({
-        where: { grupoId: index },
-      })
-      const grupo = await prisma.grupo.delete({
-        where: { id: index },
+      const grupo = await prisma.subGrupo.delete({
+        where: { id: subGrupoId },
       });
-      return Promise.resolve(grupo);
-    } catch (error) {
-      return Promise.resolve(error);
+      result.status = "Sucesso"
+      result.dados = grupo
+      return result  
+
+    } catch (err: any) {
+      const erro = <tyErro>err;
+      result.status = "Erro"
+      result.menssagem = erro.code
+      return result 
+
     }
-  })
 }
+

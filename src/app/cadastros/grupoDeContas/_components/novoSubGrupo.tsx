@@ -8,40 +8,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { tySubGrupo } from "@/types/types";
+import { tyResult, tySubGrupo } from "@/types/types";
 import { Checkbox } from "@/components/ui/checkbox";
-
-// Componente SHEET shadcn/ui
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-
-// Componente FORM shadcn/ui
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle} from "@/components/ui/sheet";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import { WarningBox,tipoEnu } from "@/app/_components/warningBox";
 
 interface Props {
-  onAddItem: (item: tySubGrupo) => Promise<boolean>;
+  onAddItem: (item: tySubGrupo) => Promise<tyResult>;
 }
 
 const schema = z.object({
-  nome: z
-    .string()
-    .min(3, "O nome da subconta deve ter pelo menos 3 caracteres."),
-  descricao: z
-    .string()
-    .min(10, "A descrição deve ter pelo menos 10 caracteres."),
+  nome: z.string().min(3, "O nome da subconta deve ter pelo menos 3 caracteres."),
+  descricao: z.string().min(10, "A descrição deve ter pelo menos 10 caracteres."),
   ativo: z.boolean(),
 });
 
@@ -52,6 +31,18 @@ type FormProps = z.infer<typeof schema>;
 export default function NovoSubGrupo({ onAddItem }: Props) {
   // Variável de estado isOpen
   const [isOpen, setIsOpen] = useState(false);
+
+    //Variaveis para a caixa de avisos (WarningBox)
+    const [showAlerta, setShowAlerta] = useState(false);
+    const [tipo, setTipo] = useState<tipoEnu>(tipoEnu.Alerta);
+    const [mensagem, setMensagem] = useState("Menssagem default");
+  
+    //Função para fechar o formulário de edição dos dados
+    const handleFechar=()=>{
+      //setSubGruposP([]);
+      //setIsEdita(false);
+      setShowAlerta(false);
+    };
 
   // Função para fechar a SHEET
   const handleClose = () => {
@@ -82,14 +73,30 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
       ativo: values.ativo,
     };
     const retorno = await onAddItem(newItem);
-    if (retorno) {
+
+    if (retorno.status === "Sucesso") {
+      setTipo(tipoEnu.Sucesso);
+      setMensagem(retorno.menssagem || "Incluido com sucesso!");
+      setShowAlerta(true);
       setIsOpen(false);
     } else {
-      alert("Esse subtipo já existe!");
+      setTipo(tipoEnu.Erro);
+      setMensagem(retorno.menssagem || "Esse subtipo já existe!");
+      setShowAlerta(true);
+      //setIsOpen(false);
     }
   }
 
   return (
+    <>
+    { showAlerta && (
+        <WarningBox
+          tipo={tipo}
+          mensagem={mensagem}
+          onCancel={handleFechar}
+        />
+      )
+    }  
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <Button
         variant="outline"
@@ -208,5 +215,6 @@ export default function NovoSubGrupo({ onAddItem }: Props) {
         </div>
       </SheetContent>
     </Sheet>
+    </>
   );
 }
