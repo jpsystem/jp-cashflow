@@ -10,6 +10,8 @@ import { DeleteFontes, ListaFontes } from "@/actions/fonteActions";
 import { useSession } from 'next-auth/react';
 import ConfirmationBox from "@/app/_components/confirmationBox";
 import { useState } from "react";
+import EditaFonteForm from "./editaFonte";
+import { tyFonte } from "@/types/types";
 
 interface Props {
   userIdSession: number | undefined;
@@ -21,7 +23,10 @@ export  default function  TabelaFontes({userIdSession}: Props) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   //Variaveis para setar o indice selecionado
   const [indice, setIndice] = useState(0);
+  const [item, setItem]=useState<tyFonte>();
 
+    //Variaveis para ativar o forme (EditaGrupoForm)
+    const [isEdita, setIsEdita] = useState(false);
 
   //Criação e execução do HOOK useQuery
   //Carrega as fontes
@@ -59,6 +64,13 @@ export  default function  TabelaFontes({userIdSession}: Props) {
     setShowConfirmation(true)
   }
 
+  const handleEditFonte = async (index: number, item: tyFonte) => {
+    setIndice(index);
+    setItem(item)
+    setIsEdita(true);
+  };
+
+
   //Função para tazer a descrição do tipo dentro da tabela
   function retTipo(tipo: String){
     let retorno = "";
@@ -81,6 +93,15 @@ export  default function  TabelaFontes({userIdSession}: Props) {
       }      
       <Card className="w-full">
         <CardContent className="p-0">
+        
+        {isEdita && (
+            <EditaFonteForm
+              pIndice={indice}
+              pItem={item}
+              isEdita={isEdita}
+              setIsEdita={setIsEdita}
+            />
+          )}        
           <Table>
             <TableHeader>
               <TableRow>
@@ -102,7 +123,12 @@ export  default function  TabelaFontes({userIdSession}: Props) {
                   <TableCell className="border-2 border-sky-900 text-sky-900 w-[4%] text-center">{item.ativo.toString()}</TableCell>
                   <TableCell className="border-2 border-sky-900 w-[10%]">
                   <div className="flex gap-1 justify-center text-sky-800">
-                    <Button className="h-8 w-8" size="icon" variant="ghost">
+                    <Button 
+                      onClick={() => handleEditFonte(item.id, item)}
+                      className="h-8 w-8" 
+                      size="icon" 
+                      variant="ghost"
+                    >
                       <FileEditIcon className="h-4 w-4" />
                       <span className="sr-only">Edit</span>
                     </Button>

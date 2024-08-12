@@ -82,6 +82,7 @@ export default function TabelaGrupos({userIdSession}: Props) {
       }
       <Card className="w-full rounded">
         <CardContent className="p-0">
+          
           {isEdita && (
             <EditaGrupoForm
               pIndice={indice}

@@ -12,17 +12,23 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { FaChevronDown } from "react-icons/fa";
-import { CreateFonte } from "@/actions/fonteActions";
+import { AlteraFonte, CreateFonte } from "@/actions/fonteActions";
 import { tipoFonte, tyFonte, tyResult } from "@/types/types";
 import queryClient from "@/lib/reactQuery";
 import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
-import {useSession } from "next-auth/react"
+
+interface Props {
+  pIndice: number;
+  pItem: tyFonte | undefined;
+  isEdita: boolean;
+  setIsEdita: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 // Definição do objeto ZOD de validação
 const schema = z.object({
   nome: z.string().min(2, "Campo obrigatorio, Mínimo (2) caracteres"),
   descricao: z.string().min(2, "Campo obrigatorio, Mínimo (2) caracteres"),
-  ativo: z.boolean(),
+  ativo: z.boolean().default(true),
   tipo: z.nativeEnum(tipoFonte, {
     errorMap: () => {
       return {
@@ -35,12 +41,22 @@ const schema = z.object({
 
 type FormProps = z.infer<typeof schema>;
 
-export default function NovoFonteForm() {
-  const { data: session } = useSession();
+export default function EditaFonteForm({ pIndice, pItem, isEdita, setIsEdita }: Props) {
+  //O variavel isEdita substitui isOpen e é tratada no formulario pai e serve
+  //para controle do formulario de edição doso dados (EditaFonteForm)
 
-  // Variavel de estado isOpen
-  const [isOpen, setIsOpen] = useState(false);
 
+    // Definição do formulário
+    const form = useForm<FormProps>({
+      resolver: zodResolver(schema),
+      defaultValues: {
+        nome: pItem?.nome,
+        descricao: pItem?.descricao,
+        tipo: pItem?.tipo,
+        ativo: (pItem?.ativo ? true : false),
+      },
+    });
+  
   //Variaveis para a caixa de avisos (WarningBox)
   const [showAlerta, setShowAlerta] = useState(false);
   const [tipo, setTipo] = useState<tipoEnu>(tipoEnu.Alerta);
@@ -48,58 +64,37 @@ export default function NovoFonteForm() {
 
   //Função para fechar a caixa de aviso
   const handleFechar=()=>{
-    //console.log("Exclusão cancelada!")
     setShowAlerta(false);
+    if(tipo === tipoEnu.Sucesso){
+      setIsEdita(false);
+    }
   };
 
-  // Função para fechar o DIALOG
   const handleClose = () => {
-    setIsOpen(false);
-  };
-
-  // Definição do formulário
-  const form = useForm<FormProps>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      nome: "",
-      descricao: "",
-      tipo: tipoFonte.Movimentacao,
-      ativo: true,
-    },
-  });
-
-  // Função para abrir a Sheet
-  const handleOpen = () => {
-    form.resetField("nome");
-    form.resetField("descricao");
-    form.resetField("tipo");
-    form.resetField("ativo");
-    setIsOpen(true);
+    setIsEdita(false);
   };
 
   // Função para executar no Submit
   function onSubmit(values: FormProps) {
     const novoFonte: tyFonte = {
+      id: pItem?.id,
       nome: values.nome,
       descricao: values?.descricao,
       tipo: values.tipo,
-      ativo: values.ativo,
-      userId: session?.user.id, 
-    }
-    incluirFonte(novoFonte)
-    setIsOpen(false);
+      ativo: values.ativo, 
+    };
+    altFonte(novoFonte);
   }
   
   //Função para incluir uma nova fonte
-  async function incluirFonte(dadosFonte: tyFonte){
-    
+  async function altFonte(dadosFonte: tyFonte){
     let retorno:tyResult ;
+    
     try {      
-      retorno = await CreateFonte(dadosFonte);
-      
+      retorno = await AlteraFonte(dadosFonte);
       if(retorno.status === "Sucesso"){
         setTipo(tipoEnu.Sucesso);
-        setMensagem(`A fonte foi incluida com sucesso!` );
+        setMensagem(`A fonte foi alterado com sucesso!` );
         setShowAlerta(true);   
          //Limpar o cache da consulta para atualizar os dados
          queryClient.invalidateQueries("fontes")   
@@ -108,7 +103,7 @@ export default function NovoFonteForm() {
         if(retorno.menssagem === "P2002")
           {
             setTipo(tipoEnu.Erro);
-            setMensagem("A fonte já está cadastrada!" );
+            setMensagem("Erro de relacionamento!" );
             setShowAlerta(true);
           }else{
             setTipo(tipoEnu.Erro);
@@ -134,21 +129,14 @@ export default function NovoFonteForm() {
           />
         )
       } 
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <Button
-          variant="outline"
-          className="hover:bg-slate-100 text-sky-900 border-2 border-sky-800 hover:text-sky-900 text-xl"
-          onClick={handleOpen}
-        >
-          + Fonte
-        </Button>
+      <Sheet open={isEdita} onOpenChange={setIsEdita}>
         <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[410px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
           <SheetHeader>
             <SheetTitle className="text-2xl text-sky-900">
-              Nova fonte financeira
+              Editar fonte
             </SheetTitle> 
           </SheetHeader>
-          {isOpen && (
+          {isEdita && (
             <div className="mt-4">
               <Form {...form}>
                 <form
@@ -252,12 +240,12 @@ export default function NovoFonteForm() {
                             <FormLabel>Ativo</FormLabel>
                             <FormControl>
                               {/* {...field} checked={field.value}  */}
-                              <Checkbox
-                                id="ativo"
-                                className="border-2 border-sky-900"
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
+                            <Checkbox
+                              id="ativo"
+                              className="border-2 border-sky-900"
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -270,8 +258,9 @@ export default function NovoFonteForm() {
                       variant="outline"
                       type="submit"
                       className="text-lg px-2 py-1 hover:bg-slate-200"
+                      //onClick={() => setIsSubmit(true)}
                     >
-                      Incluir
+                      Salvar
                     </Button>
                     <SheetClose asChild>
                       <Button

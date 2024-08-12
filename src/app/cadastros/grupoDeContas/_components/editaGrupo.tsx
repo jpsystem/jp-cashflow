@@ -43,7 +43,7 @@ type FormProps = z.infer<typeof schema>;
 export default function EditaGrupoForm({ pIndice, pItem, isEdita, setIsEdita }: Props) {
   //O variavel isEdita substitui isOpen e é tratada no formulario pai e serve
   //para controle do formulario de edição doso dados (EditaGrupoForm)
-  const pativo = pItem?.ativo? true: false;
+
   //Função para fechar a SHEET
   const handleClose = () => {
     setIsEdita(false);
@@ -60,10 +60,6 @@ export default function EditaGrupoForm({ pIndice, pItem, isEdita, setIsEdita }: 
     },
   });
 
-  // Variavel de estado para evitar a execução no reeload do componente
-  // isSubmit só fica true se for clicado em Incluir
-  const [isSubmit, setIsSubmit] = useState(false);
-
   //um array para manipular os dados do grupo
   //ante de enviar para o banco de dados
   const [grupoP, setGrupoP] = useState<tyGrupo | undefined>(pItem);
@@ -79,8 +75,10 @@ export default function EditaGrupoForm({ pIndice, pItem, isEdita, setIsEdita }: 
   //Função para fechar o formulário de edição dos dados
   const handleFechar=()=>{
     setSubGruposP([]);
-    setIsEdita(false);
     setShowAlerta(false);
+    if(tipo === tipoEnu.Sucesso){
+      setIsEdita(false);
+    }
   };
 
   function onSubmit(values: FormProps, e: any) {
@@ -92,10 +90,8 @@ export default function EditaGrupoForm({ pIndice, pItem, isEdita, setIsEdita }: 
       tipo: values.tipo,
       ativo: values.ativo,
     };
-    if (isSubmit) {
-      altGrupo(novoGrupo);
-      setIsEdita(false);
-    }
+    altGrupo(novoGrupo);
+
   }
 
   async function altGrupo(dadosGrupo: tyGrupo) {
@@ -261,7 +257,7 @@ export default function EditaGrupoForm({ pIndice, pItem, isEdita, setIsEdita }: 
                       variant="outline"
                       className="text-lg px-2 py-1 hover:bg-slate-200 border-sky-800 border-2"
                       type="submit"
-                      onClick={() => setIsSubmit(true)}
+                      //onClick={() => setIsSubmit(true)}
                     >
                       Salvar
                     </Button>

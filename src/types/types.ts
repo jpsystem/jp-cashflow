@@ -25,7 +25,7 @@ export type tyFonte = {
   id?:        number;
   nome:       string;
   descricao?: string;
-  tipo:       string;
+  tipo:       tipoFonte;
   ativo:      boolean;
   userId?:    number,
 }

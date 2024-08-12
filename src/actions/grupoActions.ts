@@ -5,31 +5,6 @@ import prisma from "@/lib/db"
 import {Grupo, SubGrupo } from "@prisma/client"
 
 
-// Função para listar Grupos
-export async function ListaGrupos() {
-  let retorno = {
-    status: 0,
-    menssage: "Vazio",
-    grupos: [{}],
-  }
-  try {
-    const grupos = await prisma.grupo.findMany({
-      //Todos os campos do grupo e todos os subgrupos
-      include: {
-        subGrupos: {
-          select: {
-            id: true,
-            nome: true,
-            descricao: true,
-          },
-        },
-      },
-    })
-    retorno.grupos = grupos
-  } catch (err: any) {}
-  return retorno
-}
-
 //Função para retornar todos os subGrupos
 //conforme id do grupo especificado
 export async function RetSubGrupos(GrupoID: number | undefined){

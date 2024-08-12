@@ -49,3 +49,30 @@ export async function DeleteFontes(index: number) {
   
   return Promise.resolve(fonte); //Promise.resolve(fontes);
 }
+
+//Essa função altera os dados do subGrupo
+export async function AlteraFonte(data: tyFonte) {
+  let result:tyResult = <tyResult>{};
+  try {
+    const fonte = await prisma.fonte.update({
+      where: {id: data.id},
+      data: {
+        nome: data.nome.toUpperCase(),
+        descricao: data.descricao,
+        tipo: data.tipo,
+        ativo: data.ativo,
+      },
+    })
+    result.status = "Sucesso"
+    result.dados = fonte
+    return result     
+  } catch (err) {
+    const erro = <tyErro>err;
+    result.status = "Erro"
+    result.menssagem = erro.code
+    return result
+  }
+}
+
+
+
