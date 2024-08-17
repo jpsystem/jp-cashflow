@@ -1,99 +1,79 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetFooter } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import { DialogTitle } from "@/components/ui/dialog";
+import { useAppContext } from "./contextProvider";
+import { RealBRToDouble, DoubleToRealBR } from "@/lib/formatacoes"; 
+import retorno from "@/lib/retSecaoUserID";
+import { tyResult } from "@/types/types";
+import { AtualizaOrcamento } from "@/actions/orcamentoActions";
+import queryClient from "@/lib/reactQuery";
 
 // Definição dos tipos de dados do formulário
-type FormProps = {
-  nomeDoOrcamento: string;
-  valor: string;
+type Props = {
+  indice: number;
+  isEdita: boolean;
+  setIsEdita: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+type FormProps = {
+  orcamentoId: number;
+  valor: string;
+}
 
 // Schema de validação com zod
 const schema = z.object({
-  nomeDoOrcamento: z.string().min(1, "Campo obrigatório!"),
-  valor: z.string().min(1, "Campo obrigatório!"),
+  valor: z.string().regex(/^\R?\$?\s?\d+(.\d{3})*(\,\d{0,2})?$/, 'Valor monetário inválido'),
 });
 
-const FormOrcamento = () => {
-  const [isOpen, setIsOpen] = useState(false);
+export default function FormOrcamento ({indice, isEdita, setIsEdita}: Props) {
+
+  const {dados, periodoId } = useAppContext();
+
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
-      nomeDoOrcamento: "",
-      valor: "",
+      valor: DoubleToRealBR(dados[indice].valor || 0),
     },
   });
 
-  const handleOpen = () => setIsOpen(true);
   const handleClose = () => {
-    setIsOpen(false);
+    setIsEdita(false);
     form.reset();
   };
 
-  const onSubmit = (values: FormProps) => {
-    console.log("VALORES", values);
+  const onSubmit = async (values: FormProps) => {
+    let retorno:tyResult;
+    try {
+      retorno = await AtualizaOrcamento(dados[indice].orcamentoId || 0, RealBRToDouble(values.valor))
+
+    } catch (error) {
+  
+    }
+
+    console.log("Atualizado");
+    //Limpar o cache da consulta para atualizar os dados
+    queryClient.refetchQueries(["orcamentos", periodoId]);
+
     handleClose();
   };
 
   return (
     <div className="flex flex-col">
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <Sheet open={isEdita} onOpenChange={setIsEdita}>
         <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[300px] max-h-[330px] min-w-[400px] max-w-[400px] overflow-x-auto rounded-2xl bg-white p-8 text-sky-800 shadow">
-          <DialogTitle className="text-sky-900">Editar Orçamento</DialogTitle>
+          <DialogTitle className="text-sky-900 mb-412">Editar Orçamento</DialogTitle>
+          <Label className="text-sky-600 bold">Alterar o valor do orçamento do grupo {dados[indice].nomeGrupo}</Label>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-4 mt-7">
-                <FormField
-                  control={form.control}
-                  name="nomeDoOrcamento"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sky-900">
-                        Conta
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          className="placeholder:text-sky-900 w-full text-lg"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <FormField
                   control={form.control}
                   name="valor"
@@ -136,4 +116,3 @@ const FormOrcamento = () => {
   );
 };
 
-export default FormOrcamento;

@@ -1,7 +1,10 @@
 'use client'
 
-import { QueryClientProvider } from 'react-query';
+//import { QueryClientProvider  } from '@tanstack/react-query';
+//import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-const Query2ClientProvider = QueryClientProvider;
+import { QueryClientProvider  } from 'react-query';
+//import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-export default Query2ClientProvider;
+export const Query2ClientProvider = QueryClientProvider;
+//export const React2QueryDevtools = ReactQueryDevtools

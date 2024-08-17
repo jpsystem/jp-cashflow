@@ -84,7 +84,7 @@ model Periodo {
 
 model Saldo {
   id        Int      @id @default(autoincrement())
-  valor     Decimal  @default(0.00)
+  valor     Float    @db.Double @default(0.00)
   fonte     Fonte?   @relation(fields: [fonteId], references: [id])
   fonteId   Int //Chave estrangeira para tabela Fonte
   periodo   Periodo?   @relation(fields: [periodoId], references: [id])
@@ -95,7 +95,7 @@ model Saldo {
 model Lancamento {
   id            Int       @id @default(autoincrement())
   periodo       String    @db.VarChar(15)
-  valor         Decimal   @default(0.00)
+  valor         Float     @db.Double @default(0.00)
   dtLancamento  DateTime?
   operacao      String    @db.VarChar(5) @default("D") 
   subGrupo      SubGrupo? @relation(fields: [subGrupoId], references: [id])
@@ -106,7 +106,7 @@ model Lancamento {
 
 model Orcamento {
   id        Int      @id @default(autoincrement())
-  valor     Decimal  @default(0.00)
+  valor     Float    @db.Double @default(0.00)
   grupo     Grupo?   @relation(fields: [grupoId], references: [id])
   grupoId   Int //Chave estrangeira para tabela Fonte
   periodo   Periodo?   @relation(fields: [periodoId], references: [id])

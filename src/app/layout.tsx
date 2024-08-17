@@ -12,7 +12,7 @@ import ClientDrawer from "./_components/ClientDrawer"; // Importando o Client Co
 import LogoutButton from "./_components/logoutButton";
 
 //==========================================================
-import Query2ClientProvider from "@/lib/queryProvider";
+import {Query2ClientProvider} from "@/lib/queryProvider";
 import queryClient from "@/lib/reactQuery";
 //==========================================================
 

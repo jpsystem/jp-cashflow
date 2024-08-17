@@ -71,6 +71,14 @@ export type tyResult = {
   menssagem?: string,
   dados: {},
 }
+export type tyOrcamento = {
+  orcamentoId?: number,
+  valor?:       number,
+  nomeGrupo?:   string,
+  tipoGrupo?:   string,
+  grupoId?:     number,
+  periodoId?:   number,
+}
 
 export enum tipoGrupo{
   Debito = "D",

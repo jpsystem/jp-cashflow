@@ -1,71 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Pen, Replace, Trash2 } from "lucide-react";
-import BoxMesAno from "./boxMesAno";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
+import { Pen} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FileEditIcon, TrashIcon } from "@/app/_components/iconsForm";
-import {
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableCell,
-  TableBody,
-  Table,
-} from "@/components/ui/table";
+import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table";
+import { useAppContext } from "./contextProvider";
+import { useState } from "react";
+import { tyOrcamento } from "@/types/types";
+import FormOrcamento from "./OrcamentoForm";
+import { RealBRToDouble, DoubleToRealBR } from "@/lib/formatacoes"; 
 
-const TabelaOrcamento = () => {
+export default function TabelaOrcamento() {
+
+  const {dados } = useAppContext();
+  const [isEdita, setIsEdita] = useState<boolean>(false);
+  const [indice, setIndice] = useState<number>(0);
+
+  //Função para exibir o formulario de edição do subGrupo
+  const handleEditSubGrupo = async (posicao: number) => {
+    console.log("Aqui: ", posicao)
+    setIndice(posicao);
+    setIsEdita(true);
+  }
+  
   return (
     <div>
-      <div className="pb-8 flex flex-col w-full items-center">
-        <Card className="border-sky-900 border-2 w-[70%]">
-          <CardContent className="flex flex-col lg:flex-row lg:items-center lg:justify-between py-3">
-            <div className="flex flex-col">
-              <Label className="block text-sm font-medium text-sky-900 ">
-                Período
-              </Label>
-              <BoxMesAno />
-            </div>
-            <div className="flex flex-1 gap-4 justify-end">
-              <div className="flex flex-col w-[10%] max-w-xs">
-                <Button
-                  variant="outline"
-                  className="border-2 border-sky-900"
-                ></Button>
-              </div>
-              <div className="flex flex-col w-[10%] max-w-xs">
-                <Button
-                  variant="outline"
-                  className="border-2 border-sky-900"
-                ></Button>
-              </div>
-              <div className="flex flex-col w-[10%] max-w-xs">
-                <Button
-                  variant="outline"
-                  className="border-2 border-sky-900"
-                ></Button>
-              </div>
-              <div className="flex flex-col w-[10%] max-w-xs">
-                <Button
-                  variant="outline"
-                  className="border-2 border-sky-900"
-                ></Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      <div>
+
         <Table className="border-collapse border-spacing-0 w-full">
           <TableHeader>
             <TableRow>
@@ -83,30 +42,45 @@ const TabelaOrcamento = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[0.5%] text-lg">
-                1
-              </TableCell>
-              <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[0.5%] text-lg">
-                R$250,00
-              </TableCell>
-              <TableCell className="border-2 border-sky-900 text-center text-sky-900 w-[0.5%] text-lg">
-                M
-              </TableCell>
-              <TableCell className="border-2 border-sky-900 w-[0.5%]">
-                <div className="flex gap-1 justify-center text-sky-800 ">
-                  <Button variant="ghost">
-                    <Pen className="mr-1 text-xs" />
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-          </TableBody>
+            <TableBody>
+              {dados.map((item: tyOrcamento, index: number) => (
+                <TableRow key={item.orcamentoId}>
+                  <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[0.5%] text-lg">
+                    {item.nomeGrupo}
+                  </TableCell>
+                  <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[0.5%] text-lg">
+                    { DoubleToRealBR(item.valor || 0)}
+                  </TableCell>
+                  <TableCell className="border-2 border-sky-900 text-center text-sky-900 w-[0.5%] text-lg">
+                  {item.tipoGrupo}
+                  </TableCell>
+                  <TableCell className="border-2 border-sky-900 w-[0.5%]">
+                    <div className="flex gap-1 justify-center text-sky-800 ">
+                      <Button 
+                        variant="ghost"
+                        onClick={() => handleEditSubGrupo(index)}
+                      >
+                        <Pen className="mr-1 text-xs" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+        
         </Table>
-      </div>
+        {/* === Formulario para edição do orcamento === */}
+        {
+          isEdita && (
+            <FormOrcamento
+              indice={indice}
+              isEdita={isEdita}
+              setIsEdita={setIsEdita}
+            />
+          )
+        }
+      {/* =========================================== */}
     </div>
   );
 };
 
-export default TabelaOrcamento;
