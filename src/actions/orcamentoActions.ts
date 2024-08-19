@@ -103,6 +103,7 @@ export async function CriarOrcamentos(periodoID: number, usuarioId: number | und
 
 }
 
+//Essa função atualiza o valor de um orçamento especifico
 export async function AtualizaOrcamento(orcamentoId: number, valor: number){
   let result:tyResult = <tyResult>{};
 
@@ -126,6 +127,67 @@ export async function AtualizaOrcamento(orcamentoId: number, valor: number){
     return result 
   }
 
+}
+
+
+//Essa função acrecenta novos grupos para os orçamentos de um periodo
+export async function AtualizaOrcamentos(periodoID: number, usuarioId: number | undefined) {
+  // 1 Passo Retornar todos os Grupos em uma lista
+  // 2 Faça um loop para verificar se o grupo já foi cadastrodo no orcamento do periodo
+  // 3 Cadastro o Grupo no orçamento do periodo
+  let result:tyResult = <tyResult>{};
+
+  try { 
+    //Passo 1 - Retornar todos os Grupos em uma lista 
+    const grupos = await prisma.grupo.findMany({
+      where: { userId: usuarioId, ativo: true, tipo: { not: "M",}}
+    })
+    //Passo 2 loop para verificar se o grupo já foi cadastrodo no orcamento do periodo
+    const orcamentos = await Promise.all(grupos.map( async grupo =>{
+      const retOrcamento = await prisma.orcamento.findMany({
+        where: { grupoId: grupo.id, periodoId: periodoID},
+        
+      });
+      //Passo 3 se ainda não tem aadastra o Grupo no orçamento do periodo
+      if(retOrcamento.length < 1){
+        return prisma.orcamento.create({
+          data:{
+            valor: 0,
+            grupoId: grupo.id,
+            periodoId: periodoID
+          }
+        });
+      }
+    })
+  );
+    result.status = "Sucesso"
+    result.dados = grupos
+    return result   
+
+  } catch (error) {
+    const erro = <tyErro>error;
+    result.status = "Erro"
+    result.menssagem = erro.code
+    return result        
+  }
+
+}
+
+//Essa função retorna a quantidade de grupos 
+//ativos de um usuário em um periodo especifico
+//Essa função acrecenta novos grupos para os orçamentos de um periodo
+export async function gruposAtivos(periodoID: number, usuarioId: number | undefined) {
+  let retorno:number = 0;
+  try { 
+    //Passo 1 - Retornar todos os Grupos em uma lista 
+    const grupos = await prisma.grupo.findMany({
+      where: { userId: usuarioId, ativo: true, tipo: { not: "M",}}
+    })
+    retorno = grupos.length;
+  }catch(err){
+    retorno = 0
+  }
+  return retorno
 }
 
 

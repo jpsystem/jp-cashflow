@@ -1,12 +1,12 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useQuery} from 'react-query';
 import queryClient from "@/lib/reactQuery";
-import { CriarOrcamentos, RetOrcamento, VerificaPeriodo } from "@/actions/orcamentoActions";
+import { AtualizaOrcamentos, CriarOrcamentos, gruposAtivos, RetOrcamento, VerificaPeriodo } from "@/actions/orcamentoActions";
 import { tyOrcamento, tyResult } from "@/types/types";
 import { useAppContext } from "./contextProvider";
 import TabelaOrcamento from "./tabelaOrcamento";
@@ -26,6 +26,21 @@ function obterMesAno() {
 
 export default function PainelControle (){
   const { usuarioId, periodoId, setPeriodoId, dados, setDados} = useAppContext();
+  const [qtdGrupos, setQtdGrupos] = useState<number>(0)
+
+  useEffect(()=>{
+    const fetchData = async () =>{
+      try {
+        const retorno = await retQtdGrupos();
+        setQtdGrupos(retorno);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+    }
+    fetchData();
+    console.log("Quantidade: ", qtdGrupos)
+    console.log("Dados: ", dados.length)
+  },[dados])
 
   //Carrega os Orcamentos
   const { data, isLoading, refetch } = useQuery( ["orcamentos", periodoId], async () => {
@@ -35,6 +50,10 @@ export default function PainelControle (){
     return response;
   })
 
+  const retQtdGrupos = async () =>{
+    const resultado:number = await gruposAtivos(periodoId, usuarioId);
+    return resultado
+  }
 
   const onChange = async (value: string) =>{
     const resultado = await VerificaPeriodo(usuarioId, value);
@@ -57,6 +76,19 @@ export default function PainelControle (){
       
     }
   }
+
+  const atualizarOrcamentos = async () =>{
+    let retorno:tyResult ;
+    try {
+      retorno = await AtualizaOrcamentos(periodoId, usuarioId);
+
+       //Limpar o cache da consulta para atualizar os dados
+       queryClient.refetchQueries(["orcamentos", periodoId]);   
+    } catch (error) {
+      
+    }
+  }
+
 
   return(
     <div className="pb-8 flex flex-col w-full items-center">
@@ -84,15 +116,16 @@ export default function PainelControle (){
           <div className="flex flex-1 gap-4 justify-end">
             <div className="flex flex-col w-[30%] max-w-xs">
               <Button
-                variant="outline" disabled={!(data?.length === 0 && periodoId > 0)}
+                variant="outline" disabled={!(dados?.length === 0 && periodoId > 0)}
                 className="border-2 border-sky-900 text-sm"
                 onClick={incluirOrcamentos}
               >Criar Orçamentos</Button>
             </div>
             <div className="flex flex-col w-[30%] max-w-xs">
               <Button
-                variant="outline" disabled={!(data?.length !== 0 && periodoId > 0)}
+                variant="outline" disabled={!(dados.length > 0 && qtdGrupos > dados.length)}
                 className="border-2 border-sky-900 text-sm"
+                onClick={atualizarOrcamentos}
               >Atualizar Orçamentos</Button>
             </div>
           </div>

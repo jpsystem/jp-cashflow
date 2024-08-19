@@ -113,17 +113,17 @@ export default function TabelaGrupos({userIdSession}: Props) {
             </TableHeader>
             <TableBody>
               {data?.map((item: any) => (
-                <TableRow className ="hover:bg-slate-200" key={item.id}>
-                  <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[13%]">
+            <TableRow className ={`hover:bg-slate-200 bold ${item.ativo ?  "text-sky-900" : "text-red-900 bg-red-100"}`}  key={item.id}>
+                  <TableCell className="border-2 border-sky-900 text-center w-[13%]">
                     {item.nome}
                   </TableCell>
-                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[64%] text-center">
+                  <TableCell className="border-2 border-sky-900 w-[64%] text-center">
                     {item.descricao}
                   </TableCell>
-                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[64%] text-center">
+                  <TableCell className="border-2 border-sky-900 w-[64%] text-center">
                     {item.tipoDesc}
                   </TableCell>
-                  <TableCell className="border-2 border-sky-900 text-center text-sky-900 w-[1%]">
+                  <TableCell className="border-2 border-sky-900 text-center w-[1%]">
                     {item?.qtdSubGrupos.toString()}
                   </TableCell>
                   <TableCell className="border-2 border-sky-900 w-[10%]">
