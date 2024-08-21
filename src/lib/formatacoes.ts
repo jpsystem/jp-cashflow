@@ -11,3 +11,12 @@ export function DoubleToRealBR(value: number): string {
     currency: 'BRL'
   }).format(value);
 }
+
+export function retPeriodoAtual(): string{
+  const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",];
+  const dataAtual = new Date();
+  const mes = dataAtual.getMonth();
+  const ano = dataAtual.getFullYear();
+  const mesAno = `${meses[mes]}/${ano}`;
+  return mesAno;
+}

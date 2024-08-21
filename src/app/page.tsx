@@ -6,7 +6,7 @@ import LoginForm from "./_components/loginForm"
 export default async function Page() {
   const session = await getServerSession(authOptions)
   if (session) {
-    redirect("/home")
+    redirect("/dashboard")
   }
 
   return (

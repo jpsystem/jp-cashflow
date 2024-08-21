@@ -57,6 +57,6 @@ export default function BarChart({ receitas }: BarChartProps) {
   };
 
   return (
-    <Bar data={data} options={options} className="flex max-h-96 text-sky-800" />
+    <Bar data={data} options={options} className="flex max-h-96  min-w-[100%] text-sky-800" />
   );
 }

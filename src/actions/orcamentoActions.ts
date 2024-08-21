@@ -64,7 +64,7 @@ export async function RetOrcamento(periodoId: number | undefined) {
         G.ativo = true and G.tipo != "M"
       Order By
 	      tipoGrupo,
-        nomeGrupo;  
+        nomeGrupo  
     `
     return  orcamentos
   } catch (error) {

@@ -24,7 +24,7 @@ export default function LoginForm() {
   const handleSubmit = form.handleSubmit((data) => {
     signIn("credentials", {
       ...data,
-      callbackUrl: "/home",
+      callbackUrl: "/dashboard",
     });
   });
 

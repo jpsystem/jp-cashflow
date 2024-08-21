@@ -9,12 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import { DialogTitle } from "@/components/ui/dialog";
-import { useAppContext } from "./contextProvider";
+import { useOrcamentoContext } from "./contextProvider";
 import { RealBRToDouble, DoubleToRealBR } from "@/lib/formatacoes"; 
 import retorno from "@/lib/retSecaoUserID";
 import { tyResult } from "@/types/types";
 import { AtualizaOrcamento } from "@/actions/orcamentoActions";
 import queryClient from "@/lib/reactQuery";
+import { useGlobalContext } from "@/app/contextGlobal";
 
 // Definição dos tipos de dados do formulário
 type Props = {
@@ -35,7 +36,9 @@ const schema = z.object({
 
 export default function FormOrcamento ({indice, isEdita, setIsEdita}: Props) {
 
-  const {dados, periodoId } = useAppContext();
+  const {dados } = useOrcamentoContext();
+  const {periodoId } = useGlobalContext();
+
 
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),

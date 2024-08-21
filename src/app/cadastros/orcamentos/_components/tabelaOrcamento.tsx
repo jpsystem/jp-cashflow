@@ -3,7 +3,7 @@
 import { Pen} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table";
-import { useAppContext } from "./contextProvider";
+import { useOrcamentoContext } from "./contextProvider";
 import { useState } from "react";
 import { tyOrcamento } from "@/types/types";
 import FormOrcamento from "./OrcamentoForm";
@@ -11,7 +11,7 @@ import { RealBRToDouble, DoubleToRealBR } from "@/lib/formatacoes";
 
 export default function TabelaOrcamento() {
 
-  const {dados } = useAppContext();
+  const {dados } = useOrcamentoContext();
   const [isEdita, setIsEdita] = useState<boolean>(false);
   const [indice, setIndice] = useState<number>(0);
 
