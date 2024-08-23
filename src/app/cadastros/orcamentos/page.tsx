@@ -10,7 +10,7 @@ export default async function Orcamento() {
 
   return (
     <AppProvider userId={session?.user.id}>
-      <div className="flex flex-col min-h-[70vh] items-start px-4 pt-0 pb-4 md:justify-center">
+      <div className="flex flex-col min-h-[70vh] w-[90%] max-w-[1400px] min-w-[500px] items-start px-4 pt-0 pb-4">
         <div className="flex flex-col w-full gap-4">
           <h1 className="text-sky-900 text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center">
             Orçamento

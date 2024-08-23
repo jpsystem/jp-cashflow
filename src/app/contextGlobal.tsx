@@ -27,7 +27,9 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({children, userId}
 
   const [usuarioId, setUsuarioId] = useState<number>(userId||0);
   const [periodoId, setPeriodoId] = useState<number>(0);
-  const [periodo, setPeriodo ] = useState<string>("");
+  const [periodo, setPeriodo ] = useState<string>(retPeriodoAtual());
+
+
 
   return (
     <GlobalContext.Provider value={{ usuarioId, setUsuarioId, periodoId, setPeriodoId, periodo, setPeriodo }}>

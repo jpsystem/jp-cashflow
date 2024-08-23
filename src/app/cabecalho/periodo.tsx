@@ -2,10 +2,12 @@
 
 import { useGlobalContext } from "../contextGlobal"
 import { VerificaPeriodo } from "@/actions/orcamentoActions";
+import { retPeriodoAtual } from '@/lib/formatacoes';
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import queryClient from "@/lib/reactQuery";
-import {useSession } from "next-auth/react"
+import { useEffect } from "react";
+//import queryClient from "@/lib/reactQuery";
+//import {useSession } from "next-auth/react"
 
 const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",];
 
@@ -21,10 +23,25 @@ function obterMesAno() {
 };
 
 export default function Periodo() {
+  
 
-  const { data: session } = useSession();
+  //const { data: session } = useSession();
 
-  const { usuarioId, setPeriodo, periodoId, setPeriodoId} = useGlobalContext();
+  const { usuarioId, periodo, setPeriodo, periodoId, setPeriodoId} = useGlobalContext();
+
+  console.log("carregou! ")
+
+  useEffect(()=>{
+      const fetchData = async () =>{
+        if(periodoId < 1){
+          const atualPeriodo = retPeriodoAtual();
+          const resultado = await VerificaPeriodo(usuarioId, atualPeriodo);
+          setPeriodo(retPeriodoAtual())
+          setPeriodoId(resultado.regId)
+        }
+      }
+      fetchData();
+  })
   
   const onChange = async (value: string) =>{
     const resultado = await VerificaPeriodo(usuarioId, value);
@@ -35,6 +52,8 @@ export default function Periodo() {
     return true
   }
 
+
+
   return(
     <div className="flex flex-row justify-center align-middle">
       <div className="flex mr-2 align-middle">
@@ -43,7 +62,7 @@ export default function Periodo() {
         </Label>
       </div>
       <div className="flex ">
-        <Select defaultValue={""} onValueChange={onChange}>
+        <Select defaultValue={periodo} onValueChange={onChange}>
           <SelectTrigger className="w-[250px] h-[40px] text-xl">
             <SelectValue placeholder="Selecione o periodo" />
           </SelectTrigger>

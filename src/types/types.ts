@@ -91,3 +91,19 @@ export enum tipoFonte{
   Credito = "C",
   Movimentacao = "M",
 }
+
+export type tyLancamento = {
+  lancamentoId?: number,
+  periodoId?: number,
+  periodo?: string,
+  valor?: number,
+  dtLancamento?: Date,
+  descricao?: string,
+  operacao?: string,
+  grupoId?: number,
+  grupo?: string,
+  subGrupoId?: number,
+  subGrupo?: string,
+  fonteId?: number,
+  fonte?: string,
+}
