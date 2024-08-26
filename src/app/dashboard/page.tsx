@@ -26,7 +26,6 @@ const receitas = [
   { conta: "Outras Receitas", valor: 200.0 },
 ];
 
-
 const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",];
 
 function obterMesAno() {
@@ -40,14 +39,9 @@ function obterMesAno() {
   return mesAno;
 };
 
-
-
-
 export default function Page() {
   const { data: session } = useSession();
   const router = useRouter();
-
-
 
   //Coloca o id di usuário no contexto
   const { usuarioId, periodoId, setPeriodoId} = useGlobalContext();
@@ -67,14 +61,11 @@ export default function Page() {
   
 
   const onChange = async (value: string) =>{
-    console.log("Value", value);
     const resultado = await VerificaPeriodo(usuarioId, value);
     if(resultado.status === "Sucesso"){
-      console.log("regId: ", resultado.regId);
       setPeriodoId(resultado.regId);
       // //Limpar o cache da consulta para atualizar os dados
       // queryClient.refetchQueries(["orcamentos", periodoIdG]);
-      console.log("Periodo", periodoId);
     }
 
     return true

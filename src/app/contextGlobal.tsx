@@ -1,6 +1,5 @@
 "use client";
 
-import { VerificaPeriodo } from '@/actions/orcamentoActions';
 import { retPeriodoAtual } from '@/lib/formatacoes';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 

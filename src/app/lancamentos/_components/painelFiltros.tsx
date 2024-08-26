@@ -16,10 +16,6 @@ import ComboSubGrupos from "./querys/selectSubGrupos";
 import ComboFontes from "./querys/selectFontes";
 
 
-
-
-
-
 export default function PainelFiltros (){ 
   
   const {dados, setDados} = useLancamentoContext();
@@ -55,13 +51,13 @@ export default function PainelFiltros (){
               <Label className="block text-sm font-medium text-sky-900">
                 Conta
               </Label>
-              <ComboGrupos/>
+              <ComboGrupos pai="Filtros"/>
             </div>
             <div>
               <Label className="block text-sm font-medium text-sky-900">
                 Sub-Conta
               </Label>
-              <ComboSubGrupos/>
+              <ComboSubGrupos pai="Filtros"/>
             </div>
             <link
               rel="stylesheet"
@@ -92,7 +88,7 @@ export default function PainelFiltros (){
               <Label className="block text-sm font-medium text-sky-900">
                 Fonte
               </Label>
-              <ComboFontes/>
+              <ComboFontes pai="Filtros"/>
             </div>
           </div>
         </CardContent>

@@ -39,7 +39,6 @@ export async function RetLancamentos(periodoId: number | undefined) {
         dtLancamento,
         lancamentoId  
     `
-    console.log(lancamentos);
     return  lancamentos
   } catch (error) {
     return lancamentos = [];

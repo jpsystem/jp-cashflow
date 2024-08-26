@@ -33,7 +33,6 @@ export async function RetSubGrupos(GrupoID: number | undefined){
 //Está função faz uma consulta no banco de dados
 //e retornar todos os grupos com a quantidade de subGrupos associado
 export async function RetGrupos(userID: number | undefined) {
-  //console.log("userId: ", userID);
   let grupos: tyGrupoLista[]
   try {
     grupos = await prisma.$queryRaw`

@@ -11,33 +11,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { DialogTitle } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { FaChevronDown } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ComboGrupos from "./querys/selectGrupos";
+import ComboSubGrupos from "./querys/selectSubGrupos";
+import ComboFontes from "./querys/selectFontes";
+import { Label } from "@/components/ui/label";
 
 // Definição dos tipos de dados do formulário
 type FormProps = {
@@ -55,10 +39,6 @@ const schema = z.object({
   valor: z.string().min(1, "Campo obrigatório!"),
   descricao: z.string().min(1, "Campo obrigatório!"),
   dtLancamento: z.date(),
-  fonte: z.string().min(1, "Campo obrigatório!"),
-  destino: z.string().min(1, "Campo obrigatório!"),
-  conta: z.string().min(1, "Campo obrigatório!"),
-  subConta: z.string().min(1, "Campo obrigatório!"),
 });
 
 export default function NovoLancamentosForm() {
@@ -69,10 +49,6 @@ export default function NovoLancamentosForm() {
       valor: "",
       descricao: "",
       dtLancamento: new Date(),
-      fonte: "",
-      destino: "",
-      conta: "",
-      subConta: "",
     },
   });
 
@@ -106,100 +82,23 @@ export default function NovoLancamentosForm() {
         </SheetTrigger>
         <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[500px] max-h-[500px] min-w-[800px] max-w-[800px] overflow-x-auto rounded-2xl bg-white p-8 text-sky-800 shadow">
           <DialogTitle className="text-sky-900">Novo Lançamento</DialogTitle>
+          {/* CONTA E SUBCONTA */}
+          <div className="flex gap-2 mb-2" >
+            <div className="flex-1">
+              <Label className="block text-sm font-medium text-sky-900">
+                  Conta
+              </Label>
+              <ComboGrupos pai="Form"/>
+            </div>
+            <div className="flex-1">
+              <Label className="block text-sm font-medium text-sky-900">
+                  Sub-Conta
+              </Label>
+              <ComboSubGrupos pai="Form"/>
+            </div>
+          </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="flex gap-2 mt-7">
-                <FormField
-                  control={form.control}
-                  name="conta"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="text-sky-900">Conta</FormLabel>
-                      <FormControl>
-                        <div className="flex flex-col space-y-2">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
-                              >
-                                {field.value || "Selecione a Conta"}
-                                <FaChevronDown className="ml-2" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-white text-sm border-2 border-sky-800 text-sky-800 ">
-                              <DropdownMenuItem
-                                className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                onClick={() => field.onChange("Conta1")}
-                              >
-                                Conta 1
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                onClick={() => field.onChange("Conta2")}
-                              >
-                                Conta 2
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                                onClick={() => field.onChange("Conta3")}
-                              >
-                                Conta 3
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="subConta"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="text-sky-900">Sub-Conta</FormLabel>
-                      <FormControl>
-                        <div className="flex flex-col space-y-2">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
-                              >
-                                {field.value || "Selecione a Sub-Conta"}
-                                <FaChevronDown className="ml-2" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
-                              <DropdownMenuItem
-                                className="hover:shadow-xl hover:bg-slate-400 text-sm"
-                                onClick={() => field.onChange("SubConta1")}
-                              >
-                                Sub-Conta 1
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="hover:shadow-xl hover:bg-slate-400 text-sm"
-                                onClick={() => field.onChange("SubConta2")}
-                              >
-                                Sub-Conta 2
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="hover:shadow-xl hover:bg-slate-400 text-sm"
-                                onClick={() => field.onChange("SubConta3")}
-                              >
-                                Sub-Conta 3
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
               <div>
                 <FormField
                   control={form.control}
@@ -273,93 +172,20 @@ export default function NovoLancamentosForm() {
                   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
                 ></link>
               </div>
-              <div className="flex gap-2 mt-4">
-                <FormField
-                  control={form.control}
-                  name="fonte"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="text-sky-900">Fonte</FormLabel>
-                      <FormControl>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
-                            >
-                              {field.value || "Selecione a Fonte"}
-                              <FaChevronDown className="ml-2" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
-                            <DropdownMenuItem
-                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                              onClick={() => field.onChange("Fonte1")}
-                            >
-                              Fonte 1
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                              onClick={() => field.onChange("Fonte2")}
-                            >
-                              Fonte 2
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                              onClick={() => field.onChange("Fonte3")}
-                            >
-                              Fonte 3
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="destino"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="text-sky-900">Destino</FormLabel>
-                      <FormControl>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className="w-full h-9 text-lg px-2 py-1 flex items-center justify-between hover:bg-slate-200"
-                            >
-                              {field.value || "Selecione o Destino"}
-                              <FaChevronDown className="ml-2" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="bg-white text-sm border-2 border-sky-900 text-sky-800">
-                            <DropdownMenuItem
-                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                              onClick={() => field.onChange("Destino1")}
-                            >
-                              Destino 1
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                              onClick={() => field.onChange("Destino2")}
-                            >
-                              Destino 2
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="hover:shadow-xl hover:bg-slate-200 text-sm"
-                              onClick={() => field.onChange("Destino3")}
-                            >
-                              Destino 3
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* FONTE E DESTINO */}
+              <div className="flex gap-2 mt-2" >
+                <div className="flex-1">
+                  <Label className="block text-sm font-medium text-sky-900">
+                      Fonte
+                  </Label>
+                  <ComboFontes pai="FormO"/>
+                </div>
+                <div className="flex-1">
+                  <Label className="block text-sm font-medium text-sky-900">
+                      Destino
+                  </Label>
+                  <ComboFontes pai="FormD"/>
+                </div>
               </div>
               <SheetFooter className="mt-7">
                 <Button
@@ -380,6 +206,7 @@ export default function NovoLancamentosForm() {
               </SheetFooter>
             </form>
           </Form>
+
         </SheetContent>
       </Sheet>
     </div>

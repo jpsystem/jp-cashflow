@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { auth as authOptions } from "@/lib/auth-config";
 import AuthProvider from "@/components/providers/auth-provider";
-import Modal from "@/components/ui/jp/modal/modal";
-import ActivityIcon from "./_components/ActivityIcon";
-import UserCircleIcon from "./_components/UserCircleIcon";
 import ClientDrawer from "./_components/ClientDrawer"; // Importando o Client Component
-import LogoutButton from "./_components/logoutButton";
 
 //==========================================================
 import {Query2ClientProvider} from "@/lib/queryProvider";

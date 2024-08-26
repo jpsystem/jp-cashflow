@@ -29,8 +29,6 @@ export default function Periodo() {
 
   const { usuarioId, periodo, setPeriodo, periodoId, setPeriodoId} = useGlobalContext();
 
-  console.log("carregou! ")
-
   useEffect(()=>{
       const fetchData = async () =>{
         if(periodoId < 1){

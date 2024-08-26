@@ -7,9 +7,29 @@ import { useQuery} from 'react-query';
 import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue } from "@/components/ui/select";
 
 
-export default function ComboFontes () { 
-  const {fonteId, setFonteId} = useLancamentoContext();
+interface Props {
+  pai: string;
+}
+
+export default function ComboFontes ({pai}: Props) { 
+  const { fonteId, setFonteId, 
+          formFonteIdO, setFormFonteIdO,
+          formFonteIdD, setFormFonteIdD,
+        } = useLancamentoContext();
+
   const {usuarioId} = useGlobalContext();
+
+  //Tratamento para o pai do componente
+  let valorDefault: string = ""
+  if(pai === "Filtros"){
+    valorDefault = fonteId.toString();
+  }
+  if(pai === "FormO"){
+    valorDefault = formFonteIdO.toString();
+  }
+  if(pai === "FormD"){
+    valorDefault = formFonteIdD.toString();
+  }
 
   //Carrega os Fontes
   const { data, isLoading, refetch } = useQuery( ["listaFontes", usuarioId], async () => {
@@ -26,18 +46,28 @@ export default function ComboFontes () {
   }
 
   const onChange = async (value: string) =>{
-    setFonteId(Number(value));
+    //Tratamento conforme Pai
+    if(pai === "Filtros"){
+      setFonteId(Number(value));
+    }
+    if(pai === "FormO"){
+      setFormFonteIdO(Number(value));
+    }
+    if(pai === "FormD"){
+      setFormFonteIdD(Number(value));
+    }
     return true
   }
 
   return(
     <div>
-      <Select defaultValue={fonteId.toString()} onValueChange={onChange}>
+      <Select defaultValue={valorDefault} onValueChange={onChange}>
         <SelectTrigger className="w-full text-sky-800 border-2">
           <SelectValue placeholder="Selecione a conta" />
         </SelectTrigger>
         <SelectContent className="border-2 border-sky-900 p-0 m-0">
           <SelectGroup className="bg-white text-sky-900">
+            <SelectItem className="bg-sky-100  text-sky-900"  key={0} value={"0"}>Todos...</SelectItem>
             { data?.map((item, index)=>(
               <SelectItem className="bg-sky-100  text-sky-900"  key={index} value={item.id?.toString()||""}>{item.nome}</SelectItem>
             )
