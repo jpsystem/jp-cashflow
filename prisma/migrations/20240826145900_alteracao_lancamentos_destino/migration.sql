@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Lancamento` ADD COLUMN `fonteIdD` INTEGER NULL DEFAULT 0;
