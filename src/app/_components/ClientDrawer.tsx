@@ -70,7 +70,7 @@ export default function ClientDrawer() {
             </Link>
             <Link
               className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
-              href="cadastros/grupoDeContas"
+              href="/cadastros/grupoDeContas"
               onClick={handleLinkClick}
             >
               <IconGrupoContas className="w-6 h-6 mr-3" />
@@ -80,7 +80,7 @@ export default function ClientDrawer() {
             </Link>
             <Link
               className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
-              href="/contas-financeiras"
+              href="/cadastros/fonte"
               onClick={handleLinkClick}
             >
               <IconContasFinanceiras className="w-6 h-6 mr-3" />
@@ -90,7 +90,7 @@ export default function ClientDrawer() {
             </Link>
             <Link
               className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
-              href="/orcamentos"
+              href="/cadastros/orcamentos"
               onClick={handleLinkClick}
             >
               <IconOrcamentos className="w-6 h-6 mr-3" />
@@ -100,7 +100,7 @@ export default function ClientDrawer() {
             </Link>
             <Link
               className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
-              href="/saldos"
+              href="/cadastros/saldos"
               onClick={handleLinkClick}
             >
               <IconSaldos className="w-6 h-6 mr-3" />
