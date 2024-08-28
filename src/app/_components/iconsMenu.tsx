@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   LuHome,
@@ -6,38 +6,58 @@ import {
   LuFileEdit,
   LuCalendarCheck,
   LuDatabase,
-  LuAlignJustify
-} from "react-icons/lu"
+  LuAlignJustify,
+  LuFolder,
+  LuCreditCard,
+  LuClipboardList,
+  LuDollarSign,
+} from "react-icons/lu";
 
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
 
 export function IconHome(props: any) {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   return (
     <>
       <LuHome {...props} />
       {/* <span>{(session ? session.user.name : '')}</span> */}
     </>
-  )
+  );
 }
 
 export function IconDashBoard(props: any) {
-  return <LuBarChartBig {...props} />
+  return <LuBarChartBig {...props} />;
 }
 
 export function IconLancamentos(props: any) {
-  return <LuFileEdit {...props} />
+  return <LuFileEdit {...props} />;
 }
 
 export function IconAgenda(props: any) {
-  return <LuCalendarCheck {...props} />
+  return <LuCalendarCheck {...props} />;
 }
 
 export function IconCadastros(props: any) {
-  return <LuDatabase {...props} />
+  return <LuDatabase {...props} />;
 }
 
 export function IconMenu(props: any) {
-  return <LuAlignJustify {...props} />
+  return <LuAlignJustify {...props} />;
 }
 
+// Novos ícones adicionados:
+export function IconGrupoContas(props: any) {
+  return <LuFolder {...props} />;
+}
+
+export function IconContasFinanceiras(props: any) {
+  return <LuCreditCard {...props} />;
+}
+
+export function IconOrcamentos(props: any) {
+  return <LuClipboardList {...props} />;
+}
+
+export function IconSaldos(props: any) {
+  return <LuDollarSign {...props} />;
+}
