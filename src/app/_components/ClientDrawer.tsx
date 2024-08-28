@@ -10,7 +10,11 @@ import {
   IconHome,
   IconLancamentos,
   IconMenu,
-} from "./iconsMenu";
+  IconGrupoContas,
+  IconContasFinanceiras,
+  IconOrcamentos,
+  IconSaldos,
+} from "./iconsMenu"; // Adicione aqui os novos ícones
 import {
   Drawer,
   DrawerContent,
@@ -18,12 +22,6 @@ import {
   DrawerHeader,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverClose,
-} from "@/components/ui/popover";
 
 export default function ClientDrawer() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -52,16 +50,6 @@ export default function ClientDrawer() {
           <nav className="flex flex-col py-0 bg-sky-900 text-sky-50 flex-1 justify-center mb-24">
             <Link
               className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
-              href="/home"
-              onClick={handleLinkClick}
-            >
-              <IconHome className="w-6 h-6 mr-3" />
-              <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
-                Home
-              </span>
-            </Link>
-            <Link
-              className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
               href="/dashboard"
               onClick={handleLinkClick}
             >
@@ -82,66 +70,44 @@ export default function ClientDrawer() {
             </Link>
             <Link
               className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
-              href="/agendamentos"
+              href="cadastros/grupoDeContas"
               onClick={handleLinkClick}
             >
-              <IconAgenda className="w-6 h-6 mr-3" />
+              <IconGrupoContas className="w-6 h-6 mr-3" />
               <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
-                Agendamento
+                Grupo de Contas
               </span>
             </Link>
-            <Popover>
-              <PopoverTrigger asChild>
-                <button className="flex items-center w-full px-3 py-4 hover:bg-sky-800">
-                  <IconCadastros className="w-6 h-6 mr-3" />
-                  <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
-                    Cadastros
-                  </span>
-                </button>
-              </PopoverTrigger>
-              <PopoverContent
-                align="start"
-                className="w-56 min-w-[200px] p-0 bg-cover border-r border-black text-sky-50 mb-16"
-                side="right"
-              >
-                <PopoverClose asChild>
-                  <Link
-                    className="flex items-center w-full px-3 py-4 hover:bg-sky-800 bg-sky-900 bg-cover"
-                    href="/cadastros/grupoDeContas"
-                    onClick={handleLinkClick}
-                  >
-                    <IconCadastros className="w-5 h-5 mr-3" />
-                    <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
-                      Grupo de Contas
-                    </span>
-                  </Link>
-                </PopoverClose>
-                <PopoverClose asChild>
-                  <Link
-                    className="flex items-center w-full px-3 py-4 hover:bg-sky-800 bg-sky-900 bg-cover"
-                    href="/cadastros/fonte"
-                    onClick={handleLinkClick}
-                  >
-                    <IconCadastros className="w-5 h-5 mr-3" />
-                    <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
-                      Contas financeiras
-                    </span>
-                  </Link>
-                </PopoverClose>
-                <PopoverClose asChild>
-                  <Link
-                    className="flex items-center w-full px-3 py-4 hover:bg-sky-800 bg-sky-900 bg-cover"
-                    href="/cadastros/orcamentos"
-                    onClick={handleLinkClick}
-                  >
-                    <IconCadastros className="w-5 h-5 mr-3" />
-                    <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
-                      Orçamento
-                    </span>
-                  </Link>
-                </PopoverClose>
-              </PopoverContent>
-            </Popover>
+            <Link
+              className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
+              href="/contas-financeiras"
+              onClick={handleLinkClick}
+            >
+              <IconContasFinanceiras className="w-6 h-6 mr-3" />
+              <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
+                Contas Financeiras
+              </span>
+            </Link>
+            <Link
+              className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
+              href="/orcamentos"
+              onClick={handleLinkClick}
+            >
+              <IconOrcamentos className="w-6 h-6 mr-3" />
+              <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
+                Orçamentos
+              </span>
+            </Link>
+            <Link
+              className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
+              href="/saldos"
+              onClick={handleLinkClick}
+            >
+              <IconSaldos className="w-6 h-6 mr-3" />
+              <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
+                Saldos
+              </span>
+            </Link>
           </nav>
         </DrawerContent>
       </Drawer>

@@ -10,7 +10,7 @@ export default async function GrupoDeContas() {
 
   return (
     
-    <div className="flex flex-col w-[90%] max-w-[1400px] min-w-[500px] items-start gap-4 px-4 pb-4 md:justify-center md:px-6 md:gap-5">
+    <div className="flex flex-col mb-6 w-[90%] max-w-[1400px] min-w-[500px] items-start gap-4 px-4 pb-4 md:justify-center md:px-6 md:gap-5">
       <div className="flex flex-col w-full gap-4">
         <div className="flex flex-col w-full justify-center">
           <h1 className="text-sky-900 text-2xl font-bold tracking-tighter text-center">
