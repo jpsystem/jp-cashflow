@@ -99,11 +99,12 @@ export type tyLancamento = {
   valor?: number,
   dtLancamento?: Date,
   descricao?: string,
-  operacao?: string,
+  operacao?: string, // Pode ser D-Debito C-Crédito ou M-Movimento
   grupoId?: number,
   grupo?: string,
   subGrupoId?: number,
   subGrupo?: string,
   fonteId?: number,
-  fonte?: string,
+  fonteIdD: number | null,
+  fontes?: string,
 }

@@ -48,7 +48,6 @@ export default function NovoFonteForm() {
 
   //Função para fechar a caixa de aviso
   const handleFechar=()=>{
-    //console.log("Exclusão cancelada!")
     setShowAlerta(false);
   };
 

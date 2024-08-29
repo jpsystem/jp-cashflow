@@ -18,8 +18,10 @@ interface AppContextProps {
   setFormSubGrupoId: (data: number) => void;
   formFonteIdO: number;
   setFormFonteIdO: (data: number) => void;
-  formFonteIdD: number;
-  setFormFonteIdD: (data: number) => void;
+  formFonteIdD: number|null;
+  setFormFonteIdD: (data: number|null) => void;
+  operacao: string;
+  setOperacao: (data: string) => void;
 }
 
 const LancamentoContext = createContext<AppContextProps | undefined>(undefined);
@@ -37,7 +39,8 @@ export const LancamentoProvider: React.FC<AppProviderProps> = ({children}: AppPr
   const [formGrupoId, setFormGrupoId] = useState<number>(0)
   const [formSubGrupoId, setFormSubGrupoId] = useState<number>(0)
   const [formFonteIdO, setFormFonteIdO] = useState<number>(0)
-  const [formFonteIdD, setFormFonteIdD] = useState<number>(0)
+  const [formFonteIdD, setFormFonteIdD] = useState<number|null>(null)
+  const [operacao, setOperacao] = useState<string>("")
 
   return (
     <LancamentoContext.Provider value={{ dados, setDados, 
@@ -48,6 +51,7 @@ export const LancamentoProvider: React.FC<AppProviderProps> = ({children}: AppPr
                                           formSubGrupoId, setFormSubGrupoId,
                                           formFonteIdO, setFormFonteIdO, 
                                           formFonteIdD, setFormFonteIdD, 
+                                          operacao, setOperacao,
                                         }}>
       {children}
     </LancamentoContext.Provider>

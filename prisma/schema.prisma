@@ -62,6 +62,7 @@ model Fonte {
   tipo               String  @db.VarChar(5) @default("M") // M-Movimento, A-APlicação e C-Crédito
   ativo              Boolean @default(true)
   fonte_lancamentos  Lancamento[]
+  fonte_lancamentosD Lancamento[] @relation("FonteD")
   fonte_saldos       Saldo[]
   //Divisão por usuário
   user                      User?   @relation(fields: [userId], references: [id])
@@ -99,13 +100,14 @@ model Lancamento {
   dtLancamento  DateTime  @db.Date
   descricao     String?   @db.VarChar(100)  @default("")
   operacao      String    @db.VarChar(5) @default("D")
-  periodo       Periodo?  @relation(fields: [periodoId], references: [id])
   periodoId     Int //Chave estrangeira para tabela Periodo
-  subGrupo      SubGrupo? @relation(fields: [subGrupoId], references: [id])
   subGrupoId    Int //Chave estrangeira para tabela SubGrupo
-  fonte         Fonte?    @relation(fields: [fonteId], references: [id])
   fonteId       Int //Chave estrangeira para tabela Fonte
   fonteIdD      Int?      @default(0) //um id da fonte que recebera os recursos
+  periodo       Periodo?  @relation(fields: [periodoId], references: [id])
+  subGrupo      SubGrupo? @relation(fields: [subGrupoId], references: [id])
+  fonte         Fonte?    @relation(fields: [fonteId], references: [id])
+  fonteD        Fonte?    @relation("FonteD", fields: [fonteIdD], references: [id])
 }
 
 model Orcamento {
