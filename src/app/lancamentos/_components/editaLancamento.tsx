@@ -1,202 +1,128 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { format, startOfMonth, endOfMonth, parseISO, addHours } from "date-fns";
-import { ptBR } from "date-fns/locale"; // Importa a localização em português
-//import "react-datepicker/dist/react-datepicker.css";
-import { FaCalendarAlt } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Sheet, SheetClose, SheetContent, SheetFooter } from "@/components/ui/sheet";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import { DialogTitle } from "@/components/ui/dialog";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { FaChevronDown } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ComboGrupos from "./querys/selectGrupos";
-import ComboSubGrupos from "./querys/selectSubGrupos";
-import ComboFontes from "./querys/selectFontes";
-import { Label } from "@/components/ui/label";
+import { format, startOfMonth, endOfMonth, parseISO, addHours } from "date-fns";
+import { ptBR } from "date-fns/locale"; 
+//import { useOrcamentoContext } from "./contextProvider";
+import { RealBRToDouble, DoubleToRealBR, retDataDoPeriodo } from "@/lib/formatacoes"; 
+//import retorno from "@/lib/retSecaoUserID";
+import { tyLancamento, tyResult } from "@/types/types";
+//import { AtualizaOrcamento } from "@/actions/orcamentoActions";
+import queryClient from "@/lib/reactQuery";
 import { useLancamentoContext } from "./contextLancamentoProvider";
 import { useGlobalContext } from "@/app/contextGlobal";
-import { tyLancamento, tyResult } from "@/types/types";
-import { RealBRToDouble, retDataDoPeriodo } from "@/lib/formatacoes";
-import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
-import { CriarLancamento } from "@/actions/lancamentoActions";
-import queryClient from "@/lib/reactQuery";
+import ComboGrupos from "./querys/selectGrupos";
+import ComboSubGrupos from "./querys/selectSubGrupos";
+import { useState } from "react";
+import ComboFontes from "./querys/selectFontes";
 
 // Definição dos tipos de dados do formulário
+type Props = {
+  pItem?: tyLancamento;
+  pIndice: number;
+  isEdita: boolean;
+  setIsEdita: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 type FormProps = {
   valor: string;
   descricao: string;
   dtLancamento: Date | null;
-};
+}
 
 // Schema de validação com zod
 const schema = z.object({
-  //valor: z.string().min(1, "Campo obrigatório!"),
   valor: z.string().regex(/^\R?\$?\s?\d+(.\d{3})*(\,\d{0,2})?$/, 'Valor monetário inválido'),
   descricao: z.string().min(1, "Campo obrigatório!"),
   dtLancamento: z.date(),
 });
 
-export default function NovoLancamentosForm() {
+export default function EditaLancamentoForm ({pItem, pIndice, isEdita, setIsEdita}: Props) {
+
+  //const {dados } = useOrcamentoContext();
+  //const {periodoId } = useGlobalContext();
   const { formGrupoId, setFormGrupoId, 
-          formSubGrupoId, setFormSubGrupoId,
-          formFonteIdO, setFormFonteIdO, 
-          formFonteIdD, setFormFonteIdD,
-          setDados, operacao, setOperacao
-  } = useLancamentoContext();
+    formSubGrupoId, setFormSubGrupoId,
+    formFonteIdO, setFormFonteIdO, 
+    formFonteIdD, setFormFonteIdD,
+    setDados, operacao, setOperacao
+} = useLancamentoContext();
+
   const { periodoId, periodo } = useGlobalContext();
-
   const [selDate, setSelDate] = useState<Date>(retDataDoPeriodo(periodo));
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  //Variaveis para a caixa de avisos (WarningBox)
-  const [showAlerta, setShowAlerta] = useState(false);
-  const [tipo, setTipo] = useState<tipoEnu>(tipoEnu.Alerta);
-  const [mensagem, setMensagem] = useState("Menssagem default");
-
-  //Função para fechar a caixa de aviso
-  const handleFechar=()=>{
-    setShowAlerta(false);
-  };
-
-  
 
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
-      valor: "",
-      descricao: "",
-      dtLancamento: selDate,
+      valor: DoubleToRealBR(pItem?.valor || 0),
+      descricao: pItem?.descricao,
+      dtLancamento: pItem?.dtLancamento
     },
   });
 
-  const handleOpen = () => setIsOpen(true);
-
   const handleClose = () => {
-    setFormGrupoId(0);
-    setFormSubGrupoId(0);
-    setFormFonteIdO(0);
-    setFormFonteIdD(null);
+    setFormGrupoId(0)
+    setFormSubGrupoId(0)
+    setFormFonteIdO( 0)
+    setFormFonteIdD(null)
     setOperacao("") 
-    setIsOpen(false);
+    setIsEdita(false);
     form.reset();
   };
 
-  const onSubmit = (values: FormProps) => {
-    if(formSubGrupoId === 0){
-      setTipo(tipoEnu.Alerta);
-      setMensagem("É necessário secionar uma subConta!" );
-      setShowAlerta(true);
-      return
-    }
-    if(formFonteIdO === 0){
-      setTipo(tipoEnu.Alerta);
-      setMensagem("É necessário secionar uma fonte!" );
-      setShowAlerta(true);
-      return
-    }
-    const novoLancamento:tyLancamento = {
-      grupoId: formGrupoId,
-      subGrupoId: formSubGrupoId,
-      fonteId: formFonteIdO || undefined,
-      fonteIdD : formFonteIdD,
-      periodoId: periodoId,
-      valor : RealBRToDouble(values.valor),
-      descricao : values.descricao,
-      dtLancamento : values.dtLancamento ?? undefined,
-      operacao : operacao,
-    };
-    incluirLancamento(novoLancamento);
-    handleClose();
+  const onSubmit = async (values: FormProps) => {
+    // let retorno:tyResult;
+    // try {
+    //   retorno = await AtualizaOrcamento(dados[indice].orcamentoId || 0, RealBRToDouble(values.valor))
+
+    // } catch (error) {
+  
+    // }
+
+    // //Limpar o cache da consulta para atualizar os dados
+    // queryClient.refetchQueries(["orcamentos", periodoId]);
+
+    // handleClose();
   };
 
-  //Função para incluir o lançamento
-  async function incluirLancamento(dadosLancamento: tyLancamento){
-    let retorno:tyResult ;
-    try {      
-      retorno = await CriarLancamento(dadosLancamento);
-      
-      if(retorno.status === "Sucesso"){
-        setTipo(tipoEnu.Sucesso);
-        setMensagem(`A fonte foi incluida com sucesso!` );
-        setShowAlerta(true);   
-         //Limpar o cache da consulta para atualizar os dados
-         queryClient.refetchQueries(["lancamentos", periodoId])   
-
-      }else{
-        if(retorno.menssagem === "P2002")
-          {
-            setTipo(tipoEnu.Erro);
-            setMensagem("A fonte já está cadastrada!" );
-            setShowAlerta(true);
-          }else{
-            setTipo(tipoEnu.Erro);
-            setMensagem("O correu um erro inesperado no servidor! " + retorno.menssagem  );
-            setShowAlerta(true);
-          }
-      }
-    } catch (error) {
-      setTipo(tipoEnu.Erro);
-      setMensagem(`Ocorreu um erro inesperado! ${error}` );
-      setShowAlerta(true);      
-    }
-  }
-
-
-
-  // Calcula o primeiro e o último dia do mês atual
-  const currentDate = selDate //retDataDoPeriodo(periodo); //new Date();
-  const firstDayOfMonth = startOfMonth(currentDate);
-  const lastDayOfMonth = endOfMonth(currentDate);
+    // Calcula o primeiro e o último dia do mês atual
+    const currentDate = selDate //retDataDoPeriodo(periodo); //new Date();
+    const firstDayOfMonth = startOfMonth(currentDate);
+    const lastDayOfMonth = endOfMonth(currentDate);
 
   return (
-    <>
-      { showAlerta && (
-          <WarningBox
-            tipo={tipo}
-            mensagem={mensagem}
-            onCancel={handleFechar}
-          />
-        )
-      }     
-      <div className="flex flex-col">
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button
-              className="border-2 text-sky-900 border-sky-900 hover:text-sky-800 hover:border-sky-700"
-              variant="outline"
-              onClick={handleOpen}
-            >
-              + Lançamentos
-            </Button>
-          </SheetTrigger>
-          <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[500px] max-h-[500px] min-w-[800px] max-w-[800px] overflow-x-auto rounded-2xl bg-white p-8 text-sky-800 shadow">
-            <DialogTitle className="text-sky-900">Novo Lançamento</DialogTitle>
-            {/* CONTA E SUBCONTA */}
-            <div className="flex gap-2 mb-2" >
-              <div className="flex-1">
-                <Label className="block text-sm font-medium text-sky-900">
-                    Conta
-                </Label>
-                <ComboGrupos pai="Form"/>
-              </div>
-              <div className="flex-1">
-                <Label className="block text-sm font-medium text-sky-900">
-                    Sub-Conta
-                </Label>
-                <ComboSubGrupos pai="Form"/>
-              </div>
+    <div className="flex flex-col">
+      <Sheet open={isEdita} onOpenChange={setIsEdita}>
+        <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[500px] max-h-[500px] min-w-[800px] max-w-[800px] overflow-x-auto rounded-2xl bg-white p-8 text-sky-800 shadow">
+          <DialogTitle className="text-sky-900 mb-412">Editar Orçamento</DialogTitle>
+          <Label className="text-sky-600 bold">Alterar o lançamento</Label>
+          {/* CONTA E SUBCONTA */}
+          <div className="flex gap-2 mb-2" >
+            <div className="flex-1 pointer-events-none  opacity-50">
+              <Label className="block text-sm font-medium text-sky-900">
+                  Conta
+              </Label>
+              <ComboGrupos pai="Form"/>
             </div>
-            <Form {...form}>
+            <div className="flex-1">
+              <Label className="block text-sm font-medium text-sky-900">
+                  Sub-Conta
+              </Label>
+              <ComboSubGrupos pai="Form"/>
+            </div>
+          </div>          
+          <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div>
                   <FormField
@@ -308,9 +234,9 @@ export default function NovoLancamentosForm() {
               </form>
             </Form>
 
-          </SheetContent>
-        </Sheet>
-      </div>
-    </>
+        </SheetContent>
+      </Sheet>
+    </div>
   );
-}
+};
+

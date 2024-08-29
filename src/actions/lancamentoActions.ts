@@ -136,6 +136,17 @@ export async function getLancamentos(periodoId: number) {
   return dados
 }
 
+// Função para excluir um lançamento
+export async function DeleteLancamentos(index: number) {
+  const lancamento = await prisma.lancamento.delete({
+    where: { id: index },
+  });
+  
+  return Promise.resolve(lancamento); //Promise.resolve(fontes);
+}
+
+
+
 // getLancamentos(1).then(lancamentos => {
 //   console.log(lancamentos);
 // }).catch(e => {
