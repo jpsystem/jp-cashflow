@@ -81,7 +81,7 @@ export default function NovoLancamentosForm() {
           </Button>
         </SheetTrigger>
         <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[500px] max-h-[500px] min-w-[800px] max-w-[800px] overflow-x-auto rounded-2xl bg-white p-8 text-sky-800 shadow">
-          <DialogTitle className="text-sky-900">Novo Lançamento</DialogTitle>
+          <DialogTitle className="text-sky-900 mb-6">Novo Lançamento</DialogTitle>
           {/* CONTA E SUBCONTA */}
           <div className="flex gap-2 mb-2" >
             <div className="flex-1">
