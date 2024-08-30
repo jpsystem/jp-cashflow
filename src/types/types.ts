@@ -11,6 +11,11 @@ export type tyUsuario = {
   confirmaSenha: string,
 };
 
+export type tySaldo = {
+  id:            number,
+  valor?:         number,          
+};
+
 export type tyGrupo = {
   key?:       number,
   id?:        number,
