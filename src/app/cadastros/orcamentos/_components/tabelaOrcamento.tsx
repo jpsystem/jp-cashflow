@@ -1,6 +1,6 @@
 "use client";
 
-import { Pen } from "lucide-react";
+import { FileEditIcon } from "@/app/_components/iconsForm";
 import { Button } from "@/components/ui/button";
 import {
   TableHead,
@@ -65,7 +65,7 @@ export default function TabelaOrcamento() {
                     variant="ghost"
                     onClick={() => handleEditSubGrupo(index)}
                   >
-                    <Pen className="mr-1 text-xs" />
+                    <FileEditIcon className="h-4 w-4" />
                   </Button>
                 </div>
               </TableCell>
