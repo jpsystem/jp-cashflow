@@ -28,7 +28,11 @@ export default function ComboFontes ({pai}: Props) {
     valorDefault = formFonteIdO.toString();
   }
   if(pai === "FormD"){
-    valorDefault = formFonteIdD.toString();
+    if(formFonteIdD){
+      valorDefault = formFonteIdD.toString();
+    }else{
+      valorDefault = "0";
+    }
   }
 
   //Carrega os Fontes
@@ -54,7 +58,8 @@ export default function ComboFontes ({pai}: Props) {
       setFormFonteIdO(Number(value));
     }
     if(pai === "FormD"){
-      setFormFonteIdD(Number(value));
+      //setFormFonteIdD(Number(value));
+      setFormFonteIdD( (value === "0") ? null : Number(value));
     }
     return true
   }

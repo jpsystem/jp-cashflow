@@ -5,13 +5,14 @@ import { useGlobalContext } from "@/app/contextGlobal";
 import { tySelects } from "@/types/types";
 import { useQuery} from 'react-query';
 import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue } from "@/components/ui/select";
+import { RetOperacao } from "@/actions/lancamentoActions";
 
 interface Props {
   pai: string;
 }
 
 export default function ComboGrupos ({pai}: Props) { 
-  const {grupoId, setGrupoId, formGrupoId, setFormGrupoId} = useLancamentoContext();
+  const {setOperacao, grupoId, setGrupoId, formGrupoId, setFormGrupoId, setSubGrupoId, setFormSubGrupoId} = useLancamentoContext();
   const {usuarioId} = useGlobalContext();
 
   //Tratamento para o pai do componente
@@ -38,13 +39,21 @@ export default function ComboGrupos ({pai}: Props) {
     )
   }
 
+  const SelOperacao = async (grupoID:number) => {
+    const oper = await RetOperacao(grupoID);
+    setOperacao(oper ?? "");
+  }
+
   const onChange = async (value: string) =>{
     //Tratamento conforme Pai
     if(pai === "Filtros"){
       setGrupoId(Number(value));
+      setSubGrupoId(0);
     }
     if(pai === "Form"){
       setFormGrupoId(Number(value));
+      setFormSubGrupoId(0);
+      SelOperacao(Number(value));
     }
     return true
   }

@@ -61,7 +61,6 @@ export default function FormOrcamento ({indice, isEdita, setIsEdita}: Props) {
   
     }
 
-    console.log("Atualizado");
     //Limpar o cache da consulta para atualizar os dados
     queryClient.refetchQueries(["orcamentos", periodoId]);
 

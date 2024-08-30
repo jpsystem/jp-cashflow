@@ -10,10 +10,11 @@ import { useQuery} from 'react-query';
 import { useGlobalContext } from "@/app/contextGlobal";
 import { useLancamentoContext } from "./contextLancamentoProvider";
 import { tyLancamento } from "@/types/types";
-import { RetLancamentos } from "@/actions/lancamentoActions";
+import { getLancamentos } from "@/actions/lancamentoActions";
 import ComboGrupos from "./querys/selectGrupos";
 import ComboSubGrupos from "./querys/selectSubGrupos";
 import ComboFontes from "./querys/selectFontes";
+import { retDataDoPeriodo } from "@/lib/formatacoes";
 
 
 export default function PainelFiltros (){ 
@@ -25,15 +26,15 @@ export default function PainelFiltros (){
 
     //Carrega os Lancamentos
     const { data, isLoading, refetch } = useQuery( ["lancamentos", periodoId], async () => {
-      const response:tyLancamento[] = await RetLancamentos(periodoId); 
+      const response:tyLancamento[] = await getLancamentos(periodoId); 
       setDados(response);
       return response;
     })
 
-  const [startDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selDate, setSelDate] = useState<Date>(retDataDoPeriodo(periodo));
 
   // Calcula o primeiro e o último dia do mês atual
-  const currentDate = new Date();
+  const currentDate = selDate //retDataDoPeriodo(periodo); //new Date();
   const firstDayOfMonth = startOfMonth(currentDate);
   const lastDayOfMonth = endOfMonth(currentDate);
 
@@ -71,10 +72,10 @@ export default function PainelFiltros (){
                 showIcon
                 icon="fa fa-calendar"
                 dateFormat="E - dd/MMMM"
-                selected={startDate}
+                selected={selDate}
                 minDate={firstDayOfMonth}
                 maxDate={lastDayOfMonth}
-                onChange={(date) => setSelectedDate(date)}
+                onChange={(date) => setSelDate(date ?? new Date())}
                 closeOnScroll={true}
                 className="text-sky-800 border-2 border-sky-900 rounded-md text-center h-9 pb-1 w-[262px] text-lg hover:bg-slate-100"
                 showMonthDropdown={false}
