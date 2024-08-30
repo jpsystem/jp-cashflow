@@ -9,7 +9,6 @@ export async function ListaFontes(userID: number | undefined) {
   const fontes = await prisma.fonte.findMany({
     where: { userId: userID },
   });
-  //revalidatePath("/cadastros/fonte")
   
   return Promise.resolve(fontes); //Promise.resolve(fontes);
 }

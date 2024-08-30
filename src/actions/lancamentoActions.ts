@@ -145,12 +145,28 @@ export async function DeleteLancamentos(index: number) {
   return Promise.resolve(lancamento); //Promise.resolve(fontes);
 }
 
-
-
-// getLancamentos(1).then(lancamentos => {
-//   console.log(lancamentos);
-// }).catch(e => {
-//   console.error(e);
-// }).finally(async () => {
-//   await prisma.$disconnect();
-// });
+//Essa função altera os dados do Lançamento
+export async function AlteraLancamento(data: tyLancamento) {
+  let result:tyResult = <tyResult>{};
+  try {
+    const lancamento = await prisma.lancamento.update({
+      where: {id: data.lancamentoId},
+      data: {
+        valor: data.valor,
+        dtLancamento: data.dtLancamento ?? new Date(),
+        subGrupoId: data.subGrupoId ?? 0,
+        fonteId: data.fonteId ?? 0,
+        descricao: data.descricao,
+        fonteIdD: data.fonteIdD,
+      },
+    })
+    result.status = "Sucesso"
+    result.dados = lancamento
+    return result     
+  } catch (err) {
+    const erro = <tyErro>err;
+    result.status = "Erro"
+    result.menssagem = erro.code
+    return result
+  }
+}

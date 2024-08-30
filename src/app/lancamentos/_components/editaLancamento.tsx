@@ -26,6 +26,8 @@ import ComboGrupos from "./querys/selectGrupos";
 import ComboSubGrupos from "./querys/selectSubGrupos";
 import { useState } from "react";
 import ComboFontes from "./querys/selectFontes";
+import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
+import { AlteraLancamento } from "@/actions/lancamentoActions";
 
 // Definição dos tipos de dados do formulário
 type Props = {
@@ -50,8 +52,6 @@ const schema = z.object({
 
 export default function EditaLancamentoForm ({pItem, pIndice, isEdita, setIsEdita}: Props) {
 
-  //const {dados } = useOrcamentoContext();
-  //const {periodoId } = useGlobalContext();
   const { formGrupoId, setFormGrupoId, 
     formSubGrupoId, setFormSubGrupoId,
     formFonteIdO, setFormFonteIdO, 
@@ -61,6 +61,17 @@ export default function EditaLancamentoForm ({pItem, pIndice, isEdita, setIsEdit
 
   const { periodoId, periodo } = useGlobalContext();
   const [selDate, setSelDate] = useState<Date>(retDataDoPeriodo(periodo));
+
+  //Variaveis para a caixa de avisos (WarningBox)
+  const [showAlerta, setShowAlerta] = useState(false);
+  const [tipo, setTipo] = useState<tipoEnu>(tipoEnu.Alerta);
+  const [mensagem, setMensagem] = useState("Menssagem default");
+
+  //Função para fechar a caixa de aviso
+  const handleFechar=()=>{
+    setShowAlerta(false);
+    handleClose();
+  };
 
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
@@ -81,28 +92,79 @@ export default function EditaLancamentoForm ({pItem, pIndice, isEdita, setIsEdit
     form.reset();
   };
 
+  //Finção a ser executada ao submeter o formulário
   const onSubmit = async (values: FormProps) => {
-    // let retorno:tyResult;
-    // try {
-    //   retorno = await AtualizaOrcamento(dados[indice].orcamentoId || 0, RealBRToDouble(values.valor))
+    if(formSubGrupoId === 0){
+      setTipo(tipoEnu.Alerta);
+      setMensagem("É necessário secionar uma subConta!" );
+      setShowAlerta(true);
+      return
+    }
+    if(formFonteIdO === 0){
+      setTipo(tipoEnu.Alerta);
+      setMensagem("É necessário secionar uma fonte!" );
+      setShowAlerta(true);
+      return
+    }
 
-    // } catch (error) {
-  
-    // }
-
-    // //Limpar o cache da consulta para atualizar os dados
-    // queryClient.refetchQueries(["orcamentos", periodoId]);
-
-    // handleClose();
+    const novoLancamento: tyLancamento = {
+      lancamentoId: pItem?.lancamentoId,
+      subGrupoId: formSubGrupoId,
+      fonteId: formFonteIdO || undefined,
+      fonteIdD : formFonteIdD,
+      valor : RealBRToDouble(values.valor),
+      descricao : values.descricao,
+      dtLancamento : values.dtLancamento ?? undefined,
+    };
+    altLancamento(novoLancamento); 
   };
 
-    // Calcula o primeiro e o último dia do mês atual
-    const currentDate = selDate //retDataDoPeriodo(periodo); //new Date();
-    const firstDayOfMonth = startOfMonth(currentDate);
-    const lastDayOfMonth = endOfMonth(currentDate);
+    //Função para incluir uma nova fonte
+    async function altLancamento(dadosLancamento: tyLancamento){
+      let retorno:tyResult ;
+      
+      try {      
+        retorno = await AlteraLancamento(dadosLancamento);
+        if(retorno.status === "Sucesso"){
+          setTipo(tipoEnu.Sucesso);
+          setMensagem(`O lançamento foi alterado com sucesso!` );
+          setShowAlerta(true);   
+          //Limpar o cache da consulta para atualizar os dados
+          queryClient.refetchQueries(["lancamentos", periodoId]) 
+        }else{
+          if(retorno.menssagem === "P2002")
+            {
+              setTipo(tipoEnu.Erro);
+              setMensagem("Erro de relacionamento!" );
+              setShowAlerta(true);
+            }else{
+              setTipo(tipoEnu.Erro);
+              setMensagem("O correu um erro inesperado no servidor!" );
+              setShowAlerta(true);
+            }
+        }
+      } catch (error) {
+        setTipo(tipoEnu.Erro);
+        setMensagem(`Ocorreu um erro inesperado! ${error}` );
+        setShowAlerta(true);      
+      }
+    }
+
+  // Calcula o primeiro e o último dia do mês atual
+  const currentDate = selDate //retDataDoPeriodo(periodo); //new Date();
+  const firstDayOfMonth = startOfMonth(currentDate);
+  const lastDayOfMonth = endOfMonth(currentDate);
 
   return (
     <div className="flex flex-col">
+      { showAlerta && (
+          <WarningBox
+            tipo={tipo}
+            mensagem={mensagem}
+            onCancel={handleFechar}
+          />
+        )
+      }       
       <Sheet open={isEdita} onOpenChange={setIsEdita}>
         <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[500px] max-h-[500px] min-w-[800px] max-w-[800px] overflow-x-auto rounded-2xl bg-white p-8 text-sky-800 shadow">
           <DialogTitle className="text-sky-900 mb-412">Editar Orçamento</DialogTitle>
