@@ -3,7 +3,6 @@
 import { Input } from "@/components/ui/input";
 import { format, startOfMonth, endOfMonth, parseISO, addHours } from "date-fns";
 import { ptBR } from "date-fns/locale"; // Importa a localização em português
-//import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
@@ -14,10 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { DialogTitle } from "@/components/ui/dialog";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { FaChevronDown } from "react-icons/fa";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+//import "react-datepicker/dist/react-datepicker.css";
 import ComboGrupos from "./querys/selectGrupos";
 import ComboSubGrupos from "./querys/selectSubGrupos";
 import ComboFontes from "./querys/selectFontes";
