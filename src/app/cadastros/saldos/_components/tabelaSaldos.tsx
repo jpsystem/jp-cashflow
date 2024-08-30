@@ -48,7 +48,7 @@ export default function TabelaSaldo() {
         </TableHeader>
         <TableBody>
           {/* {dados.map((item: tyOrcamento, index: number) => ( */}
-          <TableRow>
+          <TableRow className ="hover:bg-slate-200"> 
             <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[0.5%] text-lg">
               Saldo1
             </TableCell>
