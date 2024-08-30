@@ -30,10 +30,13 @@ export default function TabelaSaldo() {
         <TableHeader>
           <TableRow>
             <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center text-lg">
-              Grupo
+              Fonte
             </TableHead>
             <TableHead className=" bg-sky-900 border-2 border-sky-700 text-sky-50 text-center text-lg">
-              Valor
+              Saldo Inicial
+            </TableHead>
+            <TableHead className=" bg-sky-900 border-2 border-sky-700 text-sky-50 text-center text-lg">
+              Saldo Atual
             </TableHead>
             <TableHead className=" bg-sky-900 border-2 border-sky-700 text-center text-sky-50 text-lg">
               Tipo
@@ -48,6 +51,9 @@ export default function TabelaSaldo() {
           <TableRow>
             <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[0.5%] text-lg">
               Saldo1
+            </TableCell>
+            <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[0.5%] text-lg">
+              R$12321,1203123
             </TableCell>
             <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[0.5%] text-lg">
               R$12321,1203123
