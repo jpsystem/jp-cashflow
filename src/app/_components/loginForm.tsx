@@ -34,19 +34,15 @@ export default function LoginForm() {
       sm:border-b-[100px] lg:border-b-[100px]
       md:border-b-[100px] border-white h-screen"
     >
-      <Card className="w-[40%] max-w-[20rem]">
+      <Card className="w-[98%] max-w-[35rem]">
         <CardHeader className="space-y-2 text-center">
           <CardTitle className="text-2xl font-bold text-sky-900">
             Login
           </CardTitle>
-          {/* <CardDescription className="text-lg text-sky-800">
-            Entre com os dados para o login
-          </CardDescription> */}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-2">
             <div className="space-y-1">
-            {/* {`${clsLabel}`} */}
               <Label htmlFor="nickname" className={clsLabel}> 
                 Login
               </Label>
