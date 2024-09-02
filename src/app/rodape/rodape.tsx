@@ -17,6 +17,7 @@ export default async function Rodape() {
         href="#"
       >
         <Image
+          priority={false}
           src={Logo}
           alt="JP System Logo"
           width={24} // Ajuste o tamanho conforme necessário
