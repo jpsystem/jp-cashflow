@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth"
 import { auth as authOptions } from "@/lib/auth-config"
-// import { AppProvider } from "./_components/contextProvider";
-import PainelControle from "./_components/painelControle";
+import { SaldosProvider } from "./_components/contextSaldosProvider";
+import PainelControleSaldo from "./_components/painelControleSaldo";
 import TabelaSaldo from "./_components/tabelaSaldos";
 
 export default async function Saldo() {
@@ -9,7 +9,7 @@ export default async function Saldo() {
   const session = await getServerSession(authOptions)
 
   return (
-    <div>
+    <SaldosProvider userId={session?.user.id}>
       <div className="flex flex-col mb-6 min-h-[70vh] w-full max-w-[1400px] min-w-[500px] items-start px-4 pt-0 pb-4">
         <div className="flex flex-col w-full gap-4">
           <h1 className="text-sky-900 text-2xl font-bold tracking-tighter text-center">
@@ -19,13 +19,13 @@ export default async function Saldo() {
             Elaboração de saldos no período.
           </p>
           <div className="flex w-full justify-end">
-            <PainelControle/>
+            <PainelControleSaldo/>
           </div>
           <div>
             <TabelaSaldo />
           </div>
         </div>
       </div>
-    </div>
+    </SaldosProvider>
   );
 }

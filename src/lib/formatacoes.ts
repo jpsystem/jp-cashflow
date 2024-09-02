@@ -3,6 +3,7 @@
 import { getDate } from 'date-fns';
 import { toDate, format, formatInTimeZone } from 'date-fns-tz';
 import { ptBR } from 'date-fns/locale/pt-BR'
+import { Contact } from 'lucide-react';
 
 export function RealBRToDouble(value: string): number {
   let cleanedValue = value.replaceAll(".","");
@@ -34,6 +35,28 @@ export function retDataDoPeriodo(periodo: string){
   const mes = meses.indexOf(nomeMes);
   const dia = getDate(new Date())
   return new Date(Number(partes[1]), mes, dia)
+}
+
+/**
+ * Esta função retorna a string do periodo anterior
+ * @param periodo - O periodo que sera analizado, ex: Abril/2024.
+ * @returns A string do periodo anterior, ex: Março/2024.
+ */
+export async function retPeriodoAnterior(periodo: string){
+  const partes = periodo.split('/');
+  const nomeMes = partes[0];
+  const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",];
+  const mes = meses.indexOf(nomeMes);
+  let mesAnterior = "";
+  let anoAnterior = 0;
+  if(mes === 0){
+    mesAnterior = "Dezembro"
+    anoAnterior = Number(partes[1]) - 1;
+  }else{
+    mesAnterior = meses[mes - 1];
+    anoAnterior = Number(partes[1]);
+  }
+  return (mesAnterior + "/" + anoAnterior)
 }
 
 //Converter uma data local para uma data UTC

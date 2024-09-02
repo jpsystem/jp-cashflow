@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth"
 import { auth as authOptions } from "@/lib/auth-config"
 import { AppProvider } from "./_components/contextProvider";
-import PainelControle from "./_components/painelControle";
+import PainelControleOrcamento from "./_components/painelControleOrcamento";
 import TabelaOrcamento from "./_components/tabelaOrcamento";
 
 export default async function Orcamento() {
@@ -19,7 +19,7 @@ export default async function Orcamento() {
             Elaboração de orçamentos no período
           </p>
           <div className="flex w-full justify-end">
-            <PainelControle />
+            <PainelControleOrcamento />
           </div>
           <div>
             <TabelaOrcamento />

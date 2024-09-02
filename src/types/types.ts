@@ -11,11 +11,6 @@ export type tyUsuario = {
   confirmaSenha: string,
 };
 
-export type tySaldo = {
-  id:            number,
-  valor?:         number,          
-};
-
 export type tyGrupo = {
   key?:       number,
   id?:        number,
@@ -85,6 +80,16 @@ export type tyOrcamento = {
   periodoId?:   number,
 }
 
+export type tySaldo = {
+  saldoId?:    number,
+  valor?:     number,    
+  nomeFonte?: string,
+  tipoFonte?: string,
+  fonteId?:   number,
+  periodoId?: number,      
+};
+
+
 export enum tipoGrupo{
   Debito = "D",
   Credito = "C",
@@ -112,4 +117,12 @@ export type tyLancamento = {
   fonteId?: number,
   fonteIdD: number | null,
   fontes?: string,
+}
+
+export type tySaldos = {
+  fonteId: number,
+  fonteNome: string,
+  periodoId: number,
+  userId: number,
+  totFonte: number
 }
