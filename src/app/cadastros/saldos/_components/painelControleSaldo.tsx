@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
 import queryClient from "@/lib/reactQuery";
-import { AtualizaSaldo, CriarSaldos, fontesAtivas, RetSaldos } from "@/actions/saldosActions";
+import { AtualizaSaldo, AtualizaSaldos, CriarSaldos, fontesAtivas, RetSaldos } from "@/actions/saldosActions";
 import { tySaldo, tyResult } from "@/types/types";
 import { useSaldoContext } from "./contextSaldosProvider";
 import { useGlobalContext } from "@/app/contextGlobal";
@@ -15,12 +15,9 @@ export default function PainelControleSaldo() {
   const {dados, setDados} = useSaldoContext();
   const { usuarioId, periodoId, periodo } = useGlobalContext();
 
-
-
-  const { data, isLoading, refetch } = useQuery(
-    ["saldos", periodoId],
-    async () => {
+  const { data, isLoading, refetch } = useQuery(["saldos", periodoId], async () => {
       const response: tySaldo[] = await RetSaldos(periodoId);
+      setDados(response);
       return response;
     }
   );
@@ -37,15 +34,14 @@ export default function PainelControleSaldo() {
   }
 
   const atualizarSaldos = async () =>{
-    // let retorno:tyResult ;
-    // try {
-    //   retorno = await AtualizaOrcamentos(periodoId, usuarioId);
-
-    //    //Limpar o cache da consulta para atualizar os dados
-    //    queryClient.refetchQueries(["orcamentos", periodoId]);   
-    // } catch (error) {
+    let retorno:tyResult ;
+    try {
+      retorno = await AtualizaSaldos(periodoId, usuarioId);
+       //Limpar o cache da consulta para atualizar os dados
+       queryClient.refetchQueries(["saldos", periodoId]);   
+    } catch (error) {
       
-    // }
+    }
   }
 
   return (

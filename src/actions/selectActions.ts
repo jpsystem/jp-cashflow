@@ -16,6 +16,9 @@ export async function SelectGrupos(usuarioId: number | undefined) {
         id: true,
         nome: true,
       },
+      orderBy: {
+        nome: 'asc',
+      },
     })
     return activeGrupos
   } catch (error) {
@@ -38,6 +41,9 @@ export async function SelectSubGrupos(grupoID: number) {
         id: true,
         nome: true,
       },
+      orderBy: {
+        nome: 'asc',
+      },
     })
     return activeSubGrupos
   } catch (error) {
@@ -58,6 +64,9 @@ export async function SelectFontes(usuarioId: number | undefined) {
       select: {
         id: true,
         nome: true,
+      },
+      orderBy: {
+        nome: 'asc',
       },
     })
     return activeFontes

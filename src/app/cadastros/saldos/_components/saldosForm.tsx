@@ -9,10 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import { DialogTitle } from "@/components/ui/dialog";
-// import { useSaldoContext } from "./contextProvider";
+import { useSaldoContext } from "./contextSaldosProvider";
 import { RealBRToDouble, DoubleToRealBR } from "@/lib/formatacoes";     
 import { tyResult } from "@/types/types";
-import { AtualizaOrcamento } from "@/actions/orcamentoActions";
+import { AtualizaSaldo } from "@/actions/saldosActions";
 import queryClient from "@/lib/reactQuery";
 import { useGlobalContext } from "@/app/contextGlobal";
 
@@ -25,22 +25,20 @@ type Props = {
 type FormProps = {
   saldoId: number;
   valor: string;
-  fonteId: number;
-  periodoId: number;
 }
 
 const schema = z.object({
-  valor: z.string().regex(/^\R?\$?\s?\d+(.\d{3})*(\,\d{0,2})?$/, 'Valor monetário inválido'),
+  valor: z.string().regex(/^\-?\R?\$?\s?\d+(.\d{3})*(\,\d{0,2})?$/, 'Valor monetário inválido'),
 });
 
 export default function FormSaldo ({indice, isEdita, setIsEdita}: Props) {
-
+  const {dados} = useSaldoContext()
   const {periodoId } = useGlobalContext();
 
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
-    //   valor: DoubleToRealBR(dados[indice].valor || 0),
+      valor: DoubleToRealBR(dados[indice].valor || 0),
     },
   });
 
@@ -52,7 +50,7 @@ export default function FormSaldo ({indice, isEdita, setIsEdita}: Props) {
   const onSubmit = async (values: FormProps) => {
     let retorno:tyResult;
     try {
-    //   retorno = await AtualizaOrcamento(dados[indice].orcamentoId || 0, RealBRToDouble(values.valor))
+      retorno = await AtualizaSaldo(dados[indice].saldoId || 0, RealBRToDouble(values.valor))
 
     } catch (error) {
   
@@ -69,7 +67,7 @@ export default function FormSaldo ({indice, isEdita, setIsEdita}: Props) {
       <Sheet open={isEdita} onOpenChange={setIsEdita}>
         <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[300px] max-h-[330px] min-w-[400px] max-w-[400px] overflow-x-auto rounded-2xl bg-white p-8 text-sky-800 shadow">
           <DialogTitle className="text-sky-900 mb-4">Editar Saldo</DialogTitle>
-          <Label className="text-sky-600 bold">Alterar o valor do saldo do grupo</Label>
+          <Label className="text-sky-600 bold">Alterar o valor do saldo da fonte {dados[indice].nomeFonte}</Label>
           {/* {dados[indice].nomeGrupo} */}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>

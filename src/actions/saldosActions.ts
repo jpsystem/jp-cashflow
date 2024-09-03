@@ -24,8 +24,8 @@ export async function SaldosFontesPorPeriodo(
   try{
     saldos = await prisma.$queryRaw`
       SELECT
-        fontes.id as FonteId,
-        fontes.nome as Fonte,
+        fontes.id as fonteId,
+        fontes.nome as fonte,
         ${periodoId} as periodoId,
         ${userId} as userId,
         IFNULL(saldo.valorFonte, 0) as totFonte
@@ -89,11 +89,12 @@ export async function SaldosFontesPorPeriodo(
 
 export async function RetSaldos(periodoId: number | undefined) {
   let saldos: tySaldo[];
+
   try {
     saldos = await prisma.$queryRaw`
       Select
 	      S.id as saldoId,
-        O.valor as valor,
+        S.valor as valor,
         F.nome as nomeFonte,
         F.tipo as tipoFonte,
         S.fonteId as fonteId,
@@ -103,7 +104,7 @@ export async function RetSaldos(periodoId: number | undefined) {
 	      On S.fonteId = F.id
       Where
 	      S.periodoId =  ${periodoId} and 
-        S.ativo = true and G.tipo != "M"
+        F.ativo = true
       Order By
 	      tipoFonte,
         nomeFonte  
@@ -190,6 +191,49 @@ export async function AtualizaSaldo(saldoId: number, valor: number){
     result.status = "Erro"
     result.menssagem = erro.code
     return result 
+  }
+
+}
+
+//Essa função acrecenta novas fontes para os saldos iniciais de um periodo
+export async function AtualizaSaldos(periodoID: number, usuarioId: number | undefined) {
+  // 1 Passo Retornar todos oa fontes em uma lista
+  // 2 Faça um loop para verificar se a fonte já foi cadastroda nos saldos do periodo
+  // 3 Cadastro a Fonte nos saldos do periodo
+  let result:tyResult = <tyResult>{};
+
+  try { 
+    //Passo 1 - Retornar todos as Fontes em uma lista 
+    const fontes = await prisma.fonte.findMany({
+      where: { userId: usuarioId, ativo: true}
+    })
+    //Passo 2 loop para verificar se a fonte já foi cadastroda nos saldos do periodo.
+    const saldos = await Promise.all(fontes.map( async fonte =>{
+      const retSaldo = await prisma.saldo.findMany({
+        where: { fonteId: fonte.id, periodoId: periodoID},
+        
+      });
+      //Passo 3 se ainda não tem cadastra a fonte nos saldos do periodo
+      if(retSaldo.length < 1){
+        return prisma.saldo.create({
+          data:{
+            valor: 0,
+            fonteId: fonte.id,
+            periodoId: periodoID
+          }
+        });
+      }
+    })
+  );
+    result.status = "Sucesso"
+    result.dados = fontes
+    return result   
+
+  } catch (error) {
+    const erro = <tyErro>error;
+    result.status = "Erro"
+    result.menssagem = erro.code
+    return result        
   }
 
 }

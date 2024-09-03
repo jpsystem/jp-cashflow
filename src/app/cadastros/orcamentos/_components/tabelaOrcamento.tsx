@@ -2,14 +2,7 @@
 
 import { FileEditIcon } from "@/app/_components/iconsForm";
 import { Button } from "@/components/ui/button";
-import {
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableCell,
-  TableBody,
-  Table,
-} from "@/components/ui/table";
+import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table} from "@/components/ui/table";
 import { useOrcamentoContext } from "./contextProvider";
 import { useState } from "react";
 import { tyOrcamento } from "@/types/types";
@@ -23,7 +16,6 @@ export default function TabelaOrcamento() {
 
   //Função para exibir o formulario de edição do subGrupo
   const handleEditSubGrupo = async (posicao: number) => {
-    console.log("Aqui: ", posicao);
     setIndice(posicao);
     setIsEdita(true);
   };
