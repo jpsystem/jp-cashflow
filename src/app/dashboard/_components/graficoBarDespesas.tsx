@@ -1,4 +1,3 @@
-
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend} from "chart.js";
 
@@ -11,29 +10,33 @@ ChartJS.register(
   Legend
 );
 
-// interface Despesa {
-//   conta: string;
-//   valor: number;
-// }
 type Despesa = {
   GrupoID: number;
   Grupo: string;
-  valorReal: number;
   valorOrcado: number;
+  valorReal: number;
 }
 
 interface BarChartProps {
   despesas: Despesa[];
 }
 
-export default function BarChart({ despesas }: BarChartProps) {
+export default function GraficoBarDespesas({ despesas }: BarChartProps) {
+
   const data = {
     labels: despesas.map((despesa) => despesa.Grupo),
     datasets: [
       {
-        label: "Total da conta",
+        label: "Valor Real",
         data: despesas.map((despesa) => despesa.valorReal),
         backgroundColor: "rgba(252, 211, 77, 0.5)",
+        borderColor: "rgba(180, 83, 9, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Valor Orçado",
+        data: despesas.map((despesa) => despesa.valorOrcado),
+        backgroundColor: "rgba(247, 139, 139, 0.5)",
         borderColor: "rgba(180, 83, 9, 1)",
         borderWidth: 1,
       },
@@ -54,7 +57,6 @@ export default function BarChart({ despesas }: BarChartProps) {
       },
     },
   };
-
   return (
     <Bar data={data} options={options} className="flex max-h-96 min-w-[100%] text-sky-800" />
   );

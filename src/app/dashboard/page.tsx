@@ -9,15 +9,34 @@ import {useSession } from "next-auth/react";
 import { useGlobalContext } from "../contextGlobal";
 import { VerificaPeriodo } from "@/actions/orcamentoActions";
 import { retPeriodoAtual } from "@/lib/formatacoes";
+import GraficoBarDespesas from "./_components/graficoBarDespesas";
+import { RetEstatisticaDespesas } from "@/actions/graficosActions";
+import { useQuery } from "react-query";
 
-const despesas = [
-  { conta: "Alimentação", valor: 1200.0 },
-  { conta: "Transporte", valor: 2800.0 },
-  { conta: "Saude", valor: 530.0 },
-  { conta: "Lazer", valor: 830.0 },
-  { conta: "Habitação", valor: 870.0 },
-  { conta: "Educação", valor: 1200.0 },
-];
+// const despesas = [
+//   { conta: "Alimentação", valor: 1200.0 },
+//   { conta: "Transporte", valor: 2800.0 },
+//   { conta: "Saude", valor: 530.0 },
+//   { conta: "Lazer", valor: 830.0 },
+//   { conta: "Habitação", valor: 870.0 },
+//   { conta: "Educação", valor: 1200.0 },
+// ];
+
+// const despesas2 = [
+//   { conta: "Alimentação", valorReal: 1500.00, valorOrcado: 1200.00 },
+//   { conta: "Transporte", valorReal: 2500.00, valorOrcado: 2800.00 },
+//   { conta: "Saude", valorReal: 800.00, valorOrcado: 530.00 },
+//   { conta: "Lazer", valorReal: 1000.00, valorOrcado: 830.00 },
+//   { conta: "Habitação", valorReal: 1300.00, valorOrcado: 870.00 },
+//   { conta: "Educação", valorReal: 1500.00, valorOrcado: 1200.00 },
+// ];
+
+type Despesa = {
+  GrupoID: number;
+  Grupo: string;
+  valorReal: number;
+  valorOrcado: number;
+}
 
 const receitas = [
   { conta: "Salário", valor: 2500.0 },
@@ -48,6 +67,7 @@ export default function Page() {
   
   const [mostrarDespesas, setMostrarDespesas] = useState<boolean>(true);
   const [periodo, setPeriodo ] = useState<string>(retPeriodoAtual());
+  const [despesas, setDespesas ] = useState<Despesa[]>([]);
 
   const toggleDespesas = () => setMostrarDespesas(true);
   const toggleReceitas = () => setMostrarDespesas(false);
@@ -60,6 +80,13 @@ export default function Page() {
   });
   
 
+  //Carrega as Despesas para o grafico
+  const { data, isLoading, refetch } = useQuery( ["despesas", periodoId], async () => {
+    const response = await RetEstatisticaDespesas(periodoId);
+    setDespesas(response);
+    return response;
+  })
+
   const onChange = async (value: string) =>{
     const resultado = await VerificaPeriodo(usuarioId, value);
     if(resultado.status === "Sucesso"){
@@ -70,6 +97,8 @@ export default function Page() {
 
     return true
   }
+
+  console.log(despesas);
 
   return (
     // Contener
@@ -115,7 +144,7 @@ export default function Page() {
               </div>
               {/* <div className="flex items-center max-h-[300px] w-full bg-white p-2 md:p-4 rounded-lg shadow-md"> */}
                 {mostrarDespesas ? (
-                  <BarChart despesas={despesas} />
+                  <GraficoBarDespesas despesas = {despesas} />
                 ) : (
                   <BarChartR receitas={receitas} />
                 )}
