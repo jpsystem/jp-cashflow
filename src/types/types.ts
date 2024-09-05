@@ -126,3 +126,17 @@ export type tySaldos = {
   userId: number,
   totFonte: number
 }
+
+export type tyDespesaGrafico = {
+  GrupoID: number;
+  Grupo: string;
+  valorOrcado: number;
+  valorReal: number;
+}
+
+export type tyEntradasGrafico = {
+  SubGrupoID: number;
+  SubGrupo: string;
+  valorReal: number;
+}
+

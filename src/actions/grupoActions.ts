@@ -48,10 +48,8 @@ export async function RetGrupos(userID: number | undefined) {
 	      END as tipoDesc,
         Grupo.ativo as ativo,
         Grupo.userId as userId, 
-        count(SubGrupo.grupoId) as qtdSubGrupos
-      From 
-        Grupo Left Join SubGrupo 
-        On Grupo.id = SubGrupo.grupoId 
+        count(SubGrupo.grupoId) as qtdSubGrupos  
+      From  Grupo Left Join SubGrupo  On Grupo.id = SubGrupo.grupoId 
       Where
         Grupo.userID = ${userID}
       Group By 

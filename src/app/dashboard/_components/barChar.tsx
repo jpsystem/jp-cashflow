@@ -1,6 +1,7 @@
 
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend} from "chart.js";
+import { tyDespesaGrafico } from "@/types/types";
 
 ChartJS.register(
   CategoryScale,
@@ -11,19 +12,9 @@ ChartJS.register(
   Legend
 );
 
-// interface Despesa {
-//   conta: string;
-//   valor: number;
-// }
-type Despesa = {
-  GrupoID: number;
-  Grupo: string;
-  valorReal: number;
-  valorOrcado: number;
-}
 
 interface BarChartProps {
-  despesas: Despesa[];
+  despesas: tyDespesaGrafico[];
 }
 
 export default function BarChart({ despesas }: BarChartProps) {

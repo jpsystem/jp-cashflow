@@ -2,19 +2,13 @@
 
 
 import prisma from "@/lib/db"
+import { tyDespesaGrafico, tyEntradasGrafico } from "@/types/types";
 
-
-type Despesas = {
-  GrupoID: number;
-  Grupo: string;
-  valorReal: number;
-  valorOrcado: number;
-}
 
 export async function RetEstatisticaDespesas(periodoId: number | undefined) {
-  let dadosDesesas: Despesas[];
+  let dadosDespesas: tyDespesaGrafico[];
   try {
-    dadosDesesas = await prisma.$queryRaw`
+    dadosDespesas = await prisma.$queryRaw`
       SELECT 
         VO.GrupoID,
         VO.Grupo,
@@ -51,8 +45,40 @@ export async function RetEstatisticaDespesas(periodoId: number | undefined) {
               L.periodoId) AS VR
         ON VO.GrupoID = VR.GrupoID
     `
-    return  dadosDesesas
+    return  dadosDespesas
   } catch (error) {
-    return dadosDesesas = [];
+    return dadosDespesas = [];
   }
 }
+
+export async function RetEstatisticaEntradas(periodoId: number | undefined) {
+  let dadosEntradas: tyEntradasGrafico[];
+  try {
+    dadosEntradas = await prisma.$queryRaw`
+     SELECT 
+	    S.id as SubGrupoID, 
+	    S.nome as SubGrupo,
+	    SUM(L.valor) as valorReal,
+	    L.periodoId as PeriodoID
+    FROM 
+	    cashFlow.Lancamento AS L LEFT JOIN cashFlow.SubGrupo as S 
+	    ON L.subGrupoId = S.id LEFT JOIN cashFlow.Grupo as G 
+      ON S.grupoId = G.id
+    WHERE 
+	    L.periodoId = 10 AND G.tipo = 'C' 
+    GROUP BY 
+	    S.id, 
+      S.nome, 
+      L.periodoId
+     `
+    return  dadosEntradas
+  } catch (error) {
+    return dadosEntradas = [];
+  }
+}
+
+// export async function RetDespesasPeriodo(periodoId: number){
+//   const result = await prisma.lancamento.groupBy({
+    
+//   })
+// }

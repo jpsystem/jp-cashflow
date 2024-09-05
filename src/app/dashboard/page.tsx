@@ -12,6 +12,8 @@ import { retPeriodoAtual } from "@/lib/formatacoes";
 import GraficoBarDespesas from "./_components/graficoBarDespesas";
 import { RetEstatisticaDespesas } from "@/actions/graficosActions";
 import { useQuery } from "react-query";
+import { tyDespesaGrafico, tyEntradasGrafico } from "@/types/types";
+import GraficoPizzaEntradas from "./_components/graficoPizzaEntradas";
 
 // const despesas = [
 //   { conta: "Alimentação", valor: 1200.0 },
@@ -31,12 +33,12 @@ import { useQuery } from "react-query";
 //   { conta: "Educação", valorReal: 1500.00, valorOrcado: 1200.00 },
 // ];
 
-type Despesa = {
-  GrupoID: number;
-  Grupo: string;
-  valorReal: number;
-  valorOrcado: number;
-}
+// type Despesa = {
+//   GrupoID: number;
+//   Grupo: string;
+//   valorReal: number;
+//   valorOrcado: number;
+// }
 
 const receitas = [
   { conta: "Salário", valor: 2500.0 },
@@ -67,7 +69,7 @@ export default function Page() {
   
   const [mostrarDespesas, setMostrarDespesas] = useState<boolean>(true);
   const [periodo, setPeriodo ] = useState<string>(retPeriodoAtual());
-  const [despesas, setDespesas ] = useState<Despesa[]>([]);
+  const [despesas, setDespesas ] = useState<tyDespesaGrafico[]>([]);
 
   const toggleDespesas = () => setMostrarDespesas(true);
   const toggleReceitas = () => setMostrarDespesas(false);
@@ -79,6 +81,12 @@ export default function Page() {
     }
   });
   
+  // const entradas:tyEntradasGrafico[] = [
+  // {SubGrupoID: 1, SubGrupo: "JPsystem", valorReal: 1500.00},
+  // { SubGrupoID: 2, SubGrupo: "Betânia", valorReal: 2500.00 },
+  // { SubGrupoID: 3, SubGrupo: "Aluguéis", valorReal: 100.00 },
+  // { SubGrupoID: 4, SubGrupo: "Outros", valorReal: 0 },
+  // ];
 
   //Carrega as Despesas para o grafico
   const { data, isLoading, refetch } = useQuery( ["despesas", periodoId], async () => {
@@ -102,7 +110,7 @@ export default function Page() {
 
   return (
     // Contener
-    <div className="flex flex-row  h-[60%] w-[80%] max-h-[600px] max-w-[1000px] min-w-[600px]  min-h-[200px] items-center px-4 py-0 pb-16">
+    <div className="flex flex-row  h-[60%] w-[95%] max-w-[1600px] min-w-[600px]  min-h-[500px] items-center px-4 py-0 pb-16">
       <div className="flex flex-col justify-between h-full w-full  m-4 py-0">
         {/* Titulo da Página */}
         <div className="flex flex-col w-full mb-6 justify-center">
@@ -116,106 +124,52 @@ export default function Page() {
         {/* Definir periodo ativo */}
 
         {/* Conteudo */}
-        <div className="flex flex-row align-middle">
+        <div className="flex flex-row w-full align-middle">
           {/* Lado Esquerdo */}
-          <div className="flex flex-col justify-center align-middle  w-5/6 mr-6">
+          <div className="flex flex-col justify-center align-middle  w-full mr-6">
             {/* Linha 1 */}
-            <div className="flex flex-col justify-center mb-10">
-              {/* Grafico */}
-              <div className="flex justify-start items-center mb-4 w-full">
-                <label className="flex items-center mr-2 md:mr-4 text-sky-900">
+            <div className="flex flex-col justify-center mb-10 border-2 border-gray-200 rounded-md shadow-lg p-8">
+               <GraficoBarDespesas despesas = {despesas} />
+            </div>
+            {/* Linha 2 */}
+            <div className="flex flex-row justify-between mb-14">
+              {/* Linha 2 Coluna 1 */}
+              <div className="flex flex-col justify-center w-[45%] min-w-80 border-2 border-gray-200 rounded-md shadow-lg p-8">
+                <GraficoPizzaEntradas />
+              </div>
+              {/* Linha 2 Coluna 2 */}
+              <div className="flex flex-col justify-center w-[45%] min-w-80 border-2 border-gray-200 rounded-md shadow-lg p-8">                
+                {/* Grafico */}
+                <div className="flex justify-start items-center mb-4 w-full">
+                  <label className="flex items-center mr-2 md:mr-4 text-sky-900">
                   <input
                     type="checkbox"
                     checked={mostrarDespesas}
                     onChange={toggleDespesas}
-                    className="mr-1"
+                    className="mr-1 md:mr-2"
                   />
-                  Despesas 1
-                </label>
-                <label className="flex items-center text-sky-900">
-                  <input
-                    type="checkbox"
-                    checked={!mostrarDespesas}
-                    onChange={toggleReceitas}
-                    className="mr-1"
-                  />
-                  Receitas
-                </label>
-              </div>
-              {/* <div className="flex items-center max-h-[300px] w-full bg-white p-2 md:p-4 rounded-lg shadow-md"> */}
-                {mostrarDespesas ? (
-                  <GraficoBarDespesas despesas = {despesas} />
-                ) : (
-                  <BarChartR receitas={receitas} />
-                )}
-              {/* </div> */}
-            </div>
-                  {/* Linha 2 */}
-                  <div className="flex flex-row justify-between mb-14">
-                    {/* Linha 2 Coluna 1 */}
-                    <div className="flex flex-col justify-center w-[45%] min-w-80">
-                      {/* Grafico */}
-                      <div className="flex justify-start items-center mb-4 w-full">
-                        <label className="flex items-center mr-2 md:mr-4 text-sky-900">
-                          <input
-                            type="checkbox"
-                            checked={mostrarDespesas}
-                            onChange={toggleDespesas}
-                            className="mr-1 md:mr-2"
-                          />
-                          Despesas 2-1
-                        </label>
-                        <label className="flex items-center text-sky-900">
-                          <input
-                            type="checkbox"
-                            checked={!mostrarDespesas}
-                            onChange={toggleReceitas}
-                            className="mr-1 md:mr-2"
-                          />
-                          Receitas
-                        </label>
-                      </div>
-                      {/* <div className="flex items-center max-h-[300px] w-full bg-white p-2 md:p-4 rounded-lg shadow-md"> */}
-                        {mostrarDespesas ? (
-                          <BarChart despesas={despesas} />
-                        ) : (
-                          <BarChartR receitas={receitas} />
-                        )}
-                      {/* </div> */}
-                    </div>
-                    {/* Linha 2 Coluna 2 */}
-                    <div className="flex flex-col justify-center w-[45%] min-w-80">                
-                      {/* Grafico */}
-                      <div className="flex justify-start items-center mb-4 w-full">
-                        <label className="flex items-center mr-2 md:mr-4 text-sky-900">
-                          <input
-                            type="checkbox"
-                            checked={mostrarDespesas}
-                            onChange={toggleDespesas}
-                            className="mr-1 md:mr-2"
-                          />
-                          Despesas 2-2
-                        </label>
-                        <label className="flex items-center text-sky-900">
-                          <input
-                            type="checkbox"
-                            checked={!mostrarDespesas}
-                            onChange={toggleReceitas}
-                            className="mr-1 md:mr-2"
-                          />
-                          Receitas
-                        </label>
-                      </div>
-                      {/* <div className="flex items-center max-h-[300px] w-full bg-white p-2 md:p-4 rounded-lg shadow-md"> */}
-                        {mostrarDespesas ? (
-                          <BarChart despesas={despesas} />
-                        ) : (
-                          <BarChartR receitas={receitas} />
-                        )}
-                      {/* </div> */}
-                    </div>             
-                  </div>
+                    Despesas 2-2
+                  </label>
+                  <label className="flex items-center text-sky-900">
+                    <input
+                      type="checkbox"
+                      checked={!mostrarDespesas}
+                      onChange={toggleReceitas}
+                      className="mr-1 md:mr-2"
+                    />
+                    Receitas
+                  </label>
                 </div>
+                {/* <div className="flex items-center max-h-[300px] w-full bg-white p-2 md:p-4 rounded-lg shadow-md"> */}
+                  {mostrarDespesas ? (
+                    <BarChart despesas={despesas} />
+                  ) : (
+                    <BarChartR receitas={receitas} />
+                  )}
+                {/* </div> */}
+              </div>             
+            </div>
+          </div>
           {/* Lado Direito */}
           <div className="flex flex-col flex-wrap w-[300px] mb-4 h-full p-4 rounded-md shadow-lg items-center  justify-between">
             <div className="flex mb-10 rounded-md shadow-lg p-4"> 
