@@ -47,8 +47,9 @@ export async function RetGrupos(userID: number | undefined) {
           ELSE 'Movimento'
 	      END as tipoDesc,
         Grupo.ativo as ativo,
-        Grupo.userId as userId, 
-        count(SubGrupo.grupoId) as qtdSubGrupos  
+        Count(SubGrupo.id) as qtdSubGrupos, 
+        Grupo.userId as userId
+          
       From  Grupo Left Join SubGrupo  On Grupo.id = SubGrupo.grupoId 
       Where
         Grupo.userID = ${userID}
