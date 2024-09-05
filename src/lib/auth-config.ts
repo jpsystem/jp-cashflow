@@ -31,7 +31,8 @@ export const auth: NextAuthOptions = {
         }
 
         try {
-          const rep = await fetch(`http://localhost:3000/api/user?login=${credentials?.nickname}`);
+          //const rep = await fetch(`http://localhost:3000/api/user?login=${credentials?.nickname}`);
+          const rep = await fetch(`${process.env.BASEURL}/api/user?login=${credentials?.nickname}`);
           const retorno = await rep.json();
           const data = retorno.users;
           if(data){
