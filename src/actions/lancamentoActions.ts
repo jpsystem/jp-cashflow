@@ -77,7 +77,7 @@ export async function getLancamentos(periodoId: number) {
     valor: lancamento.valor,
     //dtLancamento: fromZonedTime (lancamento.dtLancamento,'America/Sao_Paulo'),
     //convertUTCToLocalDate
-    dtLancamento: convertUTCToLocalDate(lancamento.dtLancamento),
+    dtLancamento: convertLocalDateToUTC(lancamento.dtLancamento),
     descricao: lancamento.descricao || undefined,
     operacao: lancamento.operacao,
     periodoId: lancamento.periodoId,
