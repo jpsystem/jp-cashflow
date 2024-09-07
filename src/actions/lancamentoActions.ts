@@ -1,11 +1,11 @@
 
 'use server'
-import { fromZonedTime  } from 'date-fns-tz';
-import { tyFonte } from './../types/types';
-import { format } from 'date-fns';
+//import { fromZonedTime  } from 'date-fns-tz';
+//import { tyFonte } from './../types/types';
+//import { format } from 'date-fns';
 import { tyErro, tyResult, tyLancamento } from "@/types/types"
 import prisma from "@/lib/db"
-import { AcertaFusoHorario, convertLocalDateToUTC, convertUTCToLocalDate } from '@/lib/formatacoes';
+//import { AcertaFusoHorario, convertLocalDateToUTC, convertUTCToLocalDate } from '@/lib/formatacoes';
 
 
 type retorno = {
@@ -13,49 +13,6 @@ type retorno = {
   menssagem?: string
   regId: number
 }
-
-
-
-// export async function RetLancamentos(periodoId: number | undefined) {
-//   let lancamentos: tyLancamento[];
-//   try {
-//     lancamentos = await prisma.$queryRaw`
-//       SELECT
-// 	      L.id as lancamentoId,
-//         L.valor as valor,
-//         DATE(L.dtLancamento) as dtLancamento,
-//         L.descricao as descricao,
-//         L.operacao as operacao,
-//         L.periodoId as periodoId,
-//         P.periodo as periodo,
-//         L.subGrupoId as subGrupoId,
-//         S.nome as subGrupo,
-//         L.fonteId as fonteId,
-//         L.fonteIdD as fonteIdD,
-//         CASE
-//           WHEN L.fonteIdD > 0 THEN CONCAT('De: ', F.nome , CHAR(13), CHAR(10), 'Para: ', F2.nome)
-//           ELSE F.nome
-// 	      END AS fontes,
-// 	      S.grupoId as grupoId,
-// 	      G.nome as grupo
-//       FROM 
-//       cashFlow.Lancamento as L Left Join cashFlow.Fonte as F
-//         ON L.fonteId = F.id    Left Join cashFlow.Fonte as F2
-//         ON L.fonteIdD = F2.id  Left Join cashFlow.SubGrupo as S
-//         ON L.subGrupoId = S.id Left Join cashFlow.Grupo as G
-//         ON S.grupoId = G.id Left Join cashFlow.Periodo as P
-//         ON L.periodoId = P.id
-//       Where
-// 	      L.periodoId =  ${periodoId} 
-//       Order By
-//         dtLancamento,
-//         lancamentoId  
-//     `
-//     return  lancamentos
-//   } catch (error) {
-//     return lancamentos = [];
-//   }
-// }
 
 export async function CriarLancamento(dados: tyLancamento){
   let result:tyResult = <tyResult>{};
@@ -120,7 +77,7 @@ export async function getLancamentos(periodoId: number) {
     valor: lancamento.valor,
     //dtLancamento: fromZonedTime (lancamento.dtLancamento,'America/Sao_Paulo'),
     //convertUTCToLocalDate
-    dtLancamento: AcertaFusoHorario(lancamento.dtLancamento),
+    dtLancamento: lancamento.dtLancamento,
     descricao: lancamento.descricao || undefined,
     operacao: lancamento.operacao,
     periodoId: lancamento.periodoId,
