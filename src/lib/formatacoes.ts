@@ -78,18 +78,25 @@ export function convertLocalDateToUTC(date: Date) {
 //Converter uma data UTC para uma data Local
 //independente da Timezone
 export function convertUTCToLocalDate(utcDate: Date) {
-  if(utcDate.getUTCDay() !== utcDate.getDay()){
-    return new Date(
-      utcDate.getUTCFullYear(),
-      utcDate.getUTCMonth(),
-      utcDate.getUTCDate(),
-      utcDate.getUTCHours(),
-      utcDate.getUTCMinutes(),
-      utcDate.getUTCSeconds(),
-      utcDate.getUTCMilliseconds(),
-    );
+  return new Date(
+    utcDate.getUTCFullYear(),
+    utcDate.getUTCMonth(),
+    utcDate.getUTCDate(),
+    utcDate.getUTCHours(),
+    utcDate.getUTCMinutes(),
+    utcDate.getUTCSeconds(),
+    utcDate.getUTCMilliseconds(),
+  );
+}
+
+export function AcertaFusoHorario(pData: Date){
+  //console.log("Data Local: ", pData.getDate());
+  //console.log("Data UTC: ", pData.getUTCDate());
+  //console.log("Data LocalCovertida: ", convertUTCToLocalDate(pData));
+  if(pData.getDate() != pData.getUTCDate()){
+    return convertUTCToLocalDate(pData)
   }else{
-    return utcDate;
+    return pData
   }
 }
 
