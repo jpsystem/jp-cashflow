@@ -72,6 +72,7 @@ export async function getLancamentos(periodoId: number) {
     ],
   });
 
+  //MASTER
   const dados:tyLancamento[] = lancamentos.map(lancamento => ({
     lancamentoId: lancamento.id,
     valor: lancamento.valor,
