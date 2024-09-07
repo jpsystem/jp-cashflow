@@ -5,7 +5,7 @@
 //import { format } from 'date-fns';
 import { tyErro, tyResult, tyLancamento } from "@/types/types"
 import prisma from "@/lib/db"
-//import { AcertaFusoHorario, convertLocalDateToUTC, convertUTCToLocalDate } from '@/lib/formatacoes';
+import { AcertaFusoHorario, convertLocalDateToUTC, convertUTCToLocalDate } from '@/lib/formatacoes';
 
 
 type retorno = {
@@ -77,7 +77,7 @@ export async function getLancamentos(periodoId: number) {
     valor: lancamento.valor,
     //dtLancamento: fromZonedTime (lancamento.dtLancamento,'America/Sao_Paulo'),
     //convertUTCToLocalDate
-    dtLancamento: lancamento.dtLancamento,
+    dtLancamento: convertUTCToLocalDate(lancamento.dtLancamento),
     descricao: lancamento.descricao || undefined,
     operacao: lancamento.operacao,
     periodoId: lancamento.periodoId,
