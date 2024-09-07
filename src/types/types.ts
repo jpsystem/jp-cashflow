@@ -140,3 +140,9 @@ export type tyEntradasGrafico = {
   valorReal: number;
 }
 
+export type tySubGruposGrafico = {
+  SubGrupoID: number;
+  SubGrupo: string;
+  valorReal: number;
+}
+

@@ -2,7 +2,7 @@
 
 
 import prisma from "@/lib/db"
-import { tyDespesaGrafico, tyEntradasGrafico } from "@/types/types";
+import { tyDespesaGrafico, tyEntradasGrafico, tySelects, tySubGruposGrafico } from "@/types/types";
 
 
 export async function RetEstatisticaDespesas(periodoId: number | undefined) {
@@ -77,8 +77,54 @@ export async function RetEstatisticaEntradas(periodoId: number | undefined) {
   }
 }
 
-// export async function RetDespesasPeriodo(periodoId: number){
-//   const result = await prisma.lancamento.groupBy({
-    
-//   })
-// }
+export async function ListaDespesasPeriodo(periodoId: number | undefined) {
+  let contas: tySelects[];
+  try {
+    contas = await prisma.$queryRaw`
+    SELECT 
+      G.id as id,
+      G.nome as nome
+    FROM 
+	    cashFlow.Lancamento AS L LEFT JOIN cashFlow.SubGrupo AS S
+      ON L.subGrupoId = S.id LEFT JOIN cashFlow.Grupo AS G
+      ON S.grupoId = G.id
+    WHERE 
+	    L.periodoId = ${periodoId} AND G.tipo = "D"
+    GROUP BY
+      G.nome
+    ORDER BY
+	    G.nome
+    `
+    return  contas
+  } catch (error) {
+    return contas = [];
+  }
+}
+
+export async function ListaSubContasPorContas(periodoId: number | undefined, grupoId: number) {
+  let subContas: tySubGruposGrafico[];
+  try {
+    subContas = await prisma.$queryRaw`
+      SELECT 
+	      L.subGrupoId,
+        S.nome as SubGrupo,
+        SUM(L.valor) as valorReal
+      FROM 
+	      cashFlow.Lancamento AS L LEFT JOIN cashFlow.SubGrupo AS S
+        ON L.subGrupoId = S.id LEFT JOIN cashFlow.Grupo AS G
+        ON S.grupoId = G.id
+      WHERE 
+	      L.periodoId = ${periodoId} AND 
+        G.tipo = "D" AND 
+        G.id = ${grupoId}
+      GROUP BY
+	      L.subGrupoId,
+        S.nome
+      ORDER BY
+        SubGrupo
+    `
+    return  subContas
+  } catch (error) {
+    return subContas = [];
+  }
+}

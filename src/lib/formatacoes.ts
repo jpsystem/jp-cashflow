@@ -78,15 +78,19 @@ export function convertLocalDateToUTC(date: Date) {
 //Converter uma data UTC para uma data Local
 //independente da Timezone
 export function convertUTCToLocalDate(utcDate: Date) {
-  return new Date(
-    utcDate.getUTCFullYear(),
-    utcDate.getUTCMonth(),
-    utcDate.getUTCDate(),
-    utcDate.getUTCHours(),
-    utcDate.getUTCMinutes(),
-    utcDate.getUTCSeconds(),
-    utcDate.getUTCMilliseconds(),
-  );
+  if(utcDate.getUTCDay() !== utcDate.getDay()){
+    return new Date(
+      utcDate.getUTCFullYear(),
+      utcDate.getUTCMonth(),
+      utcDate.getUTCDate(),
+      utcDate.getUTCHours(),
+      utcDate.getUTCMinutes(),
+      utcDate.getUTCSeconds(),
+      utcDate.getUTCMilliseconds(),
+    );
+  }else{
+    return utcDate;
+  }
 }
 
 //const options = { timeZone: 'Africa/Accra' }; //Pais de Gana-Acrra que tem UTC-0
