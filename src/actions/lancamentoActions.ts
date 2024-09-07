@@ -71,13 +71,13 @@ export async function getLancamentos(periodoId: number) {
       { id: 'asc' },
     ],
   });
-
+  //Atualização utilizando convertUTCToLocalDate as 11:21
   const dados:tyLancamento[] = lancamentos.map(lancamento => ({
     lancamentoId: lancamento.id,
     valor: lancamento.valor,
     //dtLancamento: fromZonedTime (lancamento.dtLancamento,'America/Sao_Paulo'),
     //convertUTCToLocalDate
-    dtLancamento: lancamento.dtLancamento,
+    dtLancamento: convertUTCToLocalDate(lancamento.dtLancamento),
     descricao: lancamento.descricao || undefined,
     operacao: lancamento.operacao,
     periodoId: lancamento.periodoId,
