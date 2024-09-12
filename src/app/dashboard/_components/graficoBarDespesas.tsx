@@ -1,6 +1,11 @@
+"use client"
+
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend} from "chart.js";
-import { tyDespesaGrafico } from "@/types/types"
+import { useDashboardContext } from "./contextDashboardProvider";
+import { useGlobalContext } from "@/app/contextGlobal";
+import { useEffect } from "react";
+import { RetEstatisticaDespesas } from "@/actions/graficosActions";
 
 ChartJS.register(
   CategoryScale,
@@ -11,26 +16,36 @@ ChartJS.register(
   Legend
 );
 
+export default function GraficoBarDespesas() {
+  const { dadosBarDespesas, setDadosBarDespesas } = useDashboardContext();
+  const { periodoId } = useGlobalContext();
 
-interface BarChartProps {
-  despesas: tyDespesaGrafico[];
-}
+  
+  useEffect(() => {
+    async function carregaDados() {
+      const response = await RetEstatisticaDespesas(periodoId);
+      setDadosBarDespesas(response);
+    }
+    
+    if(periodoId){
+      carregaDados();
+    }
+  },[periodoId, setDadosBarDespesas]);
 
-export default function GraficoBarDespesas({ despesas }: BarChartProps) {
 
   const data = {
-    labels: despesas.map((despesa) => despesa.Grupo),
+    labels: dadosBarDespesas.map((despesa) => despesa.Grupo),
     datasets: [
       {
         label: "Valor Real",
-        data: despesas.map((despesa) => despesa.valorReal),
+        data: dadosBarDespesas.map((despesa) => despesa.valorReal),
         backgroundColor: "rgba(252, 211, 77, 0.5)",
         borderColor: "rgba(180, 83, 9, 1)",
         borderWidth: 1,
       },
       {
         label: "Valor Orçado",
-        data: despesas.map((despesa) => despesa.valorOrcado),
+        data: dadosBarDespesas.map((despesa) => despesa.valorOrcado),
         backgroundColor: "rgba(247, 139, 139, 0.5)",
         borderColor: "rgba(180, 83, 9, 1)",
         borderWidth: 1,

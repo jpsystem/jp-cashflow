@@ -43,16 +43,17 @@ export const LancamentoProvider: React.FC<AppProviderProps> = ({children}: AppPr
   const [operacao, setOperacao] = useState<string>("")
 
   return (
-    <LancamentoContext.Provider value={{ dados, setDados, 
-                                          grupoId, setGrupoId,
-                                          subGrupoId, setSubGrupoId,
-                                          fonteId, setFonteId,
-                                          formGrupoId, setFormGrupoId,
-                                          formSubGrupoId, setFormSubGrupoId,
-                                          formFonteIdO, setFormFonteIdO, 
-                                          formFonteIdD, setFormFonteIdD, 
-                                          operacao, setOperacao,
-                                        }}>
+    <LancamentoContext.Provider value={{ 
+      dados, setDados, 
+      grupoId, setGrupoId,
+      subGrupoId, setSubGrupoId,
+      fonteId, setFonteId,
+      formGrupoId, setFormGrupoId,
+      formSubGrupoId, setFormSubGrupoId,
+      formFonteIdO, setFormFonteIdO, 
+      formFonteIdD, setFormFonteIdD, 
+      operacao, setOperacao,
+    }}>
       {children}
     </LancamentoContext.Provider>
   );

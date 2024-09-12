@@ -1,44 +1,36 @@
-import React from 'react';
+"use client"
+
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { tyEntradasGrafico } from '@/types/types';
-import { useQuery } from 'react-query';
+import { useDashboardContext } from './contextDashboardProvider';
 import { useGlobalContext } from '@/app/contextGlobal';
+import { useEffect } from 'react';
 import { RetEstatisticaEntradas } from '@/actions/graficosActions';
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface BarChartProps {
-  entradas: tyEntradasGrafico[];
-}
-
 export default function GraficoPizzaEntradas() {
+  const { dadosPizzaEntradas, setDadosPizzaEntradas } = useDashboardContext();
+  const { periodoId } = useGlobalContext();
 
-    //Coloca o id di usuário no contexto
-    const { usuarioId, periodoId, setPeriodoId} = useGlobalContext();
+  
+  useEffect(() => {
+    async function carregaDados() {
+      const response = await RetEstatisticaEntradas(periodoId);
+      setDadosPizzaEntradas(response);
+    }
+    
+    if(periodoId){
+      carregaDados();
+    }
+  },[periodoId, setDadosPizzaEntradas]);
 
-    // //Carrega as Despesas para o grafico
-    // const { data, isLoading, refetch } = useQuery( ["despesas", periodoId], async () => {
-    //   const response = await RetEstatisticaEntradas(periodoId);
-    //   //setDespesas(response);
-    //   return response;
-    // })
-
-  const entradas:tyEntradasGrafico[] = [
-  {SubGrupoID: 1, SubGrupo: "JPsystem", valorReal: 1500.00},
-  { SubGrupoID: 2, SubGrupo: "Betânia", valorReal: 2500.00 },
-  { SubGrupoID: 3, SubGrupo: "Aluguéis", valorReal: 100.00 },
-  { SubGrupoID: 4, SubGrupo: "Outros", valorReal: 0 },
-  ];
-
-
-  //console.log("AQUI: ", data);
-
-  const datas = {
-    labels: entradas?.map(e => e.SubGrupo),
+  const data = {
+    labels: dadosPizzaEntradas?.map(e => e.SubGrupo),
     datasets: [
       {
-        data: entradas?.map(e => e.valorReal),
+        data: dadosPizzaEntradas?.map(e => e.valorReal),
         backgroundColor: [
           'rgba(255, 99, 132, 0.6)',
           'rgba(54, 162, 235, 0.6)',
@@ -68,5 +60,5 @@ export default function GraficoPizzaEntradas() {
       },
     },
   }
-  return <Pie data={datas} options={options} />;
+  return <Pie data={data} options={options} />;
 }

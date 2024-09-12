@@ -1,7 +1,8 @@
+'use client'
 
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend} from "chart.js";
-import { tyDespesaGrafico } from "@/types/types";
+import { useDashboardContext } from "./contextDashboardProvider";
 
 ChartJS.register(
   CategoryScale,
@@ -12,18 +13,16 @@ ChartJS.register(
   Legend
 );
 
+export default function GraficoBarSubContas() {
+  const { dadosBarSubContas } = useDashboardContext();
+  console.log("Dados:", dadosBarSubContas)
 
-interface BarChartProps {
-  despesas: tyDespesaGrafico[];
-}
-
-export default function BarChart({ despesas }: BarChartProps) {
   const data = {
-    labels: despesas.map((despesa) => despesa.Grupo),
+    labels: dadosBarSubContas.map((subGrupo) => subGrupo.SubGrupo),
     datasets: [
       {
         label: "Total da conta",
-        data: despesas.map((despesa) => despesa.valorReal),
+        data: dadosBarSubContas.map((subGrupo) => subGrupo.valorReal),
         backgroundColor: "rgba(252, 211, 77, 0.5)",
         borderColor: "rgba(180, 83, 9, 1)",
         borderWidth: 1,
@@ -41,12 +40,14 @@ export default function BarChart({ despesas }: BarChartProps) {
       title: {
         color:'rgb(7 89 133)',
         display: true,
-        text: "Totais das Despesas no Periodo",
+        text: `Destribuição das Sub-Contas`,
       },
     },
   };
 
   return (
-    <Bar data={data} options={options} className="flex max-h-96 min-w-[100%] text-sky-800" />
+    <>
+      <Bar data={data} options={options} className="flex max-h-96 min-w-[100%] text-sky-800" />
+    </>
   );
 }

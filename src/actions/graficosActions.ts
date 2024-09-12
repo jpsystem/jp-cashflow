@@ -1,10 +1,11 @@
 'use server'
 
-
 import prisma from "@/lib/db"
 import { tyDespesaGrafico, tyEntradasGrafico, tySelects, tySubGruposGrafico } from "@/types/types";
 
 
+// Retorna uma lista de tyDespesaGrafico com os dados necessario para
+// o grafico de despsas em relação aos valores orçados de um detrminado periodo
 export async function RetEstatisticaDespesas(periodoId: number | undefined) {
   let dadosDespesas: tyDespesaGrafico[];
   try {
@@ -51,6 +52,8 @@ export async function RetEstatisticaDespesas(periodoId: number | undefined) {
   }
 }
 
+// Retorna uma lista de tyEntradasGrafico com os dados necessario para
+// o grafico de pizza de destribuição das entradas no periodo
 export async function RetEstatisticaEntradas(periodoId: number | undefined) {
   let dadosEntradas: tyEntradasGrafico[];
   try {
@@ -65,7 +68,7 @@ export async function RetEstatisticaEntradas(periodoId: number | undefined) {
 	    ON L.subGrupoId = S.id LEFT JOIN cashFlow.Grupo as G 
       ON S.grupoId = G.id
     WHERE 
-	    L.periodoId = 10 AND G.tipo = 'C' 
+	    L.periodoId = ${periodoId} AND G.tipo = 'C' 
     GROUP BY 
 	    S.id, 
       S.nome, 
@@ -77,6 +80,8 @@ export async function RetEstatisticaEntradas(periodoId: number | undefined) {
   }
 }
 
+// Retorna uma lista dos grupos de despesas para o combo 
+// do grafico de detalhes do grupo.
 export async function ListaDespesasPeriodo(periodoId: number | undefined) {
   let contas: tySelects[];
   try {
@@ -101,6 +106,8 @@ export async function ListaDespesasPeriodo(periodoId: number | undefined) {
   }
 }
 
+// Retorna uma lista do tipo tySubGruposGrafico com as somatorias
+// dos subgrupos para o grafico de detalhes do grupo
 export async function ListaSubContasPorContas(periodoId: number | undefined, grupoId: number) {
   let subContas: tySubGruposGrafico[];
   try {
@@ -125,6 +132,9 @@ export async function ListaSubContasPorContas(periodoId: number | undefined, gru
     `
     return  subContas
   } catch (error) {
-    return subContas = [];
+    return subContas = [{
+      SubGrupoID: 0,
+      SubGrupo: '',
+      valorReal: 0}];
   }
 }

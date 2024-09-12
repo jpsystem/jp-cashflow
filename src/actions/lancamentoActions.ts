@@ -1,8 +1,6 @@
 
 'use server'
-//import { fromZonedTime  } from 'date-fns-tz';
-//import { tyFonte } from './../types/types';
-//import { format } from 'date-fns';
+
 import { tyErro, tyResult, tyLancamento } from "@/types/types"
 import prisma from "@/lib/db"
 import { AcertaFusoHorario, convertLocalDateToUTC, convertUTCToLocalDate } from '@/lib/formatacoes';
@@ -14,6 +12,7 @@ type retorno = {
   regId: number
 }
 
+//incluir um novo lançamento
 export async function CriarLancamento(dados: tyLancamento){
   let result:tyResult = <tyResult>{};
   try {
@@ -42,6 +41,7 @@ export async function CriarLancamento(dados: tyLancamento){
   }
 }
 
+// Função que retorna o tipo de operação de uma conta
 export async function RetOperacao(grupoId:number){
   const oper = await prisma.grupo.findUnique({
     where:{
@@ -51,6 +51,7 @@ export async function RetOperacao(grupoId:number){
   return oper?.tipo;
 }
 
+//Retorna os dados dos lancamentos de um determinado periodo
 export async function getLancamentos(periodoId: number) {
   const lancamentos = await prisma.lancamento.findMany({
     where: {
