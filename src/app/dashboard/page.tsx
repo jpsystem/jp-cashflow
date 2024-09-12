@@ -8,16 +8,19 @@ import GraficoPizzaEntradas from "./_components/graficoPizzaEntradas";
 import { DashboardProvider } from "./_components/contextDashboardProvider";
 import GraficoBarSubContas from "./_components/graficoBarSubContas";
 import SelectContas from "./_components/selectContas";
+import { useEffect } from "react";
 
 export default function Page() {
 
   const { data: session } = useSession();
   const router = useRouter();
 
-  // Verifica se existe seção
-  if (!session) {
-    router.push('/'); // Redireciona para a página inicial se não houver sessão
-  }
+  useEffect(() => {
+    if (!session) {
+      router.push('/'); // Redireciona para a página inicial se não houver sessão
+    }
+  }, [router, session]);
+
 
   return (
     <DashboardProvider>

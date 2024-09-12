@@ -15,7 +15,6 @@ ChartJS.register(
 
 export default function GraficoBarSubContas() {
   const { dadosBarSubContas } = useDashboardContext();
-  console.log("Dados:", dadosBarSubContas)
 
   const data = {
     labels: dadosBarSubContas.map((subGrupo) => subGrupo.SubGrupo),
