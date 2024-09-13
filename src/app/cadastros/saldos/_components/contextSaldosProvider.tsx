@@ -1,11 +1,15 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { tySaldo } from '@/types/types';
+import { tySaldo, tySomatoriasPeriodo } from '@/types/types';
 
+// interface AppContextProps {
+//   dados: tySaldo[];
+//   setDados: (data: tySaldo[]) => void;
+// }
 interface AppContextProps {
-  dados: tySaldo[];
-  setDados: (data: tySaldo[]) => void;
+  dados: tySomatoriasPeriodo[];
+  setDados: (data: tySomatoriasPeriodo[]) => void;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -17,7 +21,8 @@ interface AppProviderProps {
 
 export const SaldosProvider: React.FC<AppProviderProps> = ({children, userId}: AppProviderProps) => {
 
-  const [dados, setDados] = useState<tySaldo[]>([]);
+  // const [dados, setDados] = useState<tySaldo[]>([]);
+  const [dados, setDados] = useState<tySomatoriasPeriodo[]>([]);
 
   return (
     <AppContext.Provider value={{ dados, setDados }}>

@@ -16,14 +16,14 @@ import ComboFontes from "./querys/selectFontes";
 import { retDataDoPeriodo } from "@/lib/formatacoes";
 
 export default function PainelFiltros() {
-  const { dados, setDados } = useLancamentoContext();
+  const { dados, setDados, fonteId, subGrupoId, grupoId } = useLancamentoContext();
   const { periodoId, periodo } = useGlobalContext();
 
   // Carrega os Lancamentos
   const { data, isLoading, refetch } = useQuery(
-    ["lancamentos", periodoId],
+    ["lancamentos", periodoId, grupoId, subGrupoId, fonteId],
     async () => {
-      const response: tyLancamento[] = await getLancamentos(periodoId);
+      const response: tyLancamento[] = await getLancamentos(periodoId, grupoId, subGrupoId, fonteId);
       setDados(response);
       return response;
     }

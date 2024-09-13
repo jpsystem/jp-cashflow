@@ -7,16 +7,19 @@ import { Label } from "@/components/ui/label";
 import { useQuery } from "react-query";
 import queryClient from "@/lib/reactQuery";
 import { AtualizaSaldo, AtualizaSaldos, CriarSaldos, fontesAtivas, RetSaldos } from "@/actions/saldosActions";
-import { tySaldo, tyResult } from "@/types/types";
+import { tySaldo, tyResult, tySomatoriasPeriodo } from "@/types/types";
 import { useSaldoContext } from "./contextSaldosProvider";
 import { useGlobalContext } from "@/app/contextGlobal";
+import { RetSomatoriasPeriodo } from "@/actions/graficosActions";
 
 export default function PainelControleSaldo() {
   const {dados, setDados} = useSaldoContext();
   const { usuarioId, periodoId, periodo } = useGlobalContext();
 
   const { data, isLoading, refetch } = useQuery(["saldos", periodoId], async () => {
-      const response: tySaldo[] = await RetSaldos(periodoId);
+      // const response: tySaldo[] = await RetSaldos(periodoId);
+      // const response: tySomatoriasPeriodo[] = await RetSaldos(periodoId);
+      const response: tySomatoriasPeriodo[] = await RetSomatoriasPeriodo(periodoId);
       setDados(response);
       return response;
     }

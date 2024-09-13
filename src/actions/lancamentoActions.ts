@@ -4,6 +4,7 @@
 import { tyErro, tyResult, tyLancamento } from "@/types/types"
 import prisma from "@/lib/db"
 import { AcertaFusoHorario, convertLocalDateToUTC, convertUTCToLocalDate } from '@/lib/formatacoes';
+import { format, toDate } from "date-fns";
 
 
 type retorno = {
@@ -52,10 +53,13 @@ export async function RetOperacao(grupoId:number){
 }
 
 //Retorna os dados dos lancamentos de um determinado periodo
-export async function getLancamentos(periodoId: number) {
+export async function getLancamentos(periodoId: number, grupoId?: number, subGrupoId?: number, fonteId?: number) {
   const lancamentos = await prisma.lancamento.findMany({
     where: {
       periodoId: periodoId,
+      ...grupoId && { grupoId: grupoId },
+      ...subGrupoId && { subGrupoId: subGrupoId },
+      ...fonteId && { fonteId: fonteId },
     },
     include: {
       periodo: true,
@@ -68,8 +72,8 @@ export async function getLancamentos(periodoId: number) {
       fonteD: true,
     },
     orderBy: [
-      { dtLancamento: 'asc' },
-      { id: 'asc' },
+      { dtLancamento: 'desc' },
+      { id: 'desc' },
     ],
   });
 
@@ -77,7 +81,7 @@ export async function getLancamentos(periodoId: number) {
     lancamentoId: lancamento.id,
     valor: lancamento.valor,
     //dtLancamento: fromZonedTime (lancamento.dtLancamento,'America/Sao_Paulo'),
-    //convertUTCToLocalDate
+    //convertUTCToLocalDate //convertUTCToLocalDate(lancamento.dtLancamento),
     dtLancamento: convertUTCToLocalDate(lancamento.dtLancamento),
     descricao: lancamento.descricao || undefined,
     operacao: lancamento.operacao,

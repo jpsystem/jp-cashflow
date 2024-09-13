@@ -38,7 +38,7 @@ export default function FormSaldo ({indice, isEdita, setIsEdita}: Props) {
   const form = useForm<FormProps>({
     resolver: zodResolver(schema),
     defaultValues: {
-      valor: DoubleToRealBR(dados[indice].valor || 0),
+      valor: DoubleToRealBR(dados[indice].valorInicial || 0),
     },
   });
 
@@ -67,7 +67,7 @@ export default function FormSaldo ({indice, isEdita, setIsEdita}: Props) {
       <Sheet open={isEdita} onOpenChange={setIsEdita}>
         <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[300px] max-h-[330px] min-w-[400px] max-w-[400px] overflow-x-auto rounded-2xl bg-white p-8 text-sky-800 shadow">
           <DialogTitle className="text-sky-900 mb-4">Editar Saldo</DialogTitle>
-          <Label className="text-sky-600 bold">Alterar o valor do saldo da fonte {dados[indice].nomeFonte}</Label>
+          <Label className="text-sky-600 bold">Alterar o valor do saldo da fonte {dados[indice].Fonte}</Label>
           {/* {dados[indice].nomeGrupo} */}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>

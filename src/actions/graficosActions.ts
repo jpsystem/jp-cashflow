@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from "@/lib/db"
-import { tyDespesaGrafico, tyEntradasGrafico, tySelects, tySubGruposGrafico } from "@/types/types";
+import { tyDespesaGrafico, tyEntradasGrafico, tySelects, tySomatoriasPeriodo, tySubGruposGrafico } from "@/types/types";
 
 
 // Retorna uma lista de tyDespesaGrafico com os dados necessario para
@@ -136,5 +136,94 @@ export async function ListaSubContasPorContas(periodoId: number | undefined, gru
       SubGrupoID: 0,
       SubGrupo: '',
       valorReal: 0}];
+  }
+}
+
+// Retorna uma lista de fontes com as somatorias
+// no periodo
+export async function RetSomatoriasPeriodo(periodoId: number | undefined) {
+  let saldos: tySomatoriasPeriodo[];
+  try {
+    saldos = await prisma.$queryRaw`
+      SELECT
+	      A.FonteId,
+        A.Fonte,
+        A.Tipo,
+        A.saldoId,
+        ROUND(A.SaldoInicio, 2) as valorInicial,
+        IFNULL(ROUND(B.Somatoria, 2),0) as valorPeriodo,
+        IFNULL(ROUND((ROUND(A.SaldoInicio, 2) + ROUND(IFNULL(B.Somatoria , 0), 2) ), 2), 0) as saldoAtual
+      FROM
+      ( SELECT 
+	        S.fonteId as FonteId, 
+          F.nome as Fonte, 
+          S.valor as SaldoInicio, 
+          F.tipo as Tipo,
+          S.id as saldoId 
+        FROM 
+	        cashFlow.Saldo as S left join cashFlow.Fonte as F 
+          on S.fonteId = F.id 
+        WHERE 
+	        periodoId = ${periodoId}
+      ) as A
+      LEFT JOIN 
+      ( SELECT 
+          SUM(  CASE WHEN U.Operacao = "C" THEN U.Total ELSE -(U.Total) END) as Somatoria,
+          U.FonteId,
+          U.Fonte
+        FROM
+        ( 
+	        ( SELECT 
+		          SUM(L.valor) Total,
+		          CASE  WHEN L.operacao = "M" THEN "D" ELSE  L.operacao END AS Operacao, 
+		          L.fonteId as FonteId,  
+		          F.nome as Fonte 
+	          FROM 
+		          cashFlow.Lancamento as L left join cashFlow.Fonte as F 
+		          ON L.fonteId = F.id
+	          WHERE 
+              L.periodoId = ${periodoId}
+	          GROUP BY
+		          L.operacao,
+		          L.fonteId, 
+		          F.nome
+          ) 
+	        UNION
+	        ( SELECT 
+		          SUM(L.valor) as Total, 
+		          "C" as Operacao, 
+		          L.fonteIdD as FonteId, 
+		          F2.nome as Fonte 
+	          FROM 
+		          cashFlow.Lancamento as L left join cashFlow.Fonte as F2  
+		          ON L.fonteIdD = F2.id 
+	          WHERE 
+		          L.periodoId = ${periodoId} AND
+		          F2.id IS NOT NULL
+	          GROUP BY
+              Operacao,
+		          L.fonteIdD, 
+		          F2.nome
+          )
+        ) as U
+        GROUP BY
+          U.FonteId,
+          U.Fonte
+        ORDER BY
+	        U.Fonte
+      ) as B 
+      ON A.FonteId = B.FonteId   
+    `
+    return  saldos
+  } catch (error) {
+    return  saldos = [{
+      FonteId: 0,
+      Fonte: "",
+      Tipo: "",
+      saldoId: 0,
+      valorInicial: 0,
+      valorPeriodo: 0,
+      saldoAtual: 0,
+    }];
   }
 }

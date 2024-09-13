@@ -5,6 +5,7 @@ import { useGlobalContext } from "@/app/contextGlobal";
 import { tySelects } from "@/types/types";
 import { useQuery} from 'react-query';
 import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue } from "@/components/ui/select";
+import queryClient from "@/lib/reactQuery";
 
 
 interface Props {
@@ -15,9 +16,9 @@ export default function ComboFontes ({pai}: Props) {
   const { fonteId, setFonteId, 
           formFonteIdO, setFormFonteIdO,
           formFonteIdD, setFormFonteIdD,
-        } = useLancamentoContext();
+        grupoId, subGrupoId} = useLancamentoContext();
 
-  const {usuarioId} = useGlobalContext();
+  const {usuarioId, periodoId} = useGlobalContext();
 
   //Tratamento para o pai do componente
   let valorDefault: string = ""
@@ -53,6 +54,8 @@ export default function ComboFontes ({pai}: Props) {
     //Tratamento conforme Pai
     if(pai === "Filtros"){
       setFonteId(Number(value));
+      //Limpar o cache da consulta para atualizar os dados
+      queryClient.refetchQueries(["lancamentos", periodoId, grupoId, subGrupoId, fonteId]);  
     }
     if(pai === "FormO"){
       setFormFonteIdO(Number(value));

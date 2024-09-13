@@ -146,3 +146,13 @@ export type tySubGruposGrafico = {
   valorReal: number;
 }
 
+export type tySomatoriasPeriodo = {
+  FonteId: number;
+  Fonte: string;
+  Tipo: string;
+  saldoId: number;
+  valorInicial: number;
+  valorPeriodo: number;
+  saldoAtual: number;
+}
+
