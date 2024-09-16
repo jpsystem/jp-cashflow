@@ -8,41 +8,21 @@ import GraficoPizzaEntradas from "./_components/graficoPizzaEntradas";
 import { DashboardProvider } from "./_components/contextDashboardProvider";
 import GraficoBarSubContas from "./_components/graficoBarSubContas";
 import SelectContas from "./_components/selectContas";
-import { useEffect, useState } from "react";
-import { tySomatoriasPeriodo } from "@/types/types";
-import { RetSomatoriasPeriodo } from "@/actions/graficosActions";
-import { useGlobalContext } from "../contextGlobal";
+import { useEffect } from "react";
+
 
 export default function Page() {
 
   const { data: session } = useSession();
   const router = useRouter();
-  const {periodoId} = useGlobalContext();
-  const [dadosMovimento, setDadosMovimento] = useState<tySomatoriasPeriodo[]>([]);
-
-  
+   
   useEffect(() => {
-    async function carregaMovimentos(){
-      const response = await RetSomatoriasPeriodo(periodoId);
-      setDadosMovimento(response);
-    }
-
     if (!session) {
       router.push('/'); // Redireciona para a página inicial se não houver sessão
     }
+  }, [ router, session]);
 
-    carregaMovimentos();
 
-  }, [ periodoId, router, session]);
-
-  function saldoContas(tipo: String) {
-    const somaContas = dadosMovimento
-      .filter((movimento) => movimento.Tipo === tipo)
-      .reduce((soma, movimento) => soma + movimento.saldoAtual, 0);
-      const formatoMoeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-    
-      return formatoMoeda.format(somaContas);
-  }
 
   return (
     <DashboardProvider>
@@ -82,18 +62,21 @@ export default function Page() {
               </div>
             </div>
             {/* Lado Direito */}
-            <div className="flex flex-col flex-wrap w-[300px] mb-4 h-full p-4 rounded-md shadow-lg items-center  justify-between">
+            <div className="flex flex-col flex-wrap w-[300px] mb-4 h-full p-4 rounded-md shadow-lg items-center  justify-start">
               <div className="flex mb-10 rounded-md shadow-lg p-4"> 
-                <CardConta icone="despesas.png"     conta="Despesas"         valor={"1520.0"} />
+                <CardConta icone="despesas.png"     conta="Despesas" />            
               </div>
               <div className="flex mb-10 p-4 rounded-md shadow-lg">
-                <CardConta icone="receitas.png"     conta="Receitas"         valor={"1850.0"} />
+                <CardConta icone="receitas.png"     conta="Receitas" />
               </div>
               <div className="flex mb-10 p-4 rounded-md shadow-lg">
-                <CardConta icone="saldo.png"        conta="Saldo disponível" valor={saldoContas("M")} />
+                <CardConta icone="receitas.png"     conta="Cartões de crédito"  />
               </div>
               <div className="flex mb-10 p-4 rounded-md shadow-lg">
-                <CardConta icone="investimento.png" conta="Investimentos"    valor={saldoContas("A")} />
+                <CardConta icone="saldo.png"        conta="Saldo disponível" />
+              </div>
+              <div className="flex mb-10 p-4 rounded-md shadow-lg">
+                <CardConta icone="investimento.png" conta="Investimentos" />
               </div>
             </div>
           </div>

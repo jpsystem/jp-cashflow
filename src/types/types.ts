@@ -107,7 +107,8 @@ export type tyLancamento = {
   periodoId?: number,
   periodo?: string,
   valor?: number,
-  dtLancamento?: Date,
+  //dtLancamento?: Date,
+  dtLancamento?: string;
   descricao?: string,
   operacao?: string, // Pode ser D-Debito C-Crédito ou M-Movimento
   grupoId?: number,
