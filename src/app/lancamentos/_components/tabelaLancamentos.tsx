@@ -116,7 +116,7 @@ export default function TabelaLancamentos() {
           </TableHeader>
           <TableBody>
           {dados.map((item: tyLancamento, index: number) => (
-            <TableRow key={item.lancamentoId}>
+            <TableRow className="hover:bg-slate-200" key={item.lancamentoId}>
               <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">{item.grupo}</TableCell>
               <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">{item.subGrupo}</TableCell>
               <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">{item.descricao}</TableCell>

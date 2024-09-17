@@ -56,7 +56,8 @@ export default function EditaLancamentoForm ({pItem, pIndice, isEdita, setIsEdit
     formSubGrupoId, setFormSubGrupoId,
     formFonteIdO, setFormFonteIdO, 
     formFonteIdD, setFormFonteIdD,
-    setDados, operacao, setOperacao
+    setDados, operacao, setOperacao,
+    grupoId, subGrupoId, fonteId
 } = useLancamentoContext();
 
   const { periodoId, periodo } = useGlobalContext();
@@ -78,7 +79,7 @@ export default function EditaLancamentoForm ({pItem, pIndice, isEdita, setIsEdit
     defaultValues: {
       valor: DoubleToRealBR(pItem?.valor || 0),
       descricao: pItem?.descricao,
-      dtLancamento: pItem?.dtLancamento
+      dtLancamento: pItem?.dtLancamento ? new Date(pItem.dtLancamento) : null
     },
   });
 
@@ -114,7 +115,7 @@ export default function EditaLancamentoForm ({pItem, pIndice, isEdita, setIsEdit
       fonteIdD : formFonteIdD,
       valor : RealBRToDouble(values.valor),
       descricao : values.descricao,
-      dtLancamento : values.dtLancamento ?? undefined,
+      dtLancamento : values.dtLancamento?.toUTCString() ?? undefined,
     };
     altLancamento(novoLancamento); 
   };
@@ -130,7 +131,7 @@ export default function EditaLancamentoForm ({pItem, pIndice, isEdita, setIsEdit
           setMensagem(`O lançamento foi alterado com sucesso!` );
           setShowAlerta(true);   
           //Limpar o cache da consulta para atualizar os dados
-          queryClient.refetchQueries(["lancamentos", periodoId]) 
+          queryClient.refetchQueries(["lancamentos", periodoId, grupoId, subGrupoId, fonteId ]) 
         }else{
           if(retorno.menssagem === "P2002")
             {

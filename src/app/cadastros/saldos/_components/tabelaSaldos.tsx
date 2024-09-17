@@ -61,7 +61,7 @@ export default function TabelaSaldo() {
                     variant="ghost"
                     onClick={() => handleEditFonte(index)}
                   >
-                    <FileEditIcon className="h-4 w-4" />
+                    <FileEditIcon className="h-6 w-6" />
                   </Button>
                 </div>
               </TableCell>

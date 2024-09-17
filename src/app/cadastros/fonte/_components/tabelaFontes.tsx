@@ -109,23 +109,24 @@ export default function TabelaFontes({ userIdSession }: Props) {
               setIsEdita={setIsEdita}
             />
           )}
-          <Table>
+          {/* <Table> */}
+          <Table className="min-w-[1300px] overflow-auto rounded-2xl p-8 border-sky-800 border-2 shadow">
             <TableHeader>
               <TableRow>
                 {/* <TableHead className="w-[100px]">ID</TableHead> */}
-                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">
+                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center text-lg">
                   Fonte
                 </TableHead>
-                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">
+                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center text-lg">
                   Descrição
                 </TableHead>
-                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">
+                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center text-lg">
                   Tipo
                 </TableHead>
-                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">
+                <TableHead className="bg-sky-900 border-2 border-sky-700 text-sky-50 text-center text-lg">
                   Ativo
                 </TableHead>
-                <TableHead className="w-[100px] bg-sky-900 border-2 border-sky-700 text-sky-50 text-center">
+                <TableHead className="w-[100px] bg-sky-900 border-2 border-sky-700 text-sky-50 text-center text-lg">
                   Ações
                 </TableHead>
               </TableRow>
@@ -134,18 +135,10 @@ export default function TabelaFontes({ userIdSession }: Props) {
               {data?.map((item: any) => (
                 <TableRow className="hover:bg-slate-200" key={item.id}>
                   {/* <TableCell>{item.id}</TableCell> */}
-                  <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[13%] text-lg">
-                    {item.nome}
-                  </TableCell>
-                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[64%] text-center text-lg">
-                    {item.descricao}
-                  </TableCell>
-                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[6%] text-center text-lg">
-                    {retTipo(item.tipo)}
-                  </TableCell>
-                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[1%] text-center text-lg">
-                    {item.ativo.toString()}
-                  </TableCell>
+                  <TableCell className="border-2 border-sky-900 text-sky-900 text-center w-[15%] text-lg">{item.nome}</TableCell>
+                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[55%] text-center text-lg">{item.descricao}</TableCell>
+                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[15%] text-center text-lg">{retTipo(item.tipo)}</TableCell>
+                  <TableCell className="border-2 border-sky-900 text-sky-900 w-[5%] text-center text-lg">{item.ativo.toString()}</TableCell>
                   <TableCell className="border-2 border-sky-900 w-[10%]">
                     <div className="flex gap-1 justify-center text-sky-800">
                       <Button
@@ -154,7 +147,7 @@ export default function TabelaFontes({ userIdSession }: Props) {
                         size="icon"
                         variant="ghost"
                       >
-                        <FileEditIcon className="h-4 w-4" />
+                        <FileEditIcon className="h-6 w-6" />
                         <span className="sr-only">Edit</span>
                       </Button>
                       <Button
@@ -163,7 +156,7 @@ export default function TabelaFontes({ userIdSession }: Props) {
                         size="icon"
                         variant="ghost"
                       >
-                        <TrashIcon className="h-4 w-4" />
+                        <TrashIcon className="h-6 w-6 text-red-700" />
                         <span className="sr-only">Delete</span>
                       </Button>
                     </div>

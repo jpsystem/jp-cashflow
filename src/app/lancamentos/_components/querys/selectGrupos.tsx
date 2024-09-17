@@ -6,14 +6,19 @@ import { tySelects } from "@/types/types";
 import { useQuery} from 'react-query';
 import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue } from "@/components/ui/select";
 import { RetOperacao } from "@/actions/lancamentoActions";
+import queryClient from "@/lib/reactQuery";
 
 interface Props {
   pai: string;
 }
 
 export default function ComboGrupos ({pai}: Props) { 
-  const {setOperacao, grupoId, setGrupoId, formGrupoId, setFormGrupoId, setSubGrupoId, setFormSubGrupoId} = useLancamentoContext();
-  const {usuarioId} = useGlobalContext();
+  const { setOperacao, fonteId,
+          grupoId, setGrupoId, 
+          formGrupoId, setFormGrupoId, 
+          subGrupoId, setSubGrupoId, 
+          setFormSubGrupoId} = useLancamentoContext();
+  const {usuarioId, periodoId} = useGlobalContext();
 
   //Tratamento para o pai do componente
   let valorDefault: string = ""
@@ -49,6 +54,7 @@ export default function ComboGrupos ({pai}: Props) {
     if(pai === "Filtros"){
       setGrupoId(Number(value));
       setSubGrupoId(0);
+      queryClient.refetchQueries(["lancamentos", periodoId, grupoId, subGrupoId, fonteId]);
     }
     if(pai === "Form"){
       setFormGrupoId(Number(value));

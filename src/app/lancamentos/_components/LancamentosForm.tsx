@@ -47,7 +47,8 @@ export default function NovoLancamentosForm() {
           formSubGrupoId, setFormSubGrupoId,
           formFonteIdO, setFormFonteIdO, 
           formFonteIdD, setFormFonteIdD,
-          setDados, operacao, setOperacao
+          setDados, operacao, setOperacao,
+          grupoId, subGrupoId, fonteId
   } = useLancamentoContext();
   const { periodoId, periodo } = useGlobalContext();
 
@@ -109,7 +110,7 @@ export default function NovoLancamentosForm() {
       periodoId: periodoId,
       valor : RealBRToDouble(values.valor),
       descricao : values.descricao,
-      dtLancamento : values.dtLancamento ?? undefined,
+      dtLancamento : values.dtLancamento?.toUTCString() ?? undefined,
       operacao : operacao,
     };
     incluirLancamento(novoLancamento);
@@ -127,19 +128,18 @@ export default function NovoLancamentosForm() {
         setMensagem(`A fonte foi incluida com sucesso!` );
         setShowAlerta(true);   
          //Limpar o cache da consulta para atualizar os dados
-         queryClient.refetchQueries(["lancamentos", periodoId])   
+         queryClient.refetchQueries(["lancamentos", periodoId, grupoId, subGrupoId, fonteId])   
 
       }else{
-        if(retorno.menssagem === "P2002")
-          {
+        if(retorno.menssagem === "P2002"){
             setTipo(tipoEnu.Erro);
             setMensagem("A fonte já está cadastrada!" );
             setShowAlerta(true);
-          }else{
+        }else{
             setTipo(tipoEnu.Erro);
             setMensagem("O correu um erro inesperado no servidor! " + retorno.menssagem  );
             setShowAlerta(true);
-          }
+        }
       }
     } catch (error) {
       setTipo(tipoEnu.Erro);

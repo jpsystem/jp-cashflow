@@ -20,7 +20,8 @@ export default async function GrupoDeContas() {
             Gerenciar o plano de contas para o controle financeiro
           </p>
         </div>
-        <div className="flex w-full justify-end">
+        {/* <div className="flex w-full justify-end"> */}
+        <div className="justify-items-center flex w-full justify-end content-center mt-6">
           <NovoGrupoForm />
         </div>
       </div>

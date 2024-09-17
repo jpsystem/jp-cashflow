@@ -4,7 +4,7 @@
 import { tyErro, tyResult, tyLancamento } from "@/types/types"
 import prisma from "@/lib/db"
 import { AcertaFusoHorario, convertLocalDateToUTC, convertUTCToLocalDate } from '@/lib/formatacoes';
-import { format, toDate } from "date-fns";
+import { format, formatDate, toDate } from "date-fns";
 
 
 type retorno = {
@@ -20,7 +20,7 @@ export async function CriarLancamento(dados: tyLancamento){
     const lancamento = await prisma.lancamento.create({
       data: {
         valor: dados.valor,
-        dtLancamento: dados.dtLancamento ?? new Date(),
+        dtLancamento:  toDate(formatDate(dados.dtLancamento || new Date(), 'yyyy-MM-dd')),
         operacao: dados.operacao,
         subGrupoId: dados.subGrupoId ?? 0,
         fonteId: dados.fonteId ?? 0,
@@ -57,7 +57,9 @@ export async function getLancamentos(periodoId: number, grupoId?: number, subGru
   const lancamentos = await prisma.lancamento.findMany({
     where: {
       periodoId: periodoId,
-      ...grupoId && { grupoId: grupoId },
+      subGrupo: {
+        ...grupoId && { grupoId: grupoId },
+      },
       ...subGrupoId && { subGrupoId: subGrupoId },
       ...fonteId && { fonteId: fonteId },
     },
@@ -82,7 +84,7 @@ export async function getLancamentos(periodoId: number, grupoId?: number, subGru
     valor: lancamento.valor,
     //dtLancamento: fromZonedTime (lancamento.dtLancamento,'America/Sao_Paulo'),
     //convertUTCToLocalDate //convertUTCToLocalDate(lancamento.dtLancamento),
-    dtLancamento: lancamento.dtLancamento.toUTCString(), //convertUTCToLocalDate(lancamento.dtLancamento),
+    dtLancamento: convertUTCToLocalDate(lancamento.dtLancamento).toUTCString(), //lancamento.dtLancamento.toUTCString(),
     descricao: lancamento.descricao || undefined,
     operacao: lancamento.operacao,
     periodoId: lancamento.periodoId,
@@ -115,7 +117,7 @@ export async function AlteraLancamento(data: tyLancamento) {
       where: {id: data.lancamentoId},
       data: {
         valor: data.valor,
-        dtLancamento: data.dtLancamento ?? new Date(),
+        dtLancamento: toDate(formatDate(data.dtLancamento || new Date(), 'yyyy-MM-dd')), //data.dtLancamento ?? new Date(),
         subGrupoId: data.subGrupoId ?? 0,
         fonteId: data.fonteId ?? 0,
         descricao: data.descricao,
