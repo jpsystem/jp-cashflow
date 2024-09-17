@@ -35,7 +35,7 @@ export default function Page() {
               Dashboard
             </h1>
             <p className="text-sm md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-sky-800 text-center">
-              Painel de estatísticas do período.
+              Painel de Estatísticas do Período.
             </p>
           </div>
           {/* Definir periodo ativo */}
