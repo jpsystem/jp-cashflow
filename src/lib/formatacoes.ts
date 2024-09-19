@@ -148,7 +148,23 @@ export function FormataDataISOString(dataISO: string, mascara: string): string {
  * @returns {string} Data no formato ISO String.
  */
 export function FormataDataParaISOString(data: Date): string{
-  const dataUTC = toZonedTime(data, 'UTC');
+  console.log("DATA ", data);
+
+  //Busca o fuso horário local
+  const Local = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  console.log("Local ", Local);
+
+  //Converte a data UTC para o fuso horário Local
+  const dataLocal = toZonedTime(data, Local);
+  console.log("dataLocal ", dataLocal);
+
+  //Converte a data para o fuso horário UTC
+  const dataUTC = toZonedTime(dataLocal, 'UTC');
+  console.log("dataUTC ", dataUTC);
+
+  //Retorna uma string no formato ISO String
   const dataISOString = dataUTC.toISOString();
+  console.log("dataISOString ", dataISOString);
+  
   return dataISOString;
 }
