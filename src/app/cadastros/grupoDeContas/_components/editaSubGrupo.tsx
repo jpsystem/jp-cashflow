@@ -66,7 +66,7 @@ export default function EditaSubGrupo({onEditItem, data, isEdita, setIsEdita}: P
     <Sheet open={isEdita}>
       <SheetContent
         side="top"
-        className={`bg-gray-100/90 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-fit max-w-[500px] max-h-[600px] overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow justify-self-center`}>
+        className={`bg-gray-100/90 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-fit  h-fit overflow-auto rounded-2xl bg-white p-8 text-gray-900 shadow justify-self-center`}>
         <SheetHeader>
           <SheetTitle>Editar SubGrupo</SheetTitle>
         </SheetHeader>
@@ -100,9 +100,9 @@ export default function EditaSubGrupo({onEditItem, data, isEdita, setIsEdita}: P
                       <FormControl>
                         <Textarea placeholder="Descricao" {...field} />
                       </FormControl>
-                      <FormDescription>
+                      {/* <FormDescription>
                         Digite a descrição do subgrupo.
-                      </FormDescription>
+                      </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -113,20 +113,20 @@ export default function EditaSubGrupo({onEditItem, data, isEdita, setIsEdita}: P
                   render={({ field }) => (
                     <FormItem
                       //onChange={handleChange} 
-                      className="flex items-center space-x-2"
+                      className="flex items-center justify-start "
                     >
                       <FormLabel className={"mr-2"}>Ativo</FormLabel>
                       <FormControl>
                         <Checkbox 
-                          className={"align-top"} 
+                          className={"h-6 w-6"} 
                           checked={field.value}
                           onCheckedChange={field.onChange}
                           //defaultChecked 
                         />
                       </FormControl>
-                      <FormDescription>
+                      {/* <FormDescription>
                         Defina se o subgrupo está ativo.
-                      </FormDescription>
+                      </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}

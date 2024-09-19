@@ -4,21 +4,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Label } from "@/components/ui/label";
-import { Sheet, SheetClose, SheetContent, SheetFooter } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetTitle } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import { DialogTitle } from "@/components/ui/dialog";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { format, startOfMonth, endOfMonth, parseISO, addHours } from "date-fns";
+//import "react-datepicker/dist/react-datepicker.css";
+import { startOfMonth, endOfMonth, } from "date-fns";
 import { ptBR } from "date-fns/locale"; 
-//import { useOrcamentoContext } from "./contextProvider";
 import { RealBRToDouble, DoubleToRealBR, retDataDoPeriodo } from "@/lib/formatacoes"; 
-//import retorno from "@/lib/retSecaoUserID";
 import { tyLancamento, tyResult } from "@/types/types";
-//import { AtualizaOrcamento } from "@/actions/orcamentoActions";
 import queryClient from "@/lib/reactQuery";
 import { useLancamentoContext } from "./contextLancamentoProvider";
 import { useGlobalContext } from "@/app/contextGlobal";
@@ -167,9 +163,11 @@ export default function EditaLancamentoForm ({pItem, pIndice, isEdita, setIsEdit
         )
       }       
       <Sheet open={isEdita} onOpenChange={setIsEdita}>
-        <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[500px] max-h-[500px] min-w-[800px] max-w-[800px] overflow-x-auto rounded-2xl bg-white p-8 text-sky-800 shadow">
-          <DialogTitle className="text-sky-900 mb-412">Editar Orçamento</DialogTitle>
-          <Label className="text-sky-600 bold">Alterar o lançamento</Label>
+        <SheetContent 
+          className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 min-h-[500px] max-h-[500px] min-w-[800px] max-w-[800px] overflow-x-auto rounded-2xl bg-white p-8 text-sky-800 shadow"  
+        >
+          <SheetTitle className="text-sky-900 mb-412">Editar Lançamento</SheetTitle>
+          <SheetDescription className="text-sky-600 bold mb-4">Formulário para edição do lançamento.</SheetDescription>
           {/* CONTA E SUBCONTA */}
           <div className="flex gap-2 mb-2" >
             <div className="flex-1 pointer-events-none  opacity-50">

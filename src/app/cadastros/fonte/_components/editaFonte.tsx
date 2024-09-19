@@ -6,7 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import React, { useState } from "react";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle} from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,  DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -120,7 +120,7 @@ export default function EditaFonteForm({ pIndice, pItem, isEdita, setIsEdita }: 
   
 
   return (
-    <>
+    <div className="flex flex-col">
       { showAlerta && (
           <WarningBox
             tipo={tipo}
@@ -130,11 +130,14 @@ export default function EditaFonteForm({ pIndice, pItem, isEdita, setIsEdita }: 
         )
       } 
       <Sheet open={isEdita} onOpenChange={setIsEdita}>
-        <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[410px] min-w-[400px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
+        <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[480px] min-w-[600px] overflow-auto rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
           <SheetHeader>
             <SheetTitle className="text-2xl text-sky-900">
               Editar fonte
-            </SheetTitle> 
+            </SheetTitle>
+            <SheetDescription className="text-sky-600 bold mb-4">
+              Formulário para edição da fonte financeira.
+            </SheetDescription>
           </SheetHeader>
           {isEdita && (
             <div className="mt-4">
@@ -278,6 +281,6 @@ export default function EditaFonteForm({ pIndice, pItem, isEdita, setIsEdita }: 
           )}
         </SheetContent>
       </Sheet>
-    </>
+    </div>
   );
 }

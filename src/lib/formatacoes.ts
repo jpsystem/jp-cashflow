@@ -1,8 +1,10 @@
 
-
+import { format, parseISO } from 'date-fns';
 import { getDate } from 'date-fns';
-import { toDate, format, formatInTimeZone } from 'date-fns-tz';
-import { ptBR } from 'date-fns/locale/pt-BR'
+import {  toDate,formatInTimeZone } from 'date-fns-tz';
+import {   toZonedTime }  from 'date-fns-tz'
+import { ptBR } from 'date-fns/locale';
+//import { ptBR } from 'date-fns/locale/pt-BR'
 import { Contact } from 'lucide-react';
 
 export function RealBRToDouble(value: string): number {
@@ -89,15 +91,64 @@ export function convertUTCToLocalDate(utcDate: Date) {
   );
 }
 
-export function AcertaFusoHorario(pData: Date){
-  //console.log("Data Local: ", pData.getDate());
-  //console.log("Data UTC: ", pData.getUTCDate());
-  //console.log("Data LocalCovertida: ", convertUTCToLocalDate(pData));
-  if(pData.getDate() != pData.getUTCDate()){
-    return convertUTCToLocalDate(pData)
-  }else{
-    return pData
-  }
+// export function AcertaFusoHorario(pData: Date){
+//   //console.log("Data Local: ", pData.getDate());
+//   //console.log("Data UTC: ", pData.getUTCDate());
+//   //console.log("Data LocalCovertida: ", convertUTCToLocalDate(pData));
+//   if(pData.getDate() === pData.getUTCDate()){
+//     return convertUTCToLocalDate(pData)
+//   }else{
+//     return pData
+//   }
+// }
+
+// export function AtualizaData(dateString: string){
+
+// //const dateString = "2023-04-21T15:00:00Z";
+// const parsedDate = parseISO(dateString);
+// const timeZone = 'America/Sao_Paulo';
+// const zonedDate = toZonedTime(parsedDate, timeZone);
+
+// return zonedDate;
+// }
+
+
+// export function ConverterData(pData: Date) {
+// // Obter o fuso horário local
+// const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+// console.log("TIME_ZONE: ", timeZone, pData);
+// // Converte a data UTC para o fuso horário local
+// const dataLocal = toZonedTime(pData, timeZone);
+
+// const dataFormatada = format(dataLocal, 'yyyy-MM-dd HH:mm:ssXXX');
+// console.log("DATA_FORMATADA: ", dataFormatada);
+// return dataFormatada;
+
+// }
+
+/**
+ * Converte uma data no formato ISO String para o formato
+ * informado em 'mascara'.
+ * @param {string} dataISO - Data no formato ISO String
+ * @param {string} mascara - Mascara para formatar a data
+ * Ex: 'dd/MM/yyyy', 'dd/MM', 'dd/MMM', 'MM/yyyy', 'yyyy',  etc
+ * @returns {string} Data formatada
+ */
+export function FormataDataISOString(dataISO: string, mascara: string): string {
+  const data = parseISO(dataISO);
+  const dataFormatada = format(data, mascara);
+  return dataFormatada;
 }
 
-//const options = { timeZone: 'Africa/Accra' }; //Pais de Gana-Acrra que tem UTC-0
+
+/**
+ * Converte uma data para o formato UTC em seguida
+ * converte para ISO String.
+ * @param {Date} data - Data a ser convertida.
+ * @returns {string} Data no formato ISO String.
+ */
+export function FormataDataParaISOString(data: Date): string{
+  const dataUTC = toZonedTime(data, 'UTC');
+  const dataISOString = dataUTC.toISOString();
+  return dataISOString;
+}

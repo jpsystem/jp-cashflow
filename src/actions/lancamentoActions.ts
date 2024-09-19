@@ -3,8 +3,9 @@
 
 import { tyErro, tyResult, tyLancamento } from "@/types/types"
 import prisma from "@/lib/db"
-import { AcertaFusoHorario, convertLocalDateToUTC, convertUTCToLocalDate } from '@/lib/formatacoes';
-import { format, formatDate, toDate } from "date-fns";
+import { convertLocalDateToUTC, convertUTCToLocalDate, FormataDataParaISOString } from '@/lib/formatacoes';
+import { formatDate, toDate } from "date-fns";
+
 
 
 type retorno = {
@@ -78,13 +79,10 @@ export async function getLancamentos(periodoId: number, grupoId?: number, subGru
       { id: 'desc' },
     ],
   });
-
   const dados:tyLancamento[] = lancamentos.map(lancamento => ({
     lancamentoId: lancamento.id,
     valor: lancamento.valor,
-    //dtLancamento: fromZonedTime (lancamento.dtLancamento,'America/Sao_Paulo'),
-    //convertUTCToLocalDate //convertUTCToLocalDate(lancamento.dtLancamento),
-    dtLancamento: convertUTCToLocalDate(lancamento.dtLancamento).toUTCString(), //lancamento.dtLancamento.toUTCString(),
+    dtLancamento: FormataDataParaISOString(lancamento.dtLancamento),
     descricao: lancamento.descricao || undefined,
     operacao: lancamento.operacao,
     periodoId: lancamento.periodoId,

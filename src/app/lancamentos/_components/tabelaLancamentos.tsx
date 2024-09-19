@@ -7,7 +7,7 @@ import { Pen, Replace, Trash2 } from "lucide-react";
 import { useLancamentoContext } from "./contextLancamentoProvider";
 import { useGlobalContext } from "@/app/contextGlobal";
 import { tyLancamento } from "@/types/types";
-import { DoubleToRealBR } from "@/lib/formatacoes";
+import { DoubleToRealBR, FormataDataISOString } from "@/lib/formatacoes";
 import { format }  from "date-fns";
 import { ptBR } from 'date-fns/locale';
 import { DeleteLancamentos } from "@/actions/lancamentoActions";
@@ -123,7 +123,8 @@ export default function TabelaLancamentos() {
               <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">{DoubleToRealBR(item.valor || 0)}</TableCell>
               <TableCell className="text-center border-2 whitespace-pre-wrap text-sky-800 border-sky-900 text-lg">{item.fontes}</TableCell>
               <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">
-                {format(item.dtLancamento || new Date(), 'dd/MM', { locale: ptBR }) }
+                {/* {format(item.dtLancamento || new Date(), 'dd/MM', { locale: ptBR }) } */}
+                {FormataDataISOString(item.dtLancamento || "", "dd/MM") }
               </TableCell>
               <TableCell className="text-center border-2 text-sky-800 border-sky-900">
               <div className="flex px-2 justify-between text-sky-800">

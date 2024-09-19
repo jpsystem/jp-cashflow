@@ -156,7 +156,7 @@ export default function NovoGrupoForm() {
         >
           + Grupo
         </Button>
-        <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  max-h-[500px] min-w-[680px] overflow-auto rounded-2xl bg-white p-6 shadow-lg">
+        <SheetContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  max-h-[600px] min-w-[780px] overflow-auto rounded-2xl bg-white p-6 shadow-lg">
           <SheetHeader>
             <SheetTitle className="text-2xl text-sky-900">
               Novo grupo de Contas
