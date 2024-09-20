@@ -3,7 +3,7 @@
 
 import { tyErro, tyResult, tyLancamento } from "@/types/types"
 import prisma from "@/lib/db"
-import { convertLocalDateToUTC, convertUTCToLocalDate, FormataDataParaISOString } from '@/lib/formatacoes';
+import { convertLocalDateToUTC, convertUTCToLocalDate, FormataDataStringAmericaSaoPaulo,  } from '@/lib/formatacoes';
 import { formatDate, toDate } from "date-fns";
 
 
@@ -82,7 +82,7 @@ export async function getLancamentos(periodoId: number, grupoId?: number, subGru
   const dados:tyLancamento[] = lancamentos.map(lancamento => ({
     lancamentoId: lancamento.id,
     valor: lancamento.valor,
-    dtLancamento: FormataDataParaISOString(lancamento.dtLancamento),
+    dtLancamento: FormataDataStringAmericaSaoPaulo(lancamento.dtLancamento),
     descricao: lancamento.descricao || undefined,
     operacao: lancamento.operacao,
     periodoId: lancamento.periodoId,

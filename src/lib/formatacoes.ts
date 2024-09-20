@@ -91,41 +91,6 @@ export function convertUTCToLocalDate(utcDate: Date) {
   );
 }
 
-// export function AcertaFusoHorario(pData: Date){
-//   //console.log("Data Local: ", pData.getDate());
-//   //console.log("Data UTC: ", pData.getUTCDate());
-//   //console.log("Data LocalCovertida: ", convertUTCToLocalDate(pData));
-//   if(pData.getDate() === pData.getUTCDate()){
-//     return convertUTCToLocalDate(pData)
-//   }else{
-//     return pData
-//   }
-// }
-
-// export function AtualizaData(dateString: string){
-
-// //const dateString = "2023-04-21T15:00:00Z";
-// const parsedDate = parseISO(dateString);
-// const timeZone = 'America/Sao_Paulo';
-// const zonedDate = toZonedTime(parsedDate, timeZone);
-
-// return zonedDate;
-// }
-
-
-// export function ConverterData(pData: Date) {
-// // Obter o fuso horário local
-// const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-// console.log("TIME_ZONE: ", timeZone, pData);
-// // Converte a data UTC para o fuso horário local
-// const dataLocal = toZonedTime(pData, timeZone);
-
-// const dataFormatada = format(dataLocal, 'yyyy-MM-dd HH:mm:ssXXX');
-// console.log("DATA_FORMATADA: ", dataFormatada);
-// return dataFormatada;
-
-// }
-
 /**
  * Converte uma data no formato ISO String para o formato
  * informado em 'mascara'.
@@ -135,36 +100,33 @@ export function convertUTCToLocalDate(utcDate: Date) {
  * @returns {string} Data formatada
  */
 export function FormataDataISOString(dataISO: string, mascara: string): string {
-  const data = parseISO(dataISO);
-  const dataFormatada = format(data, mascara);
-  return dataFormatada;
-}
 
+  if (!dataISO) return ''; // Evita erro caso a data seja vazia
+
+  const timeZone = 'America/Sao_Paulo';
+  
+  const dataFormatada = formatInTimeZone(dataISO, timeZone, mascara, { locale: ptBR });
+
+  //console.log("DATAISO:", dataISO, dataFormatada);
+  return dataFormatada;
+
+}
 
 /**
- * Converte uma data para o formato UTC em seguida
- * converte para ISO String.
- * @param {Date} data - Data a ser convertida.
- * @returns {string} Data no formato ISO String.
+ * Converte uma data no fuso UTC para o formato ISO String, 
+ * ajustando para o fuso horário de São Paulo (UTC-3)
+ * @param {Date} dataUTC - Data no formato Date UTC
+ * @returns {string} Data no formato ISO String
  */
-export function FormataDataParaISOString(data: Date): string{
-  console.log("DATA ", data);
+export function FormataDataStringAmericaSaoPaulo(dataUTC: Date): string {
 
-  //Busca o fuso horário local
-  const Local = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  console.log("Local ", Local);
+  if (!dataUTC) return ''; // Evita erro caso a data seja vazia
+  const timeZone = 'America/Sao_Paulo';
 
-  //Converte a data UTC para o fuso horário Local
-  const dataLocal = toZonedTime(data, Local);
-  console.log("dataLocal ", dataLocal);
+  // Ajuste o horário manualmente adicionando 3 horas ao UTC para evitar o problema
+  const dateUTC = new Date(dataUTC); 
+  dateUTC.setHours(dateUTC.getHours() + 3); // Ajuste o horário para corrigir a diferença de UTC-3
 
-  //Converte a data para o fuso horário UTC
-  const dataUTC = toZonedTime(dataLocal, 'UTC');
-  console.log("dataUTC ", dataUTC);
-
-  //Retorna uma string no formato ISO String
-  const dataISOString = dataUTC.toISOString();
-  console.log("dataISOString ", dataISOString);
-  
-  return dataISOString;
+  return dateUTC.toISOString();
 }
+
