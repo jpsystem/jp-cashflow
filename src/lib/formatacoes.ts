@@ -103,7 +103,7 @@ export function FormataDataISOString(dataISO: string, mascara: string): string {
 
   if (!dataISO) return ''; // Evita erro caso a data seja vazia
 
-  const timeZone = 'America/Sao_Paulo';
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   
   const dataFormatada = formatInTimeZone(dataISO, timeZone, mascara, { locale: ptBR });
 
@@ -114,18 +114,25 @@ export function FormataDataISOString(dataISO: string, mascara: string): string {
 
 /**
  * Converte uma data no fuso UTC para o formato ISO String, 
- * ajustando para o fuso horário de São Paulo (UTC-3)
+ * ajustando para o fuso horário local (UTC-DiferencaEmHoras)
  * @param {Date} dataUTC - Data no formato Date UTC
  * @returns {string} Data no formato ISO String
  */
-export function FormataDataStringAmericaSaoPaulo(dataUTC: Date): string {
+export function FormataDataStringFusoLocal(dataUTC: Date): string {
 
   if (!dataUTC) return ''; // Evita erro caso a data seja vazia
-  const timeZone = 'America/Sao_Paulo';
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  // Ajuste o horário manualmente adicionando 3 horas ao UTC para evitar o problema
+  //Calcular a diferença de horas entre o fuso UTC e o local
+  const agora = new Date(); // Pega a data e hora atuais
+  const diferencaEmMinutos = agora.getTimezoneOffset(); // Diferença em minutos entre o local e o UTC
+  const diferencaEmHoras = diferencaEmMinutos / 60; // Converte de minutos para horas
+
+
+  // Ajuste o horário manualmente adicionando diferencaEmHoras 
+  // ao horário UTC para evitar o problema
   const dateUTC = new Date(dataUTC); 
-  dateUTC.setHours(dateUTC.getHours() + 3); // Ajuste o horário para corrigir a diferença de UTC-3
+  dateUTC.setHours(dateUTC.getHours() + diferencaEmHoras); // Ajuste o horário para corrigir a diferença de UTC-diferencaEmHoras
 
   return dateUTC.toISOString();
 }
