@@ -108,6 +108,16 @@ export default function ClientDrawer() {
                 Saldos
               </span>
             </Link>
+            <Link
+              className="flex items-center w-full px-3 py-4 hover:bg-sky-800"
+              href="/about"
+              onClick={handleLinkClick}
+            >
+              <IconSaldos className="w-6 h-6 mr-3" />
+              <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
+                Sobre
+              </span>
+            </Link>
           </nav>
         </DrawerContent>
       </Drawer>

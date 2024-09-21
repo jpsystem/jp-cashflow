@@ -137,3 +137,20 @@ export function FormataDataStringFusoLocal(dataUTC: Date): string {
   return dateUTC.toISOString();
 }
 
+type dadosFuso = {
+  timeZone: string;
+  diferencaEmHoras: number;
+}
+export function getFusoLocal():dadosFuso{
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  //Calcular a diferença de horas entre o fuso UTC e o local
+  const agora = new Date(); // Pega a data e hora atuais
+  const diferencaEmMinutos = agora.getTimezoneOffset(); // Diferença em minutos entre o local e o UTC
+  const diferencaEmHoras = diferencaEmMinutos / 60; // Converte de minutos para horas
+
+
+  return {timeZone: timeZone, diferencaEmHoras: diferencaEmHoras}
+
+}
+
