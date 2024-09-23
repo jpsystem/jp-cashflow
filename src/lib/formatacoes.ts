@@ -143,7 +143,7 @@ export function FormataDataStringFusoLocal(dataUTC: Date): string {
     dateUTC.setHours(dateUTC.getHours() + diferencaEmHoras); // Ajuste o horário para corrigir a diferença de UTC-diferencaEmHoras
     return dateUTC.toISOString();
   }else{
-    return dataUTC.toUTCString();
+    return dataUTC.toString();
   }
 
   
