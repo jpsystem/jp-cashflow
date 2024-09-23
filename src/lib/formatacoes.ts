@@ -148,7 +148,7 @@ export function FormataDataStringFusoLocal(dataUTC: Date): string {
     const diferencaEmMinutos = agora.getTimezoneOffset(); // Diferença em minutos entre o local e o UTC
     const diferencaEmHoras = diferencaEmMinutos / 60; // Converte de minutos para horas
     const dateUTC = new Date(dataUTC);
-    dateUTC.setHours(dateUTC.getHours() - diferencaEmHoras);
+    dateUTC.setHours(dateUTC.getHours() + 3);
     return dateUTC.toISOString();
   }
 
