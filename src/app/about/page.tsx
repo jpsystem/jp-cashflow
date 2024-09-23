@@ -5,6 +5,8 @@
 import { getFusoLocal } from '@/lib/formatacoes';
 import { FaReact, FaNodeJs, FaCss3Alt, FaDatabase } from 'react-icons/fa';
 import { SiTypescript, SiTailwindcss, SiPrisma, SiMysql } from 'react-icons/si';
+import packageJson from '../../../package.json';
+
 
 export default async function About() {
   const dadosGeoolocalizacao = getFusoLocal();
@@ -69,6 +71,21 @@ export default async function About() {
         <p className="text-lg">
           Se você tiver alguma dúvida ou quiser conversar sobre um projeto, não hesite em entrar em contato!
         </p>
+      </section>
+      <section>
+        <div className="max-w-4xl mx-auto p-8">
+          <h1 className="text-4xl font-bold mb-6">Sobre o Sistema</h1>
+          
+          <p className="text-lg mb-4">
+            <strong>Nome do Sistema:</strong> {packageJson.name}
+          </p>
+          <p className="text-lg mb-4">
+            <strong>Versão:</strong> {packageJson.version}
+          </p>
+          <p className="text-lg">
+            Este sistema foi desenvolvido utilizando tecnologias modernas como Next.js, TypeScript, Tailwind CSS e outras ferramentas essenciais para o desenvolvimento full stack.
+          </p>
+        </div>
       </section>
     </div>
   );

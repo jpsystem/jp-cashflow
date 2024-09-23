@@ -103,9 +103,18 @@ export function FormataDataISOString(dataISO: string, mascara: string): string {
 
   if (!dataISO) return ''; // Evita erro caso a data seja vazia
 
+
+
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  
-  const dataFormatada = formatInTimeZone(dataISO, timeZone, mascara, { locale: ptBR });
+
+  let dataFormatada = "";
+
+  if(timeZone === 'UTC') {
+    dataFormatada = format(dataISO,  mascara, { locale: ptBR });
+  }else{
+     dataFormatada = formatInTimeZone(dataISO, timeZone, mascara, { locale: ptBR });
+  }
+   
 
   //console.log("DATAISO:", dataISO, dataFormatada);
   return dataFormatada;
