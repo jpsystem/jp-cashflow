@@ -6,10 +6,16 @@ import { getFusoLocal } from '@/lib/formatacoes';
 import { FaReact, FaNodeJs, FaCss3Alt, FaDatabase } from 'react-icons/fa';
 import { SiTypescript, SiTailwindcss, SiPrisma, SiMysql } from 'react-icons/si';
 import packageJson from '../../../package.json';
+import { newDate } from 'react-datepicker/dist/date_utils';
 
 
 export default async function About() {
   const dadosGeoolocalizacao = getFusoLocal();
+
+  function retDataAtual(): string{
+    const data = new Date();
+    return data.toISOString();
+  }
   return (
     <div className="overflow-x-auto min-w-screen w-[90%] min-h-screen max-w-[1400px] min-w-[500px]">
       <h1 className="text-4xl font-bold tracking-tighter text-center text-sky-900">
@@ -62,6 +68,7 @@ export default async function About() {
         </h2>
         <p className="text-lg">
           Dados sobre o local de execução do sistema:<br/><br/><br/>
+          DataLocal: {retDataAtual()}<br/>
           Time Zone: {dadosGeoolocalizacao.timeZone}<br/>
           Diferença de Horas: {dadosGeoolocalizacao.diferencaEmHoras}<br/><br/><br/>
         </p>

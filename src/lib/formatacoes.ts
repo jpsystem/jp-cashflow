@@ -143,7 +143,8 @@ export function FormataDataStringFusoLocal(dataUTC: Date): string {
     dateUTC.setHours(dateUTC.getHours() + diferencaEmHoras); // Ajuste o horário para corrigir a diferença de UTC-diferencaEmHoras
     return dateUTC.toISOString();
   }else{
-    return dataUTC.toString();
+    const dateUTC = new Date(dataUTC);
+    return dateUTC.toISOString();
   }
 
   
@@ -152,6 +153,7 @@ export function FormataDataStringFusoLocal(dataUTC: Date): string {
 type dadosFuso = {
   timeZone: string;
   diferencaEmHoras: number;
+  
 }
 export function getFusoLocal():dadosFuso{
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
