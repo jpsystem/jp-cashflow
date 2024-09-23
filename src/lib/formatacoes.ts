@@ -143,7 +143,12 @@ export function FormataDataStringFusoLocal(dataUTC: Date): string {
     dateUTC.setHours(dateUTC.getHours() + diferencaEmHoras); // Ajuste o horário para corrigir a diferença de UTC-diferencaEmHoras
     return dateUTC.toISOString();
   }else{
+    //Calcular a diferença de horas entre o fuso UTC e o local
+    const agora = new Date(); // Pega a data e hora atuais
+    const diferencaEmMinutos = agora.getTimezoneOffset(); // Diferença em minutos entre o local e o UTC
+    const diferencaEmHoras = diferencaEmMinutos / 60; // Converte de minutos para horas
     const dateUTC = new Date(dataUTC);
+    dateUTC.setHours(dateUTC.getHours() - diferencaEmHoras);
     return dateUTC.toISOString();
   }
 
