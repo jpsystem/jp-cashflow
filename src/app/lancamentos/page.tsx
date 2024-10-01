@@ -1,9 +1,6 @@
 import TabelaLancamentos from "../lancamentos/_components/tabelaLancamentos";
-import LancamentosForm from "../lancamentos/_components/LancamentosForm";
 import { LancamentoProvider } from "./_components/contextLancamentoProvider";
 import PainelFiltros from "./_components/painelFiltros";
-import ExportaTabela from "./_components/exportarTabela";
-import ExportaTabelaModelo from "./_components/exportaTabelaModelo";
 
 export default async function LancamentosPage() {
   return (
@@ -20,14 +17,6 @@ export default async function LancamentosPage() {
           </div>
         </div>
         <PainelFiltros />
-        {/* <div className="flex-row flex  justify-between mt-6">
-          <div className="justify-items-center flex justify-end content-center">
-            <ExportaTabelaModelo/>
-          </div>
-          <div className="justify-items-center flex justify-end content-center">
-            <LancamentosForm />
-          </div>
-        </div> */}
         <div className="items-center">
           <TabelaLancamentos />
         </div>
