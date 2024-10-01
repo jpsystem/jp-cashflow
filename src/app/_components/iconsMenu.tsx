@@ -11,7 +11,10 @@ import {
   LuCreditCard,
   LuClipboardList,
   LuDollarSign,
+  LuInfo,
 } from "react-icons/lu";
+
+import { RiFileExcel2Fill } from "react-icons/ri";
 
 import { useSession } from "next-auth/react";
 
@@ -60,4 +63,12 @@ export function IconOrcamentos(props: any) {
 
 export function IconSaldos(props: any) {
   return <LuDollarSign {...props} />;
+}
+
+export function IconAbout(props: any) {
+  return <LuInfo {...props} />;
+}
+
+export function IconExcel(props: any) {
+  return <RiFileExcel2Fill {...props} />;
 }

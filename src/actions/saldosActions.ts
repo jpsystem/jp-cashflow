@@ -1,9 +1,9 @@
 'use server'
 
 import { tyErro, tyResult, tySaldo, tySaldos } from "@/types/types"
-import {Periodo } from "@prisma/client"
 import prisma from "@/lib/db"
 import { retPeriodoAnterior } from "@/lib/formatacoes"
+import { RetSomatoriasPeriodo } from "./graficosActions"
 
 type retorno = {
   status: string
@@ -121,18 +121,35 @@ export async function CriarSaldos(periodo: string, usuarioId: number){
   const periodoAtualId = await RetIdPeriodo(periodo, usuarioId);
   const periodoAnteriorId = await RetIdPeriodo(periodoAnterior, usuarioId);
   try {
-    const retSaldos = await SaldosFontesPorPeriodo(periodoAnteriorId, usuarioId);
-    const novosSaldos = await Promise.all(retSaldos.map(saldo => {
-      return prisma.saldo.create({
-        data:{
-          valor: saldo.totFonte,
-          fonteId: saldo.fonteId,
-          periodoId: periodoAtualId
-        }
-      });
-    }));
+    //Nova consulta de Saldos
+    const retSaldos = await RetSomatoriasPeriodo(periodoAnteriorId);
+
+    if(retSaldos.length > 0){      
+      const novosSaldos = await Promise.all(retSaldos.map(saldo => {
+        return prisma.saldo.create({
+          data:{
+            valor: saldo.saldoAtual,
+            fonteId: saldo.FonteId,
+            periodoId: periodoAtualId
+          }
+        });
+      }));
+      result.dados = novosSaldos
+    }else{
+      //Consulta anterior de Saldos
+      const retSaldos2 = await SaldosFontesPorPeriodo(periodoAnteriorId, usuarioId);
+      const novosSaldos2 = await Promise.all(retSaldos2.map(saldo => {
+        return prisma.saldo.create({
+          data:{
+            valor: saldo.totFonte,
+            fonteId: saldo.fonteId,
+            periodoId: periodoAtualId
+          }
+        });
+      }));
+      result.dados = novosSaldos2
+    }
     result.status = "Sucesso"
-    result.dados = novosSaldos
     return result
   } catch (error) {
     const erro = <tyErro>error;

@@ -1,11 +1,8 @@
 
 import { format, parseISO } from 'date-fns';
 import { getDate } from 'date-fns';
-import {  toDate,formatInTimeZone } from 'date-fns-tz';
-import {   toZonedTime }  from 'date-fns-tz'
+import { formatInTimeZone } from 'date-fns-tz';
 import { ptBR } from 'date-fns/locale';
-//import { ptBR } from 'date-fns/locale/pt-BR'
-import { Contact } from 'lucide-react';
 
 export function RealBRToDouble(value: string): number {
   let cleanedValue = value.replaceAll(".","");
@@ -130,39 +127,19 @@ export function FormataDataISOString(dataISO: string, mascara: string): string {
 export function FormataDataStringFusoLocal(dataUTC: Date): string {
 
   if (!dataUTC) return ''; // Evita erro caso a data seja vazia
-  // const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  // if(timeZone !== 'UTC') {
-  //   //Calcular a diferença de horas entre o fuso UTC e o local
-  //   const agora = new Date(); // Pega a data e hora atuais
-  //   const diferencaEmMinutos = agora.getTimezoneOffset(); // Diferença em minutos entre o local e o UTC
-  //   const diferencaEmHoras = diferencaEmMinutos / 60; // Converte de minutos para horas
-  
-  //   // Ajuste o horário manualmente adicionando diferencaEmHoras 
-  //   // ao horário UTC para evitar o problema
-  //   const dateUTC = new Date(dataUTC); 
-  //   dateUTC.setHours(dateUTC.getHours() + diferencaEmHoras); // Ajuste o horário para corrigir a diferença de UTC-diferencaEmHoras
-  //   return dateUTC.toISOString();
-  // }else{
-  //   //Calcular a diferença de horas entre o fuso UTC e o local
-  //   const agora = new Date(); // Pega a data e hora atuais
-  //   const diferencaEmMinutos = agora.getTimezoneOffset(); // Diferença em minutos entre o local e o UTC
-  //   const diferencaEmHoras = diferencaEmMinutos / 60; // Converte de minutos para horas
-  //   const dateUTC = new Date(dataUTC);
-  //   dateUTC.setHours(dateUTC.getHours() + 3);
-  //   return dateUTC.toISOString();
-  // }
 
   const dateUTC = new Date(dataUTC);
   dateUTC.setHours(dateUTC.getHours() + 3); // Ajuste o horário para corrigir a diferença de UTC x  America/Sao_Paulo
+  
   return dateUTC.toISOString();
   
 }
 
 type dadosFuso = {
   timeZone: string;
-  diferencaEmHoras: number;
-  
+  diferencaEmHoras: number; 
 }
+
 export function getFusoLocal():dadosFuso{
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 

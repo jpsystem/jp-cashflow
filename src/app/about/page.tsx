@@ -63,14 +63,26 @@ export default async function About() {
         </div>
       </section>
       <section>
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl font-semibold mb-2">
           Geolocalização
         </h2>
-        <p className="text-lg">
-          Dados sobre o local de execução do sistema:<br/><br/><br/>
-          DataLocal: {retDataAtual()}<br/>
-          Time Zone: {dadosGeoolocalizacao.timeZone}<br/>
-          Diferença de Horas: {dadosGeoolocalizacao.diferencaEmHoras}<br/><br/><br/>
+        <p className="text-lg mb-4">
+          Dados sobre o local de execução do sistema:
+        </p>
+        <p className="text-lg mb-1">
+        <strong>DataLocal: </strong>{retDataAtual()}
+        </p>
+        <p className="text-lg mb-1">
+        <strong>Time Zone: </strong>{dadosGeoolocalizacao.timeZone}
+        </p>
+        <p className="text-lg mb-1">
+        <strong>Diferença de Horas: </strong>{dadosGeoolocalizacao.diferencaEmHoras}
+        </p>
+        <p className="text-lg mb-1">
+          <strong>Nome do Sistema:</strong> {packageJson.name}
+        </p>
+        <p className="text-lg mb-4">
+          <strong>Versão:</strong> {packageJson.version}
         </p>
       </section>
       <section>
@@ -78,21 +90,6 @@ export default async function About() {
         <p className="text-lg">
           Se você tiver alguma dúvida ou quiser conversar sobre um projeto, não hesite em entrar em contato!
         </p>
-      </section>
-      <section>
-        <div className="max-w-4xl mx-auto p-8">
-          <h1 className="text-4xl font-bold mb-6">Sobre o Sistema</h1>
-          
-          <p className="text-lg mb-4">
-            <strong>Nome do Sistema:</strong> {packageJson.name}
-          </p>
-          <p className="text-lg mb-4">
-            <strong>Versão:</strong> {packageJson.version}
-          </p>
-          <p className="text-lg">
-            Este sistema foi desenvolvido utilizando tecnologias modernas como Next.js, TypeScript, Tailwind CSS e outras ferramentas essenciais para o desenvolvimento full stack.
-          </p>
-        </div>
       </section>
     </div>
   );

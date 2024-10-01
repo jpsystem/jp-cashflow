@@ -41,7 +41,7 @@ export default async function RootLayout({
               {/* ===== Parte central ===== */}
               <div className="flex flex-col flex-grow w-auto pt-14 pb-4">
                 {session && <ClientDrawer />}
-                <div className="flex flex-col flex-grow items-center h-auto w-auto pr-8 pl-8 pt-2 pb-2 bg-white overflow-y-scroll overflow-x-auto">
+                <div className="flex flex-col flex-grow items-center h-auto w-auto pr-8 pl-8 pt-2 pb-2 bg-white  overflow-x-auto">
                   {children}
                 </div>
               </div>

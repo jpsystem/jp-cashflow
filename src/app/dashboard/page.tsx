@@ -62,20 +62,20 @@ export default function Page() {
               </div>
             </div>
             {/* Lado Direito */}
-            <div className="flex flex-col flex-wrap w-[300px] mb-4 h-full p-4 rounded-md shadow-lg items-center  justify-start">
-              <div className="flex mb-10 rounded-md shadow-lg p-4"> 
+            <div className="flex flex-col flex-wrap w-[500px] mb-10 h-full p-2 rounded-md shadow-lg items-center  justify-start">
+              <div className="flex w-full mb-10 rounded-md  shadow-lg p-2"> 
                 <CardConta icone="despesas.png"     conta="Despesas" />            
               </div>
-              <div className="flex mb-10 p-4 rounded-md shadow-lg">
+              <div className="flex  w-full mb-10 rounded-md shadow-lg p-2">
                 <CardConta icone="receitas.png"     conta="Receitas" />
               </div>
-              <div className="flex mb-10 p-4 rounded-md shadow-lg">
+              <div className="flex  w-full mb-10 rounded-md  shadow-lg p-2">
                 <CardConta icone="receitas.png"     conta="Cartões de crédito"  />
               </div>
-              <div className="flex mb-10 p-4 rounded-md shadow-lg">
+              <div className="flex  w-full mb-10 rounded-md shadow-lg p-2">
                 <CardConta icone="saldo.png"        conta="Saldo disponível" />
               </div>
-              <div className="flex mb-10 p-4 rounded-md shadow-lg">
+              <div className="flex  w-full mb-10 rounded-md  shadow-lg p-2">
                 <CardConta icone="investimento.png" conta="Investimentos" />
               </div>
             </div>

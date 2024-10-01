@@ -62,7 +62,13 @@ export async function getLancamentos(periodoId: number, grupoId?: number, subGru
         ...grupoId && { grupoId: grupoId },
       },
       ...subGrupoId && { subGrupoId: subGrupoId },
-      ...fonteId && { fonteId: fonteId },
+      ...(fonteId ? {
+        OR: [
+          { fonteId: fonteId },
+          { fonteIdD: fonteId }
+        ]
+      } : {}), // Só aplica o filtro se fonteId estiver presente
+      //...fonteId && { fonteId: fonteId },
     },
     include: {
       periodo: true,

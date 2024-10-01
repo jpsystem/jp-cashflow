@@ -3,19 +3,18 @@
 import "react-datepicker/dist/react-datepicker.css";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pen, Replace, Trash2 } from "lucide-react";
 import { useLancamentoContext } from "./contextLancamentoProvider";
 import { useGlobalContext } from "@/app/contextGlobal";
 import { tyLancamento } from "@/types/types";
 import { DoubleToRealBR, FormataDataISOString } from "@/lib/formatacoes";
-import { format }  from "date-fns";
-import { ptBR } from 'date-fns/locale';
 import { DeleteLancamentos } from "@/actions/lancamentoActions";
 import { useState } from "react";
 import queryClient from "@/lib/reactQuery";
 import ConfirmationBox from "@/app/_components/confirmationBox";
 import { FileEditIcon, TrashIcon } from "@/app/_components/iconsForm"
 import EditaLancamentoForm from "./editaLancamento";
+import NovoLancamentosForm from "./LancamentosForm";
+import ExportaTabela from "./exportarTabela";
 
 export default function TabelaLancamentos() {
   //const {dados} = useLancamentoContext();
@@ -23,17 +22,34 @@ export default function TabelaLancamentos() {
   const { dados, setFormGrupoId, setFormSubGrupoId,
           setFormFonteIdO, setFormFonteIdD,
           setOperacao
-} = useLancamentoContext();
+  } = useLancamentoContext();
 
   //Variavel para a caixa de confirmação (ConfirmationBox)
   const [showConfirmation, setShowConfirmation] = useState(false);
+
+  //Controle de páginação
+  //==============================================================================
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  //calculo da páginação
+  const indexUltimoRegistro = currentPage * pageSize;
+  const indexPrimeiroRegistro = indexUltimoRegistro - pageSize;
+  const registrosPaginaAtual = dados.slice(indexPrimeiroRegistro, indexUltimoRegistro);
+
+  // Função para mudar de página
+  const mudarPagina = (novaPagina: number) => {
+    setCurrentPage(novaPagina);
+  };
+
+  const totalPaginas = Math.ceil(dados.length / pageSize);
+  //==============================================================================
 
   //Variaveis para setar o indice selecionado
   const [indice, setIndice] = useState(0);
   const [pItem, setPItem]=useState<tyLancamento>();
 
-    //Variaveis para ativar o forme (EditaGrupoForm)
-    const [isEdita, setIsEdita] = useState(false);
+  //Variaveis para ativar o forme (EditaGrupoForm)
+  const [isEdita, setIsEdita] = useState(false);
   //Função para cofirmar a exclusão
   const handleConfirm= async ()=>{
     await DeleteLancamentos(indice);
@@ -43,6 +59,7 @@ export default function TabelaLancamentos() {
     //fecha caixa de confirmação
     setShowConfirmation(false);
   };
+
 
   //Função para cancelar a exclusão
   const handleCancel=()=>{
@@ -88,7 +105,16 @@ export default function TabelaLancamentos() {
               setIsEdita={setIsEdita}
             />
         )} 
-        <Table className="min-w-[1300px] overflow-auto rounded-2xl p-8 border-sky-800 border-2 shadow">
+        <div className="flex-row flex  justify-between mt-6">
+          <div className="justify-items-center flex justify-end content-center">
+            <ExportaTabela/>
+          </div>
+          <div className="justify-items-center flex justify-end content-center">
+            <NovoLancamentosForm />
+          </div>
+        </div>
+
+        <Table className="min-w-[1200px] overflow-x-auto rounded-2xl p-2 border-sky-800 border-2 shadow">
           <TableHeader>
             <TableRow>
               <TableHead className="text-center border-2 w-[10%] text-sky-50 border-sky-700 bg-sky-900 text-lg">
@@ -115,7 +141,7 @@ export default function TabelaLancamentos() {
             </TableRow>
           </TableHeader>
           <TableBody>
-          {dados.map((item: tyLancamento, index: number) => (
+          {registrosPaginaAtual.map((item: tyLancamento, index: number) => (
             <TableRow className="hover:bg-slate-200" key={item.lancamentoId}>
               <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">{item.grupo}</TableCell>
               <TableCell className="text-center border-2 text-sky-800 border-sky-900 text-lg">{item.subGrupo}</TableCell>
@@ -150,6 +176,26 @@ export default function TabelaLancamentos() {
           ))}
           </TableBody>
         </Table>
+        {/* Controle de paginação */}
+        <div className="flex justify-between items-center mt-4">
+          <button
+            onClick={() => mudarPagina(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="bg-sky-950 text-white px-4 py-2 rounded disabled:opacity-50"
+          >
+            Anterior
+          </button>
+          <span>
+            Página {currentPage} de {totalPaginas}
+          </span>
+          <button
+            onClick={() => mudarPagina(currentPage + 1)}
+            disabled={currentPage === totalPaginas}
+            className="bg-sky-950 text-white px-4 py-2 rounded disabled:opacity-50"
+          >
+            Próximo
+          </button>
+        </div>
       </div>
     </div>
   );

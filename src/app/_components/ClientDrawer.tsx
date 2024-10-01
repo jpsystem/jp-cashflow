@@ -14,6 +14,7 @@ import {
   IconContasFinanceiras,
   IconOrcamentos,
   IconSaldos,
+  IconAbout,
 } from "./iconsMenu"; // Adicione aqui os novos ícones
 import {
   Drawer,
@@ -113,7 +114,7 @@ export default function ClientDrawer() {
               href="/about"
               onClick={handleLinkClick}
             >
-              <IconSaldos className="w-6 h-6 mr-3" />
+              <IconAbout className="w-6 h-6 mr-3" />
               <span className="text-base xs:text-sm sm:text-lg xl:text-xl 2xl:text-2xl flex items-center">
                 Sobre
               </span>
