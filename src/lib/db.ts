@@ -1,5 +1,4 @@
-import { convertLocalDateToUTC } from '@/lib/formatacoes';
-import { ptBR } from 'date-fns/locale/pt-BR';
+
 import { PrismaClient } from '@prisma/client'
 
 const prismaClientSingleton = () => {

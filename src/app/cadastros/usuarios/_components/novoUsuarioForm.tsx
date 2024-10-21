@@ -7,17 +7,19 @@ import {
   CardContent,
   Card,
 } from "@/components/ui/card"
+import { useState } from "react";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { CreateUsuario } from "@/actions/usarioActions"
-import { useRouter } from "next/navigation"
 import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { NovoUsuario } from "@/actions/usarioActions"
+import { useRouter } from "next/navigation"
 import LabelError from "@/components/ui/jp/labelError"
-import { useContext } from "react"
-import { ModalContext } from "@/components/ui/jp/modal/modal-context"
+import { WarningBox, tipoEnu } from "@/app/_components/warningBox";
+//import { useContext } from "react"
+//import { ModalContext } from "@/components/ui/jp/modal/modal-context"
 
 const schema = z
   .object({
@@ -41,8 +43,20 @@ type FormProps = z.infer<typeof schema>
 
 export default function NovoUsuarioForm() {
   const router = useRouter()
+  //Variaveis para a caixa de avisos (WarningBox)
+  const [showAlerta, setShowAlerta] = useState(false);
+  const [tipo, setTipo] = useState<tipoEnu>(tipoEnu.Alerta);
+  const [mensagem, setMensagem] = useState("Menssagem default");
 
-  const { setShow, setTitle, setBody } = useContext(ModalContext)
+  //Função para fechar a caixa de aviso
+  const handleFechar=()=>{
+    setShowAlerta(false);
+    if(tipo === tipoEnu.Sucesso){
+      router.replace("/")
+    }
+  };
+
+  //const { setShow, setTitle, setBody } = useContext(ModalContext)
 
   const {
     register,
@@ -55,34 +69,51 @@ export default function NovoUsuarioForm() {
   })
 
   const handleForm = async (data: FormProps) => {
-    const dados = {
-      key: 0,
-      id: 0,
-      email: data.email,
-      nome: data.nome,
-      senha: data.senha,
-      perfil: data.perfil,
-      login: data.login,
-      token: undefined,
-      dtToken: undefined,
-      confirmaSenha: data.confirmaSenha,
-    }
+    try {      
+      const dados = {
+        key: 0,
+        id: 0,
+        email: data.email,
+        nome: data.nome,
+        senha: data.senha,
+        perfil: data.perfil,
+        login: data.login,
+        token: undefined,
+        dtToken: undefined,
+        confirmaSenha: data.confirmaSenha,
+      }
+  
+      const ret = await NovoUsuario(dados)
+      if (ret.status > 0) {
+        setTipo(tipoEnu.Sucesso);
+        setMensagem(ret.menssage);
+        setShowAlerta(true);
+        //router.replace("/")
+      } else {
+        setTipo(tipoEnu.Erro);
+        setMensagem(ret.menssage);
+        setShowAlerta(true);
+      }
+    } catch (erro: any) {
+      let men = "Ocorreu um erro inesperado!";
+      men = men + ": " + erro?.message;
 
-    const ret = await CreateUsuario(dados)
-    if (ret.status > 0) {
-      setTitle("Sucesso!")
-      setBody(ret.menssage)
-      setShow(true)
-      router.replace("/")
-    } else {
-      setTitle("Falha!")
-      setBody(ret.menssage)
-      setShow(true)
+      setTipo(tipoEnu.Erro);
+      setMensagem(men);
+      setShowAlerta(true);
     }
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4">
+      { showAlerta && (
+          <WarningBox
+            tipo={tipo}
+            mensagem={mensagem}
+            onCancel={handleFechar}
+          />
+        )
+      }   
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-3xl font-bold text-sky-800">Cadastro</CardTitle>

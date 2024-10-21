@@ -10,14 +10,16 @@ generator client {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @db.VarChar(60) @unique
-  nome      String    @db.VarChar(60)
-  senha     String    @db.VarChar(20)
-  perfil    String    @db.VarChar(20) @default("default")
-  login     String    @db.VarChar(20) @unique
-  token     String?   @db.VarChar(100)
-  dtToken   DateTime? @db.Date
+  id              Int       @id @default(autoincrement())
+  email           String    @db.VarChar(60) @unique
+  nome            String    @db.VarChar(60)
+  senha           String    @db.VarChar(20)
+  perfil          String    @db.VarChar(20) @default("default")
+  login           String    @db.VarChar(20) @unique
+  token           String?   @db.VarChar(100)
+  dtToken         DateTime? @db.Date
+  codVerificacao  String?   @db.VarChar(4)
+  dtVerificacao   DateTime? @db.DateTime()
   grupos    Grupo[]
   fontes    Fonte[]
   periodos Periodo[]
@@ -33,7 +35,7 @@ model Grupo {
   grupo_orcamentos  Orcamento[]
   //Divisão por usuário
   user                      User?   @relation(fields: [userId], references: [id])
-  userId                    Int //Chave estrnageira para tabela usuario
+  userId                    Int //Chave estranageira para tabela usuario
   @@unique([nome, userId])  //Só aceita um nome grupo unico por usuário
 
 }

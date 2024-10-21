@@ -71,3 +71,16 @@ await prisma.$transaction(async (trx) => {
   })
 
 })
+
+###############################################
+IMPORTANTE USO DO useRouter
+###############################################
+Se você está usando o App Router e não o Pages Router, 
+deve importar useRouter de 'next/navigation' e não de 'next/router'.
+
+O certo é
+import {useRouter} form 'next/navigation'
+
+dentro do componente
+const router = useRouter();
+router.push("/novaRota");

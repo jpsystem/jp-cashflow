@@ -30,9 +30,10 @@ const meses = [
 ];
 
 function obterMesAno() {
-  const anoAtual = new Date().getFullYear();
+  //const anoAtual = new Date().getFullYear();
+  const anoAtual = 2023;
   const mesAno = [];
-  for (let ano = anoAtual; ano <= anoAtual + 5; ano++) {
+  for (let ano = anoAtual; ano <= anoAtual + 10; ano++) {
     for (let mes = 0; mes < meses.length; mes++) {
       mesAno.push(`${meses[mes]}/${ano}`);
     }
@@ -74,11 +75,26 @@ export default function Periodo() {
       </div>
       <div className="w-[250px]">
         <Select defaultValue={periodo} onValueChange={onChange}>
-          <SelectTrigger className="w-full h-[40px] text-xl flex items-center">
+          <SelectTrigger className={`
+            w-full 
+            h-[40px] 
+            text-xl flex 
+            items-center`}>
             <SelectValue placeholder="Selecione o periodo" />
           </SelectTrigger>
-          <SelectContent className="max-h-[200px] opacity-100 border-2 border-sky-950 bg-sky-100 text-sky-900">
-            <SelectGroup className="hover:bg-sky-900 hover:text-sky-100">
+          <SelectContent className={`
+            //max-h-[500px] 
+            //opacity-100 
+            border-2 
+            border-sky-950
+            p-0 m-0 
+            //bg-sky-100 
+            //text-sky-900`}>
+            <SelectGroup className={`
+              //hover:bg-sky-900 
+              //hover:text-sky-100 
+              bg-white 
+              text-sky-900`}>
               {obterMesAno().map((mesAno, index) => (
                 <SelectItem
                   className="bg-sky-100 text-sky-900"

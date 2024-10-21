@@ -11,6 +11,10 @@ interface GlobalContextProps {
   setPeriodoId: (data: number) => void;
   periodo: string;
   setPeriodo: (data: string) => void;
+  emailVerificacao: string;
+  setEmailVerificacao: (data: string) => void;
+  codigoVerificacao: string;
+  setCodigoVerificacao: (data: string) => void;
 }
 
 const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
@@ -27,11 +31,17 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({children, userId}
   const [usuarioId, setUsuarioId] = useState<number>(userId||0);
   const [periodoId, setPeriodoId] = useState<number>(0);
   const [periodo, setPeriodo ] = useState<string>(retPeriodoAtual());
+  const [emailVerificacao, setEmailVerificacao ] = useState<string>("");
+  const [codigoVerificacao, setCodigoVerificacao ] = useState<string>("");
 
 
 
   return (
-    <GlobalContext.Provider value={{ usuarioId, setUsuarioId, periodoId, setPeriodoId, periodo, setPeriodo }}>
+    <GlobalContext.Provider value={{  usuarioId, setUsuarioId, 
+                                      periodoId, setPeriodoId, 
+                                      periodo, setPeriodo, 
+                                      emailVerificacao, setEmailVerificacao, 
+                                      codigoVerificacao, setCodigoVerificacao }}>
       {children}
     </GlobalContext.Provider>
   );

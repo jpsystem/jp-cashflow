@@ -8,39 +8,106 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
+import { IncluirCodVerificacao, RetUsuarioPorLoginOuEmail } from "@/actions/usarioActions";
+import { montaEmailVerificacao, validarTipoLogin } from "@/lib/jpFuncoes";
+import { tyVerificacao } from "@/types/types";
+import { useGlobalContext } from "../contextGlobal";
+import {useRouter} from 'next/navigation'
 
 export default function LoginForm() {
+  const router = useRouter();
   //Capturar erro de URL
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
+
+  //Recuperar as funções do contexto
+  const {setEmailVerificacao, setCodigoVerificacao, setUsuarioId} = useGlobalContext();
 
   //Inicializar o HOOK useForm
   const form = useForm();
 
   //Constantes para Estilo tailwind dos controles do formulário
-  const clsLabel = "text-sm font-bold text-sky-900";
-  const clsInput = "text-sm h-7";
+  const clsLabel = "text-xl font-bold text-sky-900";
+  const clsInput = "text-xl h-10";
+  const clsErro  = "text-xl h-10 text-red-600 font-bold";
 
   const handleSubmit = form.handleSubmit((data) => {
+    console.log("DATA: ", data);
+    
     signIn("credentials", {
       ...data,
       callbackUrl: "/dashboard",
     });
   });
 
+  async function enviaCodigo(){
+    const identificador = form.getValues("nickname");
+
+    //verificar se foi digitado um logim ou email
+    if(!identificador){
+      alert("Por favor informar um login valido ou o email cadastrado!")
+      return;
+    }
+
+    let codigo: string = "";
+    let email: string = "";
+    let login: string = "";
+
+    if(validarTipoLogin(identificador) === "email"){
+      codigo = await IncluirCodVerificacao(undefined, identificador);
+      email = identificador;
+    }else{
+      codigo = await IncluirCodVerificacao(identificador);
+      login = identificador;
+    }
+    
+    //verificar se o email foi enviado
+    if(codigo === "NADA" || codigo === "ERRO"){
+      alert("Email não foi enviado! Verifique se voçe está digitando um email ou um login!")
+      return;
+    }
+    const usuario: tyVerificacao | boolean = await RetUsuarioPorLoginOuEmail(login, email);
+    
+    if(typeof(usuario) === 'object'){
+      usuario.codigo = codigo;
+      const emailHTML = await montaEmailVerificacao(usuario);
+
+      const response = await fetch('/api/sendEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          para: `${usuario?.email}`, // Email do usuário
+          assunto: "👮 Redefinição de Senha",
+          corpoTexto: `Olá ${usuario?.nome},\nSeu código de verificação: ${codigo}`,
+          corpoHtml: emailHTML ,
+        }),
+      });
+      if (response.ok) {
+        setEmailVerificacao(usuario.email);
+        setCodigoVerificacao(usuario.codigo);
+        setUsuarioId(usuario.id);
+        console.log('Email enviado com sucesso');
+        //redericona para a página de verificação do código
+        router.push('/cadastros/usuarios/verificacao');
+      } else {
+        console.log('Erro ao enviar email');
+      }
+    }
+  }
+
   return (
     <div
-      className="flex items-center justify-center px-0 py-0 xl:border-b-[300px] 2xl:border-b-[200px] 
-      sm:border-b-[100px] lg:border-b-[100px]
-      md:border-b-[100px] border-white h-screen"
+      className="flex items-center mt-[10%] justify-center align-middle w-screen"
     >
-      <Card className="w-[98%] max-w-[35rem]">
+      <Card className="w-[80%] max-w-[800px]">
         <CardHeader className="space-y-2 text-center">
-          <CardTitle className="text-2xl font-bold text-sky-900">
+          <CardTitle className="text-4xl font-bold text-sky-900">
             Login
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="text-4xl">
           <form onSubmit={handleSubmit} className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="nickname" className={clsLabel}> 
@@ -66,35 +133,45 @@ export default function LoginForm() {
                 {...form.register("password")}
               />
             </div>
-            <Button
-              className="w-full text-base hover:bg-sky-100 hover:text-sky-900 bg-sky-900 text-sky-50"
-              variant={"outline"}
-              type="submit"
-            >
-              Login
-            </Button>
-            {error === "CredentialsSignin" && (
-              <div className="text-red-600">Erro no login!</div>
-            )}
+            <div className="pt-8">
+              <Button
+                className="w-full text-xl font-bold hover:bg-sky-100 hover:text-sky-900 bg-sky-900 text-sky-50"
+                variant={"outline"}
+                type="submit"
+              >
+                Login
+              </Button>
+              {error === "CredentialsSignin" && (
+                <div className={clsErro}>Erro no login!</div>
+              )}
+            </div>
           </form>
         </CardContent>
         <CardFooter>
           <div className="w-full space-y-1">
+            <p className="text-center text-xl hover:opacity-100 text-sky-800 opacity-40">
+            esqueceu sua senha digite o login para cadastra uma nova senha! 
             <Link
-              className="text-blue-600 underline dark:text-blue-400"
-              href="/cadastros/usuarios/cadastro"
+              className="text-blue-600 underline ml-2 dark:text-blue-400"
+              onClick={() => enviaCodigo()}
+              href="#"
+              //href="/cadastros/usuarios/verificacao"
             >
               Esqueceu a senha?
             </Link>
-            <p className="text-center hover:opacity-100 text-sky-800 opacity-40">
+            </p>
+            <p className="text-center text-xl hover:opacity-100 text-sky-800 opacity-40">
               ainda não está cadastrado?
-              <Link className="text-blue-600 underline dark:text-blue-400" 
+              <Link className="text-blue-600 underline ml-2 dark:text-blue-400" 
                     href="/cadastros/usuarios/cadastro">
                 Cadastrar
               </Link>
             </p>
           </div>
         </CardFooter>
+        {/* <Button onClick={() => enviaCodigo()}>
+            Esqueci a senha
+        </Button> */}
       </Card>
     </div>
   );

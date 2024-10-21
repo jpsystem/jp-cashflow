@@ -3,6 +3,7 @@ import ExcelJS, { Style } from 'exceljs';
 import { FormataDataISOString, DoubleToRealBR } from '@/lib/formatacoes';
 import { tyLancamento } from '@/types/types';
 import { Buffer } from 'buffer';
+import {centroStyle, ladoEsquerdoStyle, moneyStyle, textoLongoStyle  } from '@/lib/estilosExcelJs';
 
 export async function exportaTabelaServidor(tabela: tyLancamento[]): Promise<string> {
   try {
@@ -35,68 +36,6 @@ export async function exportaTabelaServidor(tabela: tyLancamento[]): Promise<str
         right: { style: 'thin' }
       }
     });
-    // Adicionar dados formatados à planilha
-    const centralStyle: Partial<Style>  = {
-      font: {
-        name: 'Roboto'
-      },
-      alignment: { 
-        vertical: 'middle', 
-        horizontal: 'center' 
-      },
-      border: {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' }
-      }
-    } 
-    const esquerdoStyle: Partial<Style>  = {
-      font: {
-        name: 'Roboto'
-      },
-      alignment: { 
-        vertical: 'middle', 
-        horizontal: 'left' 
-      },
-      border: {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' }
-      }
-    }
-    const direitoStyle: Partial<Style>  = {
-      font: {
-        name: 'Roboto'
-      },
-      alignment: { 
-        vertical: 'middle', 
-        horizontal: 'right' 
-      },
-      border: {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' }
-      }
-    }    
-    const textoStyle:Partial<Style> ={ 
-      font: {
-        name: 'Roboto'
-      },
-      alignment: { 
-        vertical: 'top', 
-        horizontal: 'center', 
-        wrapText: true 
-      },
-      border: {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' }
-      }
-    };
 
     tabela.forEach(lancamento => {
       const row = worksheet.addRow({
@@ -104,18 +43,18 @@ export async function exportaTabelaServidor(tabela: tyLancamento[]): Promise<str
         Conta: lancamento.grupo,
         SubConta: lancamento.subGrupo,
         Descricao: lancamento.descricao,
-        Valor: DoubleToRealBR(lancamento.valor || 0),
+        Valor: lancamento.valor,
         Fontes: lancamento.fontes,
         DtLancamento: FormataDataISOString(lancamento.dtLancamento || "", "dd/MM/yyyy"),
       });
       // Aplicar formatação a cada célula na linha
-      row.getCell('ID').style = centralStyle;
-      row.getCell('Conta').style = esquerdoStyle;
-      row.getCell('SubConta').style = esquerdoStyle;
-      row.getCell('Descricao').style = textoStyle;
-      row.getCell('Valor').style = direitoStyle;
-      row.getCell('Fontes').style = textoStyle;
-      row.getCell('DtLancamento').style = centralStyle;
+      row.getCell('ID').style = centroStyle;
+      row.getCell('Conta').style = ladoEsquerdoStyle;
+      row.getCell('SubConta').style = ladoEsquerdoStyle;
+      row.getCell('Descricao').style = textoLongoStyle;
+      row.getCell('Valor').style = moneyStyle;
+      row.getCell('Fontes').style = textoLongoStyle;
+      row.getCell('DtLancamento').style = centroStyle;
 
     });
 

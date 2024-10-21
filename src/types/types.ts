@@ -157,3 +157,12 @@ export type tySomatoriasPeriodo = {
   saldoAtual: number;
 }
 
+export type tyVerificacao= {
+  id:               number,
+  login:            string,
+  email:            string,
+  nome:             string,
+  minutos_passados: number,
+  codigo?:          string,
+}
+

@@ -13,6 +13,7 @@ export default function ExportaTabela() {
   const exportToExcel = async () => {
     setLoading(true);
     try {
+      
       // 1. Chama a função do servidor para gerar o arquivo Excel
       const base64 = await exportaTabelaServidor(dados);
 
@@ -24,7 +25,6 @@ export default function ExportaTabela() {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
       const byteArray = new Uint8Array(byteNumbers);
-
 
       // 2. Converte o Buffer em Blob
       const blob = new Blob([byteArray], {

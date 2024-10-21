@@ -22,6 +22,8 @@ export const auth: NextAuthOptions = {
           return null
         }
 
+        console.log("Credenciais: ", credentials)
+
         const user: User = {
           id: "1",
           name: "vasio",
@@ -35,6 +37,9 @@ export const auth: NextAuthOptions = {
           const rep = await fetch(`${process.env.BASEURL}/api/user?login=${credentials?.nickname}`);
           const retorno = await rep.json();
           const data = retorno.users;
+
+          console.log("Data: ", data)
+
           if(data){
             user.id = data.id.toString();
             user.email = data.email;
@@ -42,9 +47,11 @@ export const auth: NextAuthOptions = {
             user.nickname = data.login;
             user.role = data.perfil;
           }
-          if(credentials.nickname.toUpperCase() ===  data.login && credentials.password === data.senha){
+
+          if(credentials.password === data.senha){
             return user
           }
+          
           return null
 
         } catch (error) {

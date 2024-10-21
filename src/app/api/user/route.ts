@@ -1,20 +1,41 @@
 //import { PrismaClient } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-//const prisma = new PrismaClient()
+import { validarTipoLogin } from '@/lib/jpFuncoes';
+
 
 export async function GET(req: NextRequest){
   const {searchParams} = new URL(req.url)
   const login = searchParams.get('login')
+
+  //verificar o tipo do login
+  const tipo = validarTipoLogin(login || "");
+  let filtroEmail = "";
+  let filtroLogin = "";
+  if(tipo === "email"){ 
+    filtroEmail = login?.toLowerCase() || "";
+  }else{
+    filtroLogin = login?.toUpperCase() || "";
+  }
   
   //const testes = request.cookies.get("next-auth.csrf-token");
   req.cookies.set("userNome","LOGIN");
   try
   {
     if(login){
-      const users = await prisma.user.findUnique({ 
-        where: { login:login},
+      // const users = await prisma.user.findUnique({ 
+      //   where: { login:login},
+      // })
+      // console.log("USERS: ", users);
+      const consulta = await prisma.user.findMany({
+        where: {
+          ...filtroEmail && {email:filtroEmail},
+          ...filtroLogin && {login:filtroLogin},
+        }
       })
+
+      const users = consulta[0];
+
       if(!users){
         return  NextResponse.json({
           menssage: "Não encontrou registros"
