@@ -24,8 +24,8 @@ export default async function GrupoDeContas() {
         <div className="justify-items-center flex w-full justify-end content-center mt-6">
           <NovoGrupoForm />
         </div>
-      </div>
       <TabelaGrupos userIdSession={session?.user.id} />
+      </div>
     </div>
   )
 }

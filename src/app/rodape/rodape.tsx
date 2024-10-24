@@ -54,7 +54,11 @@ export default async function Rodape() {
             size="lg"
             text="Logout"
             variant="outline"
-            className="hover:bg-sky-800 hover:text-sky-100 text-sky-50 border-r border-sky-50"
+            className={`
+              bg-sky-800  
+              text-sky-50 
+              border-r 
+              border-sky-50`}
           />
         )}
       </div>

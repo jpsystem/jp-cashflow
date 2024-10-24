@@ -106,9 +106,9 @@ export function VerificaOTP({ setStep }: Props) {
               )}
             />
             <div className="flex gap-8 pt-10">
-              <Button type="submit">Verificar</Button>
-              <Button >Reenviar</Button>
-              <Button >Cancelar</Button>
+              <Button type="submit" variant="outline" className="text-green-600 border-green-800 hover:text-green-800">Verificar</Button>
+              <Button variant="outline" className="text-blue-600 border-blue-800 hover:text-blue-800">Reenviar</Button>
+              <Button variant="outline" className="text-red-600 border-red-800 hover:text-red-800" >Cancelar</Button>
             </div>
           </form>
         </Form>

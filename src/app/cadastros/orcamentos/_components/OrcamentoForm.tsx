@@ -95,13 +95,14 @@ export default function FormOrcamento ({indice, isEdita, setIsEdita}: Props) {
               <SheetFooter className="mt-7 flex justify-between">
                 <Button
                   type="submit"
+                  variant="outline"
                   className="h-9 w-22 border-2 text-sky-900 border-sky-800"
                 >
                   Concluir
                 </Button>
                 <SheetClose asChild>
                   <Button
-                    className="h-9 w-22 border-2 text-sky-900 border-sky-800"
+                    className="h-9 w-22 border-2 text-red-700 border-red-800"
                     variant="outline"
                     onClick={handleClose}
                   >

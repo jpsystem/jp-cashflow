@@ -52,10 +52,10 @@ export default function PainelControleSaldo() {
       <Card className="border-sky-900 border-2 w-[70%]">
         <CardContent className="flex flex-col lg:flex-row lg:items-center lg:justify-between py-3">
           <div className="flex flex-1 gap-4 justify-between">
-            <div className="flex w-[30%] max-w-xs">          
+            <div className="flex w-[50%] max-w-xs">          
               <Label className="text-lg font-bold">{`Periodo ${periodo}`}</Label>
             </div>
-            <div className="flex flex-row w-[30%] max-w-xs justify-between">
+            <div className="flex flex-row w-[50%] max-w-xs justify-between">
               <Button
                 variant="outline"
                 disabled={!(dados?.length === 0 && periodoId > 0)}

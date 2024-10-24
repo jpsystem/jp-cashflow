@@ -39,7 +39,7 @@ export default function ConfirmationBox({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="text-lg text-amber-950 font-semibold hover:bg-amber-50 " onClick={onCancel}>Cancelar</AlertDialogCancel>
-          <AlertDialogAction className="text-lg text-sky-950 font-semibold hover:bg-amber-50 " onClick={onConfirm}>Confirmar</AlertDialogAction>
+          <AlertDialogAction className="text-lg text-sky-950 font-semibold bg-white hover:bg-amber-50 " onClick={onConfirm}>Confirmar</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

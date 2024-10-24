@@ -7,7 +7,7 @@ import queryClient from "@/lib/reactQuery";
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table, } from "@/components/ui/table";
 import { FileEditIcon, TrashIcon } from "@/app/_components/iconsForm";
 import { DeleteGrupo, RetGrupo, RetGrupos } from "@/actions/grupoActions";
-import { tyGrupo, tyGrupoLista } from "@/types/types";
+import { tyGrupo, tyGrupoLista, tipoGrupo } from "@/types/types";
 import { useState } from "react";
 import EditaGrupoForm from "./editaGrupo";
 import ConfirmationBox from "@/app/_components/confirmationBox";
@@ -130,6 +130,7 @@ export default function TabelaGrupos({userIdSession}: Props) {
                     <span className="sr-only">Edit</span>
                   </Button>
                   <Button
+                    disabled={item.tipo === tipoGrupo.Debito ? false : true}
                     onClick={() => handleDeleteGrupo(item.id)} 
                     className="h-8 w-8" 
                     size="icon" 

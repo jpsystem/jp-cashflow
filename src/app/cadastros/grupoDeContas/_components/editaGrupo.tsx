@@ -154,6 +154,7 @@ export default function EditaGrupoForm({ pIndice, pItem, isEdita, setIsEdita }: 
                           <FormLabel className="text-sky-900">Nome</FormLabel>
                           <FormControl>
                             <Input
+                              disabled={field.value === "ENTRADA" ? true : field.value === "TRANSFERENCIAS" ? true : false}
                               className="placeholder:text-sky-800 border-2 border-sky-900"
                               {...field}
                             />
@@ -172,7 +173,7 @@ export default function EditaGrupoForm({ pIndice, pItem, isEdita, setIsEdita }: 
                           <FormLabel className="text-sky-900">Tipo</FormLabel>
                           <FormControl>
                             <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
+                              <DropdownMenuTrigger asChild disabled={true}>
                                 <Button
                                   variant="outline"
                                   className="w-full text-sm flex items-center justify-between hover:bg-slate-200 text-sky-900 border-sky-900"

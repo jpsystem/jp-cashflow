@@ -288,13 +288,14 @@ export default function NovoLancamentosForm() {
                 <SheetFooter className="mt-7">
                   <Button
                     type="submit"
-                    className="h-9 w-22 border-2 text-sky-900 border-sky-800"
+                    variant="outline"
+                    className="h-9 w-22 border-2 text-sky-900 border-sky-800 hover:text-sky-50 hover:bg-sky-900"
                   >
                     Confirmar
                   </Button>
                   <SheetClose asChild>
                     <Button
-                      className="h-9 w-22 border-2 text-sky-900 border-sky-800"
+                      className="h-9 w-22 border-2 text-sky-900 border-sky-800 hover:text-sky-50 hover:bg-sky-900"
                       variant="outline"
                       onClick={handleClose}
                     >

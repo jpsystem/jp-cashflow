@@ -68,7 +68,7 @@ export default function PainelControleOrcamento (){
 
   return(
     <div className="pb-8 flex flex-col w-full items-center">
-      <Card className="border-sky-900 border-2 w-[70%]">
+      <Card className="border-sky-900 border-2 w-[90%]">
         <CardContent className="flex flex-col lg:flex-row lg:items-center lg:justify-between py-3">
           <div className="flex flex-1 gap-4 justify-end">
             <div className="flex w-[30%] max-w-xs">

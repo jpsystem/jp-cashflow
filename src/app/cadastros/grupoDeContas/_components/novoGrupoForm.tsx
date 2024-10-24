@@ -197,7 +197,7 @@ export default function NovoGrupoForm() {
                             <FormLabel className="text-sky-900">Tipo</FormLabel>
                             <FormControl>
                               <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
+                                <DropdownMenuTrigger asChild disabled={true}>
                                   <Button
                                     variant="outline"
                                     className="w-full text-sm flex items-center justify-between hover:bg-slate-200 text-sky-900 border-sky-900"
